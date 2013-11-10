@@ -31,7 +31,7 @@
                 <archive>
                     <manifest>
                         <addClasspath>true</addClasspath>
-                        <mainClass>net.jeedup.web.App</mainClass>
+                        <mainClass>net.jeedup.web.Main</mainClass>
                     </manifest>
                 </archive>
             </configuration>
@@ -42,7 +42,7 @@
                 <archive>
                     <manifest>
                         <addClasspath>true</addClasspath>
-                        <mainClass>net.jeedup.web.App</mainClass>
+                        <mainClass>net.jeedup.web.Main</mainClass>
                     </manifest>
                 </archive>
                 <descriptorRefs>

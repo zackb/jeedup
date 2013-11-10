@@ -2,14 +2,14 @@ apply plugin: 'groovy'
 //apply plugin: 'java'
 apply plugin:'application'
 
-mainClassName = 'net.jeedup.web.JWeb'
+mainClassName = 'net.jeedup.web.Main'
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    compile 'org.codehaus.groovy:groovy-all:2.1.0'
+    compile 'org.codehaus.groovy:groovy-all:2.1+'
     compile 'io.undertow:undertow-core:1.0.0+'
     //compile 'io.undertow:undertow-servlet:1.0.0+'
     testCompile 'junit:junit:4.11'
@@ -20,7 +20,7 @@ task uberjar(type: Jar) {
     from configurations.runtime.asFileTree.files.collect { zipTree(it) }
 
     manifest {
-        attributes 'Main-Class': 'net.jeedup.web.JWeb'
+        attributes 'Main-Class': 'net.jeedup.web.Main'
     }
 }
 
@@ -28,6 +28,6 @@ jar {
     dependsOn configurations.runtime
     from { configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) } }
     manifest {
-        attributes 'Main-Class': 'net.jeedup.web.JWeb'
+        attributes 'Main-Class': 'net.jeedup.web.Main'
     }
 }
