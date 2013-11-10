@@ -37,6 +37,7 @@ class JWeb {
                 String path = exchange.getRequestPath()
                 path = path.startsWith('/') ? path.substring(1) : path
                 Route route = routes[path] ?: routes['404']
+                exchange.startBlocking()
                 Map requestData = parseRequestData(exchange)
                 println('Path: ' + path)
                 println 'Request Params: ' +requestData
@@ -44,13 +45,15 @@ class JWeb {
 
                 exchange.setResponseCode(response.status)
                 exchange.getResponseHeaders().add(Headers.CONTENT_TYPE, response.contentType)
+                OutputStream out = exchange.getOutputStream()
+                response.render(out)
+                exchange.endExchange()
             }
 
             private Map parseRequestData(HttpServerExchange exchange) {
                 Map result = [:]
                 HttpString method = exchange.getRequestMethod()
                 if (method == Methods.POST) {
-                    exchange.startBlocking()
                     exchange.getInputStream().newReader().eachLine { String line ->
                         result = line.split('&').collectEntries { String param ->
                             param.split('=').collect { String it -> URLDecoder.decode(it, 'UTF-8') }

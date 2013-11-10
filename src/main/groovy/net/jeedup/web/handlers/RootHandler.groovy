@@ -5,6 +5,7 @@ import net.jeedup.web.Endpoint
 import net.jeedup.web.Response
 
 import static net.jeedup.web.Response.JSON
+import static net.jeedup.web.Response.TEXT
 
 /**
  * User: zack
@@ -15,6 +16,11 @@ class RootHandler {
 
     @Endpoint('test')
     Response test(Map data) {
-        return JSON()
+        return JSON(data)
+    }
+
+    @Endpoint('echo')
+    Response echo(Map data) {
+        return TEXT(data)
     }
 }
