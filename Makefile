@@ -13,3 +13,4 @@ runjar: jar
 
 clean:
 	gradle clean
+	rm -f jeedup.jar

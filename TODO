@@ -1,9 +1,10 @@
-mustache.java (/html)
+Play with it! http://bootswatch.com/cosmo/
 Database
 Authentication
 Authorization
 Parse JSON/XML input request data from post/put
  - Multipart form data?
+* mustache.java (/html)
 * GZIP
 * Deployment
 * JSON

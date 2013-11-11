@@ -35,4 +35,9 @@ class RootHandler {
         // will render zack.html with no data
         HTML()
     }
+
+    @Endpoint('admin')
+    def admin(Map data) {
+        HTML(null, 'admin/admin')
+    }
 }
