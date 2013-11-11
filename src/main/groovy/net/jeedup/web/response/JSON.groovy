@@ -17,6 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 class JSON extends Response {
 
     private static final ObjectMapper mapper
+    private static final Class mapClass
 
     static {
         mapper = new ObjectMapper()
@@ -30,6 +31,7 @@ class JSON extends Response {
             .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
             .enableDefaultTyping()
 
+        mapClass = new HashMap<String, Object>().getClass()
     }
 
     public JSON() {
@@ -43,5 +45,9 @@ class JSON extends Response {
         }
         String str = mapper.writeValueAsString(data)
         out.write(str.getBytes('UTF-8'))
+    }
+
+    static Map parse(String data) {
+        return (Map)mapper.readValue(data.getBytes('UTF-8'), mapClass)
     }
 }

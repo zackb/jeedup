@@ -10,6 +10,7 @@ import io.undertow.util.HttpString
 import io.undertow.util.Methods
 import net.jeedup.reflection.ClassEnumerator
 import net.jeedup.web.response.HTML
+import net.jeedup.web.response.JSON
 
 import java.lang.annotation.Annotation
 import java.lang.reflect.Method
@@ -80,11 +81,20 @@ class JeedupHandler implements HttpHandler {
 
     private static Map parseRequestData(HttpServerExchange exchange) {
         Map result = [:]
+        String contentType = exchange.getRequestHeaders().get(Headers.CONTENT_TYPE)
         HttpString method = exchange.getRequestMethod()
         if (method == Methods.POST || method == Methods.PUT) {
-            exchange.getInputStream().newReader().eachLine { String line ->
-                result = line.split('&').collectEntries { String param ->
-                    param.split('=').collect { String it -> URLDecoder.decode(it, 'UTF-8') }
+            if (contentType?.contains('json')) {
+                String json = ''
+                exchange.getInputStream().newReader().eachLine { String line ->
+                    json += line
+                }
+                result = JSON.parse(json)
+            } else {
+                exchange.getInputStream().newReader().eachLine { String line ->
+                    result = line.split('&').collectEntries { String param ->
+                        param.split('=').collect { String it -> URLDecoder.decode(it, 'UTF-8') }
+                    }
                 }
             }
         } else if (method == Methods.GET || method == Methods.DELETE) {
