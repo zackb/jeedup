@@ -11,7 +11,9 @@ jar:
 	gradle jar
 
 runjar: jar
-	java -jar build/libs/jweb.jar
+	mv build/libs/jeedup.jar .
+	java -jar jeedup.jar
 
 clean:
 	gradle clean
+	rm -f jeedup.jar

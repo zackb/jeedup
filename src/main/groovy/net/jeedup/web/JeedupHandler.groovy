@@ -31,9 +31,22 @@ class JeedupHandler implements HttpHandler {
 
     private void createResourceHandler() {
 
-        File rootPath = new File(getClass().getResource("/css").toURI()).getParentFile();
+        //File rootPath = new File(getClass().getResource("/css").toURI()).getParentFile();
+        String rootPath = getClass().getResource("/html").toString()
+        if (rootPath.contains('!')) {
+            rootPath = rootPath.substring(0, rootPath.lastIndexOf('!'))
+        }
+        rootPath = rootPath.substring(rootPath.indexOf("file:") + 5)
+
+        rootPath = rootPath.substring(0, rootPath.lastIndexOf('/'))
+        if (rootPath.endsWith('/build/resources/main')) {
+            rootPath = rootPath.replace('/build/resources/main', '')
+        }
+
+        println rootPath
+
         resourceHandler = new ResourceHandler()
-                .setResourceManager(new FileResourceManager(rootPath, 10485760))
+                .setResourceManager(new FileResourceManager(new File(rootPath), 10485760))
                 .setDirectoryListingEnabled(false)
     }
 
