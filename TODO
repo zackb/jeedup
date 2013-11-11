@@ -1,1 +1,7 @@
-mustache.java
+mustache.java (/html)
+JSON
+GZIP
+Authentication
+Authorization
+Resources (js, images, css)
+    build includes /html, /css, /js (config.json?)

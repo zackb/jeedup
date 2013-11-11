@@ -5,7 +5,7 @@ import io.undertow.util.StatusCodes
 import net.jeedup.web.Endpoint
 import net.jeedup.web.Response
 
-import static net.jeedup.web.Response.TEXT
+import static net.jeedup.web.Response.HTML
 
 /**
  * User: zack
@@ -16,6 +16,6 @@ class NotFoundHandler {
 
     @Endpoint('404')
     Response notFound() {
-        return TEXT('Not Found').withStatus(StatusCodes.NOT_FOUND)
+        return HTML('Not Found').withStatus(StatusCodes.NOT_FOUND)
     }
 }

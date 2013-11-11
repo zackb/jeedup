@@ -31,3 +31,10 @@ jar {
         attributes 'Main-Class': 'net.jeedup.web.Main'
     }
 }
+
+processResources {
+    from('css') { into 'css' }
+    from('images') { into 'images' }
+    from('html'){ into 'html' }
+    from('js'){ into 'js' }
+}

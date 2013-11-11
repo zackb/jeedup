@@ -7,8 +7,8 @@ package net.jeedup.web
 class Main {
 
     static void main(final String[] args) {
-        JWeb jweb = new JWeb()
-        jweb.start()
+        Jeedup jeedup = new Jeedup()
+        jeedup.start()
     }
 
 }
