@@ -38,3 +38,13 @@ processResources {
     //from('images') { into 'images' }
     //from('js'){ into 'js' }
 }
+
+task archive(dependsOn: 'jar',type: Tar) {
+    baseName = project.name
+    destinationDir = new File(project.buildDir.path + '/installer')
+    compression = Compression.GZIP
+    from("${buildDir}/libs/${project.name}.jar")  { into "${baseName}/" }
+    from("${projectDir}/css") { into "${baseName}/css" }
+    from("${projectDir}/images") { into "${baseName}/images" }
+    from("${projectDir}/js") { into "${baseName}/js" }
+}
