@@ -30,7 +30,7 @@ class RootHandler {
         HTML([message: data?.message ?: 'Hello, World!', foo:[bar: 'BOOO']], 'test')
     }
 
-    @Endpoint('zack')
+    @Endpoint('test/zack')
     def zack(Map data) {
         // will render zack.html with no data
         HTML()

@@ -3,7 +3,6 @@ package net.jeedup.web
 import groovy.transform.CompileStatic
 import io.undertow.server.HttpHandler
 import io.undertow.server.HttpServerExchange
-import io.undertow.server.handlers.encoding.AllowedContentEncodings
 import io.undertow.server.handlers.resource.FileResourceManager
 import io.undertow.server.handlers.resource.ResourceHandler
 import io.undertow.util.Headers
@@ -14,7 +13,6 @@ import net.jeedup.web.response.HTML
 
 import java.lang.annotation.Annotation
 import java.lang.reflect.Method
-import java.util.zip.GZIPOutputStream
 
 /**
  * User: zack
@@ -69,7 +67,7 @@ class JeedupHandler implements HttpHandler {
         if (response instanceof HTML) {
             HTML html = (HTML)response
             if (!html.view)
-                html.view(route.action.name)
+                html.view(route.path)
         }
 
         exchange.setResponseCode(response.status)
@@ -117,6 +115,9 @@ class JeedupHandler implements HttpHandler {
                     route.path = annotation.value()
                     route.handler = instance
                     route.action = method
+                    if (routes[route.path]) {
+                        throw new Exception('The route: ' + route.path + ' is already registered')
+                    }
                     routes[route.path] = route
                 }
             }
