@@ -3,6 +3,7 @@ package net.jeedup.web
 import groovy.transform.CompileStatic
 import io.undertow.server.HttpHandler
 import io.undertow.server.HttpServerExchange
+import io.undertow.server.handlers.encoding.AllowedContentEncodings
 import io.undertow.server.handlers.resource.FileResourceManager
 import io.undertow.server.handlers.resource.ResourceHandler
 import io.undertow.util.Headers
@@ -12,6 +13,7 @@ import net.jeedup.reflection.ClassEnumerator
 
 import java.lang.annotation.Annotation
 import java.lang.reflect.Method
+import java.util.zip.GZIPOutputStream
 
 /**
  * User: zack
@@ -31,7 +33,6 @@ class JeedupHandler implements HttpHandler {
 
     private void createResourceHandler() {
 
-        //File rootPath = new File(getClass().getResource("/css").toURI()).getParentFile();
         String rootPath = getClass().getResource("/html").toString()
         if (rootPath.contains('!')) {
             rootPath = rootPath.substring(0, rootPath.lastIndexOf('!'))
@@ -42,8 +43,6 @@ class JeedupHandler implements HttpHandler {
         if (rootPath.endsWith('/build/resources/main')) {
             rootPath = rootPath.replace('/build/resources/main', '')
         }
-
-        println rootPath
 
         resourceHandler = new ResourceHandler()
                 .setResourceManager(new FileResourceManager(new File(rootPath), 10485760))
@@ -68,8 +67,18 @@ class JeedupHandler implements HttpHandler {
 
         exchange.setResponseCode(response.status)
         exchange.getResponseHeaders().add(Headers.CONTENT_TYPE, response.contentType)
-        OutputStream out = exchange.getOutputStream()
-        response.render(out)
+
+        OutputStream outputStream = exchange.getOutputStream()
+
+        /*
+        if (exchange.getRequestHeaders().get(Headers.ACCEPT_ENCODING)?.getAt(0)?.contains('gzip')) {
+            exchange.getResponseHeaders().add(Headers.CONTENT_ENCODING, 'gzip')
+            outputStream = new GZIPOutputStream(outputStream)
+        }
+        */
+
+        response.render(outputStream)
+        outputStream.flush()
         exchange.endExchange()
     }
 
@@ -98,6 +107,10 @@ class JeedupHandler implements HttpHandler {
 
         List<Class> classes = ClassEnumerator.getClassesForPackage(packageName)
         for (Class clazz : classes) {
+            // no inner classes
+            if (clazz.name.contains('$'))
+                continue
+
             Object instance = clazz.newInstance()
             for (Method method : clazz.getMethods()) {
                 Annotation annotation = method.getAnnotation(Endpoint)

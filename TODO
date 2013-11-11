@@ -1,7 +1,9 @@
+- GZIP
 mustache.java (/html)
-JSON
-GZIP
 Authentication
 Authorization
-Resources (js, images, css)
-    build includes /html, /css, /js (config.json?)
+* Deployment
+* JSON
+* Resources (js, images, css)
+    * build includes /html
+    * tar includes /css, /js (config.json?)

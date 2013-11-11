@@ -14,13 +14,13 @@ import static net.jeedup.web.Response.TEXT
 @CompileStatic
 class RootHandler {
 
-    @Endpoint('test')
+    @Endpoint('json')
     Response test(Map data) {
-        return JSON(data)
+        JSON(data)
     }
 
-    @Endpoint('echo')
+    @Endpoint('text')
     Response echo(Map data) {
-        return TEXT(data)
+        TEXT(data)
     }
 }
