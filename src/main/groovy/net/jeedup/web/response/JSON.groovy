@@ -33,7 +33,7 @@ class JSON extends Response {
     }
 
     public JSON() {
-        withContentType('application/json;charset=UTF-8')
+        contentType('application/json;charset=UTF-8')
     }
 
     @Override

@@ -2,6 +2,8 @@ mustache.java (/html)
 Database
 Authentication
 Authorization
+Parse JSON/XML input request data from post/put
+ - Multipart form data?
 * GZIP
 * Deployment
 * JSON

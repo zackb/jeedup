@@ -12,7 +12,7 @@ import java.nio.charset.Charset
 @CompileStatic
 class TEXT extends Response {
     public TEXT() {
-        withContentType('text/plain')
+        contentType('text/plain')
     }
 
     @Override

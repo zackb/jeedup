@@ -6,6 +6,7 @@ import net.jeedup.web.Response
 
 import static net.jeedup.web.Response.JSON
 import static net.jeedup.web.Response.TEXT
+import static net.jeedup.web.Response.HTML
 
 /**
  * User: zack
@@ -15,12 +16,23 @@ import static net.jeedup.web.Response.TEXT
 class RootHandler {
 
     @Endpoint('json')
-    Response test(Map data) {
+    def json(Map data) {
         JSON(data)
     }
 
     @Endpoint('text')
-    Response echo(Map data) {
+    def text(Map data) {
         TEXT(data)
+    }
+
+    @Endpoint('')
+    def html(Map data) {
+        HTML([message: data?.message ?: 'Hello, World!', foo:[bar: 'BOOO']], 'test')
+    }
+
+    @Endpoint('zack')
+    def zack(Map data) {
+        // will render zack.html with no data
+        HTML()
     }
 }

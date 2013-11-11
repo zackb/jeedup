@@ -16,6 +16,6 @@ class NotFoundHandler {
 
     @Endpoint('404')
     Response notFound() {
-        return HTML('Not Found').withStatus(StatusCodes.NOT_FOUND)
+        return HTML('Not Found').status(StatusCodes.NOT_FOUND)
     }
 }

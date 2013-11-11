@@ -10,6 +10,7 @@ import io.undertow.util.Headers
 import io.undertow.util.HttpString
 import io.undertow.util.Methods
 import net.jeedup.reflection.ClassEnumerator
+import net.jeedup.web.response.HTML
 
 import java.lang.annotation.Annotation
 import java.lang.reflect.Method
@@ -65,32 +66,30 @@ class JeedupHandler implements HttpHandler {
         println 'Request: ' + path + ' ' + requestData
         Response response = route.invoke(requestData)
 
+        if (response instanceof HTML) {
+            HTML html = (HTML)response
+            if (!html.view)
+                html.view(route.action.name)
+        }
+
         exchange.setResponseCode(response.status)
         exchange.getResponseHeaders().add(Headers.CONTENT_TYPE, response.contentType)
 
         OutputStream outputStream = exchange.getOutputStream()
-
-        /*
-        if (exchange.getRequestHeaders().get(Headers.ACCEPT_ENCODING)?.getAt(0)?.contains('gzip')) {
-            exchange.getResponseHeaders().add(Headers.CONTENT_ENCODING, 'gzip')
-            outputStream = new GZIPOutputStream(outputStream)
-        }
-        */
-
         response.render(outputStream)
-        exchange.endExchange()
+        //exchange.endExchange()
     }
 
     private static Map parseRequestData(HttpServerExchange exchange) {
         Map result = [:]
         HttpString method = exchange.getRequestMethod()
-        if (method == Methods.POST) {
+        if (method == Methods.POST || method == Methods.PUT) {
             exchange.getInputStream().newReader().eachLine { String line ->
                 result = line.split('&').collectEntries { String param ->
                     param.split('=').collect { String it -> URLDecoder.decode(it, 'UTF-8') }
                 }
             }
-        } else if (method == Methods.GET) {
+        } else if (method == Methods.GET || method == Methods.DELETE) {
             exchange.getQueryParameters().each { String name, Deque<String> values ->
                 if (values.size() == 1) {
                     result[name] = URLDecoder.decode(values[0], 'UTF-8')
