@@ -2,7 +2,14 @@ package net.jeedup.web
 
 import groovy.transform.CompileStatic
 import io.undertow.Undertow
+import io.undertow.io.IoCallback
+import io.undertow.predicate.Predicates
 import io.undertow.server.HttpHandler
+import io.undertow.server.HttpServerExchange
+import io.undertow.server.handlers.encoding.ContentEncodingRepository
+import io.undertow.server.handlers.encoding.EncodingHandler
+import io.undertow.server.handlers.encoding.GzipEncodingProvider
+import io.undertow.util.Headers
 
 @CompileStatic
 class Jeedup {
@@ -19,7 +26,13 @@ class Jeedup {
     }
 
     private HttpHandler createHttpHandler() {
-        return new JeedupHandler()
+        final jeedupHandler = new JeedupHandler()
+
+        final EncodingHandler handler = new EncodingHandler(new ContentEncodingRepository()
+                .addEncodingHandler("gzip", new GzipEncodingProvider(), 50, Predicates.maxContentSize(5)))
+                .setNext(jeedupHandler)
+
+        return handler
     }
 
 }

@@ -1,7 +1,8 @@
-- GZIP
 mustache.java (/html)
+Database
 Authentication
 Authorization
+* GZIP
 * Deployment
 * JSON
 * Resources (js, images, css)

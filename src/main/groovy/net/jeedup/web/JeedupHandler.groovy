@@ -78,7 +78,6 @@ class JeedupHandler implements HttpHandler {
         */
 
         response.render(outputStream)
-        outputStream.flush()
         exchange.endExchange()
     }
 
