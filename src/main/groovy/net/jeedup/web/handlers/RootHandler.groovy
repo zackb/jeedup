@@ -2,7 +2,7 @@ package net.jeedup.web.handlers
 
 import groovy.transform.CompileStatic
 import net.jeedup.model.User
-import net.jeedup.persistence.Db
+import net.jeedup.persistence.DB
 import net.jeedup.web.Config
 import net.jeedup.web.Endpoint
 
@@ -45,7 +45,7 @@ class RootHandler {
 
     @Endpoint('db')
     def db(Map data) {
-        Db<User> db = Db.db(User.class)
+        DB<User> db = DB.db(User.class)
         List<User> users = db.getAll([1])
         JSON(users)
     }
