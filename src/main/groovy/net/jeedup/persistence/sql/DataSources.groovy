@@ -1,10 +1,14 @@
 package net.jeedup.persistence.sql
 
 import groovy.transform.CompileStatic
+import net.jeedup.reflection.ClassEnumerator
 import net.jeedup.web.Config
+import net.jeedup.web.Model
 import org.apache.commons.dbcp.BasicDataSource
 
 import javax.sql.DataSource
+import java.lang.annotation.Annotation
+import java.lang.reflect.Method
 
 /**
  * User: zack
@@ -15,13 +19,42 @@ class DataSources {
 
     private static DataSources instance = null
 
-    private static final Map<String, DataSource> dataSources
+    private final Map<String, DataSource> dataSources = [:]
+    private final Map<Class, DataSource> models = [:]
 
     static {
-        dataSources = [:]
+        getInstance()
+    }
+
+    private DataSources() {
+        config()
+    }
+
+    public static DataSources getInstance() {
+        if (!instance) {
+            synchronized (DataSources.class) {
+                if (!instance) {
+                    instance = new DataSources()
+                }
+            }
+        }
+
+        return instance
+    }
+
+    private void config() {
+        registerDataSources()
+        registerModels('net.jeedup.model')
+    }
+
+    public static DataSource forClass(Class clazz) {
+        return getInstance().models[clazz]
+    }
+
+
+    private void registerDataSources() {
         Map configs = Config.getDataSources()
         configs.each { String name, Map c ->
-            println "Name: ${name} Value: ${c}"
             BasicDataSource dataSource = new BasicDataSource()
             dataSource.driverClassName = c.driverClassName ?: 'com.mysql.jdbc.Driver'
             dataSource.url             = c.url
@@ -36,23 +69,23 @@ class DataSources {
         }
     }
 
-    public DataSources() {
-    }
+    private void registerModels(String packageName) {
 
-    public static DataSource getDefaultDataSource() {
-        return dataSources.get('mainDB')
-    }
+        List<Class> classes = ClassEnumerator.getClassesForPackage(packageName)
+        for (Class<?> clazz : classes) {
+            // no inner classes
+            if (clazz.name.contains('$'))
+                continue
 
-    public static DataSources getInstance() {
-        if (instance) {
-            return instance
-        }
-
-        synchronized (DataSources.class) {
-            if (instance == null) {
-                instance = new DataSources()
+            Annotation annotation = clazz.getAnnotation(Model.class)
+            if (annotation) {
+                String dsName = annotation.value()
+                DataSource ds = dataSources[dsName]
+                if (!ds) {
+                    throw new IllegalArgumentException("No such datasource ${dsName} for model ${clazz.name}")
+                }
+                models[clazz] = ds
             }
         }
-        return instance
     }
 }

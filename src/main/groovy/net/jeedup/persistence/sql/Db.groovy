@@ -27,7 +27,7 @@ class Db<T> {
                 if (!db) {
                     db = new Db<T>()
                     db.clazz = clazz
-                    db.dataSource = DataSources.defaultDataSource
+                    db.dataSource = DataSources.forClass(clazz)
                 }
             }
         }
