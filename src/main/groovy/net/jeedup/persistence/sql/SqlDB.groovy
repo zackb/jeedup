@@ -18,12 +18,22 @@ class SqlDB<T> extends DB<T> {
     private DataSource dataSource
 
     public SqlDB(Class clazz) {
-        this.clazz = clazz;
+        this.clazz = clazz
         this.dataSource = DataSources.forClass(clazz)
     }
 
     public <T> void save(T obj) {
+        insertOrUpdate(obj)
+    }
 
+    public <T> void insertOrUpdate(T obj) {
+        Sql().executeInsert(describeInsertSql(), values(obj))
+    }
+
+    public <T> void update(T obj) {
+        List values = values(obj)
+        values << id(obj)
+        Sql().executeUpdate(describeUpdateSql(), values)
     }
 
     public <T> void saveAll(List<T> objs) {
@@ -33,7 +43,7 @@ class SqlDB<T> extends DB<T> {
     }
 
     public <T> T get(Object id) {
-        def row = new Sql(dataSource).firstRow(describeSelectSql(), [id])
+        def row = Sql().firstRow(describeSelectSql(), [id])
         Object instance = clazz.newInstance()
         describeFields().each { String name, Field field ->
             field.set(instance, row[name])
@@ -64,6 +74,11 @@ class SqlDB<T> extends DB<T> {
         return results
     }
 
+    protected Sql Sql() {
+        return new Sql(dataSource)
+    }
+
+
     private static Map<Class, String> selectSqlCache = new ConcurrentHashMap<Class, String>()
 
     protected final String describeSelectSql() {
@@ -74,6 +89,68 @@ class SqlDB<T> extends DB<T> {
         sql = "select ${describeFields().keySet().join(',')} from ${clazz.simpleName} where id = ?"
         selectSqlCache.put(clazz, sql)
         return sql
+    }
+
+
+    private static Map<Class, String> insertOrUpdateSqlCache = new ConcurrentHashMap<Class, String>()
+
+    protected final String describeInsertSql() {
+
+        String insertSql = insertOrUpdateSqlCache.get(clazz)
+
+        if (insertSql) {
+            return insertSql
+        }
+
+        Map<String, Field> fields = describeFields()
+
+        String updateSql = ""
+        insertSql = "insert into ${clazz.simpleName} ("
+        for (String name : fields.keySet()) {
+            insertSql += "${name},"
+            updateSql += "${name} = values(${name}),"
+        }
+        // trim last ,
+        insertSql = insertSql.substring(0, insertSql.length() - 1)
+        updateSql = updateSql.substring(0, updateSql.length() - 1)
+
+        insertSql += ") values (${questionMarksWithCommas(fields.size())})"
+
+        insertSql += " on duplicate key update " + updateSql
+
+        insertOrUpdateSqlCache.put(clazz, insertSql)
+        return insertSql
+    }
+
+    private static Map<Class, String> updateSqlCache = new ConcurrentHashMap<Class, String>()
+
+    private final String describeUpdateSql() {
+
+        String updateSql = updateSqlCache.get(clazz)
+
+        if (updateSql) {
+            return updateSql
+        }
+
+        updateSql = "update ${clazz.simpleName} set "
+
+        describeFields().keySet().each { String name ->
+            updateSql += "${name} = ?,"
+        }
+
+        // trim last ,
+        updateSql = updateSql.substring(0, updateSql.length() - 1)
+
+        updateSql += ' where id = ?'
+
+        updateSqlCache.put(clazz, updateSql)
+
+        return updateSql
+    }
+
+    protected Object id(obj) {
+        Field field = describeFields().get('id')
+        return field.get(obj)
     }
 
     private static String questionMarksWithCommas(int num) {

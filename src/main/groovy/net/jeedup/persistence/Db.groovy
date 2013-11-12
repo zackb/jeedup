@@ -15,17 +15,17 @@ import java.util.concurrent.ConcurrentHashMap
 @CompileStatic
 abstract class DB<T> {
 
-    protected Class clazz
+    protected Class<T> clazz
 
     private static final Map<Class, DB<T>> dbs = [:]
 
-    public abstract <T> void save(T obj);
+    public abstract <T> void save(T obj)
 
-    public abstract <T> void saveAll(List<T> objs);
+    public abstract <T> void saveAll(List<T> objs)
 
-    public abstract <T> T get(Object id);
+    public abstract <T> T get(Object id)
 
-    public abstract <T> List<T> getAll(List ids);
+    public abstract <T> List<T> getAll(List ids)
 
     public static final DB<T> db(Class clazz) {
         DB<T> db = dbs[clazz]
@@ -40,9 +40,13 @@ abstract class DB<T> {
         return db
     }
 
+    public static final SqlDB<T> sql(Class clazz) {
+        return (SqlDB<T>)db(clazz)
+    }
+
     private static Map<Class, Map<String, Field>> fieldsCache = new ConcurrentHashMap<Class, Map<String, Field>>()
 
-    public final Map<String, Field> describeFields() {
+    protected final Map<String, Field> describeFields() {
         Map<String, Field> fields = fieldsCache.get(clazz)
         if (fields != null) {
             return fields
@@ -60,6 +64,21 @@ abstract class DB<T> {
 
         fieldsCache.put(clazz, fields)
         return fields
+    }
+
+    protected <T> List values(T o) {
+        List args = []
+        describeFields().each { String name, Field field ->
+            Object value = o ? field.get(o) : null
+            if (name == 'lastUpdated') {
+                args << new Date()
+            } else if (name == 'dateCreated' && value == null) {
+                args << new Date()
+            } else {
+                args << value
+            }
+        }
+        return args
     }
 
     protected static HashSet<Class> PERSISTABLE_TYPES = new HashSet<>([
