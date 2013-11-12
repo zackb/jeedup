@@ -2,10 +2,9 @@ package net.jeedup.web.handlers
 
 import groovy.transform.CompileStatic
 import net.jeedup.model.User
-import net.jeedup.persistence.sql.Db
+import net.jeedup.persistence.Db
 import net.jeedup.web.Config
 import net.jeedup.web.Endpoint
-import net.jeedup.web.Response
 
 import static net.jeedup.web.Response.JSON
 import static net.jeedup.web.Response.TEXT

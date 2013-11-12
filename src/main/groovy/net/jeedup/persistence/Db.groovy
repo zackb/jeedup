@@ -1,7 +1,8 @@
-package net.jeedup.persistence.sql
+package net.jeedup.persistence
 
 import groovy.sql.Sql
 import groovy.transform.CompileStatic
+import net.jeedup.persistence.sql.DataSources
 
 import javax.sql.DataSource
 import java.lang.reflect.Field
