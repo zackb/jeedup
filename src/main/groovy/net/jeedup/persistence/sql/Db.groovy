@@ -3,6 +3,7 @@ package net.jeedup.persistence.sql
 import groovy.sql.Sql
 import groovy.transform.CompileStatic
 
+import javax.sql.DataSource
 import java.lang.reflect.Field
 import java.lang.reflect.Modifier
 import java.sql.Timestamp
@@ -16,10 +17,21 @@ import java.util.concurrent.ConcurrentHashMap
 class Db<T> {
 
     private Class clazz
+    private DataSource dataSource
 
+    private static final Map<Class, Db<T>> dbs = [:]
     public static Db<T> db(Class clazz) {
-        Db<T> db = new Db<T>()
-        db.clazz = clazz
+        Db<T> db = dbs[clazz]
+        if (!db) {
+            synchronized (clazz) {
+                if (!db) {
+                    db = new Db<T>()
+                    db.clazz = clazz
+                    db.dataSource = DataSources.defaultDataSource
+                }
+            }
+        }
+
         return db
     }
 
@@ -28,7 +40,7 @@ class Db<T> {
     }
 
     public <T> T get(Object id) throws Exception {
-        def row = new Sql(DataSources.defaultDataSource).firstRow(describeSelectSql(), [id])
+        def row = new Sql(dataSource).firstRow(describeSelectSql(), [id])
         Object instance = clazz.newInstance()
         describeFields().each { String name, Field field ->
             field.set(instance, row[name])
@@ -48,7 +60,7 @@ class Db<T> {
             query = 'select * ' + query
         }
 
-        new Sql(DataSources.defaultDataSource).eachRow(query, args ?: [], { row ->
+        new Sql(dataSource).eachRow(query, args ?: [], { row ->
             Object instance = clazz.newInstance()
             describeFields().each { String name, Field field ->
                 field.set(instance, row[name])
@@ -121,7 +133,7 @@ class Db<T> {
             Long.class,
             Date.class,
             Timestamp.class,
-            java.sql.Date,
+            java.sql.Date.class,
             byte[].class
     ])
 }

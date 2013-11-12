@@ -2,14 +2,11 @@ package net.jeedup.web
 
 import groovy.transform.CompileStatic
 import io.undertow.Undertow
-import io.undertow.io.IoCallback
 import io.undertow.predicate.Predicates
 import io.undertow.server.HttpHandler
-import io.undertow.server.HttpServerExchange
 import io.undertow.server.handlers.encoding.ContentEncodingRepository
 import io.undertow.server.handlers.encoding.EncodingHandler
 import io.undertow.server.handlers.encoding.GzipEncodingProvider
-import io.undertow.util.Headers
 
 @CompileStatic
 class Jeedup {

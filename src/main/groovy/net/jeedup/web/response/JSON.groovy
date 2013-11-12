@@ -1,5 +1,6 @@
 package net.jeedup.web.response
 
+import com.fasterxml.jackson.core.JsonParser
 import groovy.transform.CompileStatic
 import net.jeedup.web.Response
 import com.fasterxml.jackson.annotation.JsonAutoDetect
@@ -29,7 +30,8 @@ class JSON extends Response {
             //.setSerializationInclusion(JsonInclude.Include.NON_EMPTY)
             .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
             .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-            .enableDefaultTyping()
+            .configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true)
+            //.enableDefaultTyping()
 
         mapClass = new HashMap<String, Object>().getClass()
     }

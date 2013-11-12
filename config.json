@@ -1,5 +1,23 @@
-'datasource': {
-    'url': 'jdbc:mysql://127.0.0.1:3306/frequency?relaxAutoCommit=true&autoReconnect=true'
-    'username': 'root'
-    'password': 'G3tB4Ck'
+{
+    "datasources": {
+        "mainDB": {
+            "url": "jdbc:mysql://127.0.0.1:3306/jeedup?relaxAutoCommit=true&autoReconnect=true",
+            "username": "jeedup",
+            "password": "jeedup"
+        },
+        "auxDB": { 
+            "url": "jdbc:mysql://127.0.0.1:3306/jeedup_aux?relaxAutoCommit=true&autoReconnect=true",
+            "username": "jeedup",
+            "password": "jeedup"
+        }
+    },
+
+    "queues": {
+        "mainQueue": {
+            "host": "127.0.0.1",
+            "port": 5672,
+            "login": "guest",
+            "password": "guest"
+        }
+    }
 }

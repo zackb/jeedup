@@ -39,6 +39,7 @@ jar {
 
 processResources {
     from('html'){ into 'html' }
+    from('config.json')
     //from('css') { into 'css' }
     //from('images') { into 'images' }
     //from('js'){ into 'js' }
