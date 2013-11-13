@@ -1,4 +1,6 @@
 {
+    "host": "localhost",
+    "port": 8080,
     "datasources": {
         "mainDB": {
             "url": "jdbc:mysql://127.0.0.1:3306/jeedup?relaxAutoCommit=true&autoReconnect=true",

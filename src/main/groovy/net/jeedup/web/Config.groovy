@@ -36,6 +36,14 @@ class Config implements Map<String, Object> {
         return (Map<String, Map>) getInstance().get('datasources')
     }
 
+    public static final String host() {
+        return (String)getInstance().get('host')
+    }
+
+    public static final int port() {
+        return (int)getInstance().get('port')
+    }
+
     int size() {
         return data.size()
     }

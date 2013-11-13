@@ -105,5 +105,4 @@ abstract class DB<T> {
             java.sql.Date.class,
             byte[].class
     ])
-
 }

@@ -15,8 +15,9 @@ class Jeedup {
     }
 
     public void start() {
+
         Undertow server = Undertow.builder()
-                .addListener(8080, "localhost")
+                .addListener(Config.port(), Config.host())
                 .setHandler(createHttpHandler())
                 .build()
         server.start()
@@ -26,7 +27,7 @@ class Jeedup {
         final jeedupHandler = new JeedupHandler()
 
         final EncodingHandler handler = new EncodingHandler(new ContentEncodingRepository()
-                .addEncodingHandler("gzip", new GzipEncodingProvider(), 50, Predicates.maxContentSize(5)))
+                .addEncodingHandler('gzip', new GzipEncodingProvider(), 50, Predicates.maxContentSize(5)))
                 .setNext(jeedupHandler)
 
         return handler

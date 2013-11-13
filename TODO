@@ -1,12 +1,21 @@
-Config
-Database
+BCrypt https://github.com/seymores/grails-bcrypt/blob/master/src/java/grails/plugin/bcrypt/BCrypt.java
+HTTP get/post...
+BSON
+Queue
+Redis
 Authentication
 Authorization
-Queue
+Exec
 FoundationDB
 Scaffolding
+Sharding
+Text
+   - sentiment analysis
+   - summarization
 - Parse JSON/XML input request data from post/put
  - Multipart form data?
+* Config
+* Database
 * mustache.java (/html)
 * GZIP
 * Deployment
