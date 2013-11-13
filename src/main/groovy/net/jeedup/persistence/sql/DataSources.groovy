@@ -1,14 +1,14 @@
 package net.jeedup.persistence.sql
 
 import groovy.transform.CompileStatic
-import net.jeedup.reflection.ClassEnumerator
+import net.jeedup.entity.Entity
+import net.jeedup.reflect.ClassEnumerator
 import net.jeedup.web.Config
 import net.jeedup.web.Model
 import org.apache.commons.dbcp.BasicDataSource
 
 import javax.sql.DataSource
 import java.lang.annotation.Annotation
-import java.lang.reflect.Method
 
 /**
  * User: zack
@@ -79,6 +79,10 @@ class DataSources {
 
             Annotation annotation = clazz.getAnnotation(Model.class)
             if (annotation) {
+                if (Entity.class.isAssignableFrom(clazz)) {
+                    // hack to initialize type information
+                    clazz.newInstance()
+                }
                 String dsName = annotation.value()
                 DataSource ds = dataSources[dsName]
                 if (!ds) {

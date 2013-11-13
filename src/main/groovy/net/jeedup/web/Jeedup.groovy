@@ -7,6 +7,7 @@ import io.undertow.server.HttpHandler
 import io.undertow.server.handlers.encoding.ContentEncodingRepository
 import io.undertow.server.handlers.encoding.EncodingHandler
 import io.undertow.server.handlers.encoding.GzipEncodingProvider
+import net.jeedup.persistence.sql.DataSources
 
 @CompileStatic
 class Jeedup {
@@ -15,6 +16,9 @@ class Jeedup {
     }
 
     public void start() {
+
+        // configure datasources and data models
+        DataSources.getInstance()
 
         Undertow server = Undertow.builder()
                 .addListener(Config.port(), Config.host())

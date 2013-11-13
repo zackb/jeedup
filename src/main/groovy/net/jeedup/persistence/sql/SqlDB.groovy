@@ -52,6 +52,7 @@ class SqlDB<T> extends DB<T> {
     }
 
     public <T> T get(Object id) {
+
         GroovyRowResult row = Sql().firstRow(describeSelectSql(), [id])
         if (!row)
             return null

@@ -1,6 +1,7 @@
 package net.jeedup.model
 
 import groovy.transform.CompileStatic
+import net.jeedup.entity.Entity
 import net.jeedup.persistence.Constraints
 import net.jeedup.web.Model
 
@@ -10,7 +11,7 @@ import net.jeedup.web.Model
  */
 @CompileStatic
 @Model('mainDB')
-class User {
+class User extends Entity<User> {
 
     public Long id
 
@@ -20,4 +21,26 @@ class User {
     public String passwd
 
     public Date dateCreated
+
+    // IEntity
+    @Override
+    int getEntityTypeId() {
+        return 0
+    }
+
+    @Override
+    Object getEntityId() {
+        return id
+    }
+
+    @Override
+    String getTitle() {
+        return username
+    }
+
+    /*
+    protected static Class<?> getTypeClass() {
+        return User.class
+    }
+    */
 }

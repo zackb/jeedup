@@ -1,4 +1,4 @@
-package net.jeedup.reflection
+package net.jeedup.reflect
 
 import groovy.transform.CompileStatic
 

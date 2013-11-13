@@ -47,7 +47,10 @@ class RootHandler {
 
     @Endpoint('db')
     def db(Map data) {
-        SqlDB<User> db = DB.sql(User.class)
-        JSON(db.executeQuery("select * from User"))
+        //SqlDB<User> db = DB.sql(User.class)
+        User user = User.get(8)
+        user.username = 'fooey ' + System.currentTimeMillis()
+        user.save()
+        JSON(User.get(8))
     }
 }

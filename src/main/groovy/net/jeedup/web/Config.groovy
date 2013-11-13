@@ -1,11 +1,13 @@
 package net.jeedup.web
 
+import groovy.transform.CompileStatic
 import net.jeedup.web.response.JSON
 
 /**
  * User: zack
  * Date: 11/12/13
  */
+@CompileStatic
 class Config implements Map<String, Object> {
 
     private static Config instance
@@ -16,7 +18,6 @@ class Config implements Map<String, Object> {
     }
 
     private Config(String filename) {
-        //URL resource = ClassLoader.getResource(filename)
         URL resource = ClassLoader.getSystemResource(filename)
         data = JSON.parse(resource.text)
     }

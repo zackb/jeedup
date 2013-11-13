@@ -8,7 +8,7 @@ import io.undertow.server.handlers.resource.ResourceHandler
 import io.undertow.util.Headers
 import io.undertow.util.HttpString
 import io.undertow.util.Methods
-import net.jeedup.reflection.ClassEnumerator
+import net.jeedup.reflect.ClassEnumerator
 import net.jeedup.web.response.HTML
 import net.jeedup.web.response.JSON
 
