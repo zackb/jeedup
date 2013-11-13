@@ -1,6 +1,7 @@
 package net.jeedup.web.handlers
 
 import groovy.transform.CompileStatic
+
 import net.jeedup.model.User
 import net.jeedup.persistence.DB
 import net.jeedup.persistence.sql.SqlDB
@@ -47,9 +48,6 @@ class RootHandler {
     @Endpoint('db')
     def db(Map data) {
         SqlDB<User> db = DB.sql(User.class)
-        User user = db.get(3)
-        user.username = 'another test user'
-        db.update(user)
-        JSON(user)
+        JSON(db.get(1))
     }
 }

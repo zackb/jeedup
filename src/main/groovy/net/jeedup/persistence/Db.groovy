@@ -81,7 +81,7 @@ abstract class DB<T> {
         return args
     }
 
-    protected static HashSet<Class> PERSISTABLE_TYPES = new HashSet<>([
+    protected static Set<Class> PERSISTABLE_TYPES = new HashSet<>([
             Boolean.class,
             Double.class,
             Float.class,

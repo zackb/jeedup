@@ -6,6 +6,7 @@ import net.jeedup.persistence.DB
 
 import javax.sql.DataSource
 import java.lang.reflect.Field
+import java.sql.Timestamp
 import java.util.concurrent.ConcurrentHashMap
 
 /**
@@ -63,7 +64,7 @@ class SqlDB<T> extends DB<T> {
             query = 'select * ' + query
         }
 
-        new Sql(dataSource).eachRow(query, args ?: [], { row ->
+        Sql().eachRow(query, args ?: [], { row ->
             Object instance = clazz.newInstance()
             describeFields().each { String name, Field field ->
                 field.set(instance, row[name])
@@ -74,10 +75,61 @@ class SqlDB<T> extends DB<T> {
         return results
     }
 
+    /**
+     * Very rudimentary create table syntax
+     *
+     */
+    public void createTable(String engine = 'innodb') {
+        String createSql = "create table `${clazz.simpleName}` ("
+        Map<String, Field> fields = describeFields()
+        Class idType = fields['id'].type
+        if ([Long.class, Integer.class, int.class, long.class].contains(idType)) {
+            createSql += '`id` int(10) unsigned not null auto_increment primary key,'
+        } else if (idType == String.class) {
+            createSql += '`id` varchar(255) character set utf8 not null primary key,'
+        }
+        fields.each { String name, Field field ->
+            if (name == 'id')
+                return
+            String datatype = ''
+            switch (field.type) {
+                case String:
+                    datatype = 'varchar(255) character set utf8'
+                    break
+                case Long:
+                    datatype = 'bigint(10)'
+                    break
+                case Integer:
+                case Short:
+                    datatype = 'int(10)'
+                    break
+                case Double:
+                case Float:
+                    datatype = 'double'
+                    break
+                case Date:
+                case Timestamp:
+                    datatype = 'datetime'
+                    break
+                case byte[]:
+                    datatype = 'blob'
+                    break
+                default:
+                    throw new Exception("Do not know how to handle: ${field.type.name}")
+            }
+
+            createSql += "`${name}` ${datatype},"
+        }
+        // trim last ,
+        createSql = createSql.substring(0, createSql.length() - 1)
+
+        createSql += ") engine=${engine} default charset=utf8"
+        Sql().executeUpdate(createSql)
+    }
+
     protected Sql Sql() {
         return new Sql(dataSource)
     }
-
 
     private static Map<Class, String> selectSqlCache = new ConcurrentHashMap<Class, String>()
 
@@ -86,7 +138,9 @@ class SqlDB<T> extends DB<T> {
         if (sql) {
             return sql
         }
-        sql = "select ${describeFields().keySet().join(',')} from ${clazz.simpleName} where id = ?"
+
+        List fields = describeFields().keySet().collect({ "`${it}`"})
+        sql = "select ${fields.join(',')} from ${clazz.simpleName} where `id` = ?"
         selectSqlCache.put(clazz, sql)
         return sql
     }
@@ -105,10 +159,10 @@ class SqlDB<T> extends DB<T> {
         Map<String, Field> fields = describeFields()
 
         String updateSql = ""
-        insertSql = "insert into ${clazz.simpleName} ("
+        insertSql = "insert into `${clazz.simpleName}` ("
         for (String name : fields.keySet()) {
-            insertSql += "${name},"
-            updateSql += "${name} = values(${name}),"
+            insertSql += "`${name}`,"
+            updateSql += "`${name}` = values(`${name}`),"
         }
         // trim last ,
         insertSql = insertSql.substring(0, insertSql.length() - 1)
@@ -132,16 +186,16 @@ class SqlDB<T> extends DB<T> {
             return updateSql
         }
 
-        updateSql = "update ${clazz.simpleName} set "
+        updateSql = "update `${clazz.simpleName}` set "
 
         describeFields().keySet().each { String name ->
-            updateSql += "${name} = ?,"
+            updateSql += "`${name}` = ?,"
         }
 
         // trim last ,
         updateSql = updateSql.substring(0, updateSql.length() - 1)
 
-        updateSql += ' where id = ?'
+        updateSql += ' where `id` = ?'
 
         updateSqlCache.put(clazz, updateSql)
 
