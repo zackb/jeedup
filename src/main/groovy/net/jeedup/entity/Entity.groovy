@@ -32,4 +32,8 @@ abstract class Entity<T> implements IEntity {
     public void save() {
         db().save(this)
     }
+
+    public String uuid() {
+        return EntityUtil.uuid(this)
+    }
 }
