@@ -1,5 +1,7 @@
 package net.jeedup.persistence.sql
 
+import groovy.sql.GroovyResultSet
+import groovy.sql.GroovyRowResult
 import groovy.sql.Sql
 import groovy.transform.CompileStatic
 import net.jeedup.persistence.DB
@@ -50,13 +52,11 @@ class SqlDB<T> extends DB<T> {
     }
 
     public <T> T get(Object id) {
-        def row = Sql().firstRow(describeSelectSql(), [id])
+        GroovyRowResult row = Sql().firstRow(describeSelectSql(), [id])
         if (!row)
             return null
-        Object instance = clazz.newInstance()
-        describeFields().each { String name, Field field ->
-            field.set(instance, row[name])
-        }
+
+        Object instance = instantiate(row)
 
         return (T) instance
     }
@@ -66,18 +66,16 @@ class SqlDB<T> extends DB<T> {
     }
 
     public <T> List<T> executeQuery(String query, List args = null) throws Exception {
+
         List<T> results = []
+
         query = query.toLowerCase().trim().replaceAll("\n|\t|\r", ' ')
         if (query.startsWith('from')) {
             query = 'select * ' + query
         }
 
-        Sql().eachRow(query, args ?: [], { row ->
-            Object instance = clazz.newInstance()
-            describeFields().each { String name, Field field ->
-                field.set(instance, row[name])
-            }
-            results << instance
+        Sql().eachRow(query, args ?: [], { GroovyResultSet row ->
+            results << instantiate(row.toRowResult())
         })
 
         return results

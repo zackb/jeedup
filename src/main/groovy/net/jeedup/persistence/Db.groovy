@@ -27,6 +27,8 @@ abstract class DB<T> {
 
     public abstract <T> List<T> getAll(List ids)
 
+    protected abstract <T> void delete(T obj)
+
     public static final DB<T> db(Class clazz) {
         DB<T> db = dbs[clazz]
         if (!db) {
@@ -57,7 +59,7 @@ abstract class DB<T> {
         for (Field field : clazz.declaredFields) {
             int no = Modifier.ABSTRACT | Modifier.STATIC
             if (!(field.modifiers & no) && (field.type.isPrimitive() || PERSISTABLE_TYPES.contains(field.type))) {
-                field.setAccessible(true)
+                field.accessible = true
                 fields[field.name] = field
             }
         }
@@ -79,6 +81,15 @@ abstract class DB<T> {
             }
         }
         return args
+    }
+
+    public <T> T instantiate(Map<String, Object> values = null) {
+        Object obj = clazz.newInstance()
+        describeFields().each { String name, Field field ->
+            field.set(obj, values[name])
+        }
+
+        return obj
     }
 
     protected static Set<Class> PERSISTABLE_TYPES = new HashSet<>([
