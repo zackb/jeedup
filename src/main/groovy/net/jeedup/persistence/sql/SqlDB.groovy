@@ -3,6 +3,7 @@ package net.jeedup.persistence.sql
 import groovy.sql.Sql
 import groovy.transform.CompileStatic
 import net.jeedup.persistence.DB
+import net.jeedup.persistence.Options
 
 import javax.sql.DataSource
 import java.lang.reflect.Field
@@ -28,7 +29,12 @@ class SqlDB<T> extends DB<T> {
     }
 
     public <T> void insertOrUpdate(T obj) {
-        Sql().executeInsert(describeInsertSql(), values(obj))
+        if (id(obj)) {
+            Sql().executeInsert(describeInsertOrUpdateSql(), values(obj))
+        } else {
+            def res = Sql().executeInsert(describeInsertSql(), values(obj))
+            setId(obj, res[0][0])
+        }
     }
 
     public <T> void update(T obj) {
@@ -45,6 +51,8 @@ class SqlDB<T> extends DB<T> {
 
     public <T> T get(Object id) {
         def row = Sql().firstRow(describeSelectSql(), [id])
+        if (!row)
+            return null
         Object instance = clazz.newInstance()
         describeFields().each { String name, Field field ->
             field.set(instance, row[name])
@@ -88,20 +96,22 @@ class SqlDB<T> extends DB<T> {
         } else if (idType == String.class) {
             createSql += '`id` varchar(255) character set utf8 not null primary key,'
         }
+        List<String> constraints = []
         fields.each { String name, Field field ->
+            Options options = field.getAnnotation(Options)
             if (name == 'id')
                 return
             String datatype = ''
             switch (field.type) {
                 case String:
-                    datatype = 'varchar(255) character set utf8'
+                    datatype = "varchar(${options?.max() ?: 255}) character set utf8"
                     break
                 case Long:
-                    datatype = 'bigint(10)'
+                    datatype = "bigint(${options?.max() ?: 10})"
                     break
                 case Integer:
                 case Short:
-                    datatype = 'int(10)'
+                    datatype = "int(${options?.max() ?: 10})"
                     break
                 case Double:
                 case Float:
@@ -119,7 +129,15 @@ class SqlDB<T> extends DB<T> {
             }
 
             createSql += "`${name}` ${datatype},"
+
+            if (options?.unique()) {
+                createSql += " constraint u_${clazz.simpleName}_on_${field.name} unique(${field.name}),"
+            }
+            if (options?.index()) {
+                createSql += " index idx_${clazz.simpleName}_on_${field.name} (${field.name}),"
+            }
         }
+
         // trim last ,
         createSql = createSql.substring(0, createSql.length() - 1)
 
@@ -145,10 +163,36 @@ class SqlDB<T> extends DB<T> {
         return sql
     }
 
+    private static Map<Class, String> insertSqlCache = new ConcurrentHashMap<Class, String>()
+
+    public String describeInsertSql() {
+        String insertSql = insertSqlCache.get(clazz);
+        if (insertSql) {
+            return insertSql
+        }
+
+        insertSql = "insert into ${clazz.simpleName} ("
+
+        def fields = describeFields()
+        fields.keySet().each { String name ->
+            insertSql += "`${name}`,"
+        }
+        // trim last ,
+        insertSql = insertSql.substring(0, insertSql.length() - 1);
+
+        insertSql += ") values (${questionMarksWithCommas(fields.size())})"
+
+        insertSqlCache.put(clazz, insertSql)
+
+        return insertSql
+    }
+
+
+
 
     private static Map<Class, String> insertOrUpdateSqlCache = new ConcurrentHashMap<Class, String>()
 
-    protected final String describeInsertSql() {
+    protected final String describeInsertOrUpdateSql() {
 
         String insertSql = insertOrUpdateSqlCache.get(clazz)
 
@@ -202,9 +246,14 @@ class SqlDB<T> extends DB<T> {
         return updateSql
     }
 
-    protected Object id(obj) {
+    protected Object id(T obj) {
         Field field = describeFields().get('id')
         return field.get(obj)
+    }
+
+    protected void setId(T obj, Object value) {
+        Field field = describeFields().get('id')
+        field.set(obj, value)
     }
 
     private static String questionMarksWithCommas(int num) {

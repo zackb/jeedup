@@ -48,6 +48,6 @@ class RootHandler {
     @Endpoint('db')
     def db(Map data) {
         SqlDB<User> db = DB.sql(User.class)
-        JSON(db.get(1))
+        JSON(db.get(4))
     }
 }
