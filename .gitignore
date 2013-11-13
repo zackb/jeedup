@@ -3,3 +3,4 @@
 build
 *.iml
 jeedup.jar
+out/

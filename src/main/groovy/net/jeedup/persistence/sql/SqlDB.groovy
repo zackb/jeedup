@@ -42,7 +42,7 @@ class SqlDB<T> extends DB<T> {
     public <T> void update(T obj) {
         List values = values(obj)
         values << id(obj)
-        Sql().executeUpdate(describeUpdateSql(), values)
+        executeUpdate(describeUpdateSql(), values)
     }
 
     public <T> void saveAll(List<T> objs) {
@@ -81,8 +81,12 @@ class SqlDB<T> extends DB<T> {
         return results
     }
 
+    public void executeUpdate(String sql, List args = []) {
+        Sql().executeUpdate(sql, args)
+    }
+
     public <T> void delete(T obj) {
-        Sql().executeUpdate(describeDeleteSql(), [id(obj)])
+        executeUpdate(describeDeleteSql(), [id(obj)])
     }
 
     /**
@@ -147,7 +151,7 @@ class SqlDB<T> extends DB<T> {
         createSql = createSql.substring(0, createSql.length() - 1)
 
         createSql += ") engine=${engine} default charset=utf8"
-        Sql().executeUpdate(createSql)
+        executeUpdate(createSql)
     }
 
     protected Sql Sql() {

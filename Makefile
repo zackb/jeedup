@@ -17,3 +17,4 @@ dist:
 clean:
 	gradle clean
 	rm -f jeedup.jar
+	rm -Rf out
