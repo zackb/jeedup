@@ -3,7 +3,7 @@ package net.jeedup.persistence.sql
 import groovy.sql.Sql
 import groovy.transform.CompileStatic
 import net.jeedup.persistence.DB
-import net.jeedup.persistence.Options
+import net.jeedup.persistence.Constraints
 
 import javax.sql.DataSource
 import java.lang.reflect.Field
@@ -83,6 +83,10 @@ class SqlDB<T> extends DB<T> {
         return results
     }
 
+    public <T> void delete(T obj) {
+        Sql().executeUpdate(describeDeleteSql(), [id(obj)])
+    }
+
     /**
      * Very rudimentary create table syntax
      *
@@ -96,9 +100,10 @@ class SqlDB<T> extends DB<T> {
         } else if (idType == String.class) {
             createSql += '`id` varchar(255) character set utf8 not null primary key,'
         }
+
         List<String> constraints = []
         fields.each { String name, Field field ->
-            Options options = field.getAnnotation(Options)
+            Constraints options = field.getAnnotation(Constraints)
             if (name == 'id')
                 return
             String datatype = ''
@@ -131,12 +136,14 @@ class SqlDB<T> extends DB<T> {
             createSql += "`${name}` ${datatype},"
 
             if (options?.unique()) {
-                createSql += " constraint u_${clazz.simpleName}_on_${field.name} unique(${field.name}),"
+                constraints << " constraint u_${clazz.simpleName}_on_${field.name} unique(${field.name}),"
             }
             if (options?.index()) {
-                createSql += " index idx_${clazz.simpleName}_on_${field.name} (${field.name}),"
+                constraints << " index idx_${clazz.simpleName}_on_${field.name} (${field.name}),"
             }
         }
+
+        createSql += constraints.join(' ')
 
         // trim last ,
         createSql = createSql.substring(0, createSql.length() - 1)
@@ -148,6 +155,7 @@ class SqlDB<T> extends DB<T> {
     protected Sql Sql() {
         return new Sql(dataSource)
     }
+
 
     private static Map<Class, String> selectSqlCache = new ConcurrentHashMap<Class, String>()
 
@@ -162,6 +170,7 @@ class SqlDB<T> extends DB<T> {
         selectSqlCache.put(clazz, sql)
         return sql
     }
+
 
     private static Map<Class, String> insertSqlCache = new ConcurrentHashMap<Class, String>()
 
@@ -186,8 +195,6 @@ class SqlDB<T> extends DB<T> {
 
         return insertSql
     }
-
-
 
 
     private static Map<Class, String> insertOrUpdateSqlCache = new ConcurrentHashMap<Class, String>()
@@ -244,6 +251,19 @@ class SqlDB<T> extends DB<T> {
         updateSqlCache.put(clazz, updateSql)
 
         return updateSql
+    }
+
+    private static Map<Class, String> deleteSqlCache = new ConcurrentHashMap<Class, String>()
+
+    private final String describeDeleteSql() {
+        String deleteSql = deleteSqlCache.get(clazz)
+        if (deleteSql) {
+            return deleteSql
+        }
+        deleteSql = "delete from `${clazz.simpleName}` where id = ?"
+        deleteSqlCache.put(clazz, deleteSql)
+
+        return deleteSql
     }
 
     protected Object id(T obj) {
