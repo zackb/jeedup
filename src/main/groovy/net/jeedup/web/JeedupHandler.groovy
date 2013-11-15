@@ -52,7 +52,12 @@ class JeedupHandler implements HttpHandler {
     public void handleRequest(HttpServerExchange exchange) throws Exception {
 
         String path = exchange.getRequestPath()
+        path.trim()
         path = path.startsWith('/') ? path.substring(1) : path
+
+        if (path.endsWith('/')) {
+            path = path.substring(0, path.lastIndexOf('/'))
+        }
 
         if (isResourceDir(path)) {
             resourceHandler.handleRequest(exchange)

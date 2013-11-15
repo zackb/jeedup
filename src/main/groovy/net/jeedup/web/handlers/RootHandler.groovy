@@ -27,17 +27,6 @@ class RootHandler {
         TEXT(data)
     }
 
-    @Endpoint('')
-    def html(Map data) {
-        HTML([message: data?.message ?: 'Hello, World!', foo:[bar: 'BOOO']], 'test')
-    }
-
-    @Endpoint('test/zack')
-    def zack(Map data) {
-        // will render zack.html with no data
-        HTML()
-    }
-
     @Endpoint('admin')
     def admin(Map data) {
         HTML(null, 'admin/admin')

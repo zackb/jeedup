@@ -12,8 +12,18 @@ import static net.jeedup.web.Response.HTML
 @CompileStatic
 class ZackHandler {
 
-    @Endpoint('zack/index')
+    @Endpoint('zack')
     def index(Map data) {
+        HTML(null, 'zack/index')
+    }
+
+    @Endpoint('zack/about')
+    def about(Map data) {
+        HTML()
+    }
+
+    @Endpoint('zack/projects')
+    def projects(Map data) {
         HTML()
     }
 }
