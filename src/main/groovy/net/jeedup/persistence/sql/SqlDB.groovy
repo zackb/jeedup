@@ -62,8 +62,14 @@ class SqlDB<T> extends DB<T> {
         return (T) instance
     }
 
-    public <T> List<T> getAll(List ids) {
-        return executeQuery("select * from ${clazz.simpleName} where id in (${questionMarksWithCommas(ids.size())}) ", ids)
+    public <T> List<T> getAll(List ids = null) {
+        List<T> result = null
+        if (ids)
+            result = executeQuery("select * from ${clazz.simpleName} where id in (${questionMarksWithCommas(ids.size())}) ", ids)
+        else
+            result = executeQuery("select * from ${clazz.simpleName}")
+
+        return result
     }
 
     public <T> List<T> executeQuery(String query, List args = null) throws Exception {
@@ -97,14 +103,18 @@ class SqlDB<T> extends DB<T> {
     public void createTable(String engine = 'innodb') {
         String createSql = "create table `${clazz.simpleName}` ("
         Map<String, Field> fields = describeFields()
-        Class idType = fields['id'].type
-        if ([Long.class, Integer.class, int.class, long.class].contains(idType)) {
-            createSql += '`id` int(10) unsigned not null auto_increment primary key,'
-        } else if (idType == String.class) {
-            createSql += '`id` varchar(255) character set utf8 not null primary key,'
+        List<String> constraints = []
+        Class idType = fields['id']?.type
+        if (idType) {
+            if ([Long.class, Integer.class, int.class, long.class].contains(idType)) {
+                createSql += '`id` int(10) unsigned not null auto_increment,'
+            } else if (idType == String.class) {
+                createSql += '`id` varchar(255) character set utf8 not null,'
+            }
+
+            constraints << "constraint pk_${clazz.simpleName} primary key(id),"
         }
 
-        List<String> constraints = []
         fields.each { String name, Field field ->
             Constraints options = field.getAnnotation(Constraints)
             if (name == 'id')

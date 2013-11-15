@@ -25,7 +25,7 @@ abstract class DB<T> {
 
     public abstract <T> T get(Object id)
 
-    public abstract <T> List<T> getAll(List ids)
+    public abstract <T> List<T> getAll(List ids = null)
 
     protected abstract <T> void delete(T obj)
 

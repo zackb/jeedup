@@ -10,7 +10,7 @@ import net.jeedup.web.Model
  * Date: 11/11/13
  */
 @CompileStatic
-@Model('mainDB')
+@Model('auxDB')
 class User extends Entity<User> {
 
     public Long id

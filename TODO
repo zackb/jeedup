@@ -1,4 +1,3 @@
-BCrypt https://github.com/seymores/grails-bcrypt/blob/master/src/java/grails/plugin/bcrypt/BCrypt.java
 HTTP get/post...
 BSON
 Queue
@@ -14,6 +13,7 @@ Text
    - summarization
 - Parse JSON/XML input request data from post/put
  - Multipart form data?
+* BCrypt
 * Config
 * Database
 * mustache.java (/html)

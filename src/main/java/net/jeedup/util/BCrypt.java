@@ -675,6 +675,11 @@ public class BCrypt {
 		return rs.toString();
 	}
 
+
+    public static String hashpw(String plaintext) {
+        return hashpw(plaintext, gensalt(11));
+    }
+
 	/**
 	 * Generate a salt for use with the BCrypt.hashpw() method
 	 * @param log_rounds	the log2 of the number of rounds of

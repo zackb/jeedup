@@ -26,6 +26,7 @@ class HTML extends Response {
         if (this.view && !this.view.endsWith('.html')) {
             this.view = this.view + '.html'
         }
+
         return this
     }
 
@@ -34,14 +35,12 @@ class HTML extends Response {
         if (data instanceof String) {
             out.write(data.getBytes(Charset.forName("UTF-8")))
         } else if (view) {
-            OutputStream bytes = new ByteArrayOutputStream()
-            Writer writer = new OutputStreamWriter(bytes)
+            StringWriter writer = new StringWriter()
             MustacheFactory mf = new DefaultMustacheFactory()
             Mustache mustache = mf.compile("html/${view}")
             mustache.execute(writer, data)
             writer.flush()
-            out.write(new String(bytes.toByteArray(), 'UTF-8').getBytes('UTF-8'))
-
+            out.write(writer.toString().getBytes('UTF-8'))
         }
     }
 }
