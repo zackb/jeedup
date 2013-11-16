@@ -1,14 +1,13 @@
 package net.jeedup.net.http
 
 import groovy.transform.CompileStatic
-import io.undertow.util.StatusCodes
 
 /**
  * User: zack
  * Date: 11/10/13
  */
 @CompileStatic
-abstract class Response {
+class Response {
 
     public String contentType
     public int status
@@ -16,34 +15,30 @@ abstract class Response {
     public InputStream inputStream
     public Map<String, String> headers
 
+    // hack just for html?
+    public String view
+
     //TODO cache headers
 
-    public static JSON JSON() {
-        return (JSON)new JSON()
-                .status(StatusCodes.OK)
+    public static Response OK(Object data = null) {
+        return new Response()
+                .data(data)
+                .status(200)
     }
 
-    public static HTML HTML() {
-        return (HTML)new HTML()
-                .status(StatusCodes.OK)
+    public static Response HTML(Object data = null, String view = null) {
+        return OK(data)
+                .contentType('text/html')
+                .view(view)
     }
 
-    public static TEXT TEXT() {
-        return (TEXT)new TEXT()
-                .status(StatusCodes.OK)
+
+    public static Response TEXT(Object data = null) {
+        return OK(data).contentType('text/plain')
     }
 
-    public static JSON JSON(Object data) {
-        return (JSON)JSON().data(data)
-    }
-
-    public static HTML HTML(Object data, String view = null) {
-        HTML html = (HTML)HTML().data(data)
-        return html.view(view)
-    }
-
-    public static TEXT TEXT(Object data) {
-        return (TEXT)TEXT().data(data)
+    public static Response JSON(Object data = null) {
+        return OK(data).contentType('application/json;charset=UTF-8')
     }
 
     public Response contentType(String contentType) {
@@ -58,6 +53,15 @@ abstract class Response {
 
     public Response data(Object data) {
         this.data = data
+        return this
+    }
+
+    public Response view(String view) {
+        this.view = view
+        if (this.view && !this.view.endsWith('.html')) {
+            this.view = this.view + '.html'
+        }
+
         return this
     }
 }

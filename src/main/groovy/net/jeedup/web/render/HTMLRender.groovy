@@ -4,7 +4,6 @@ import com.github.mustachejava.DefaultMustacheFactory
 import com.github.mustachejava.Mustache
 import com.github.mustachejava.MustacheFactory
 import groovy.transform.CompileStatic
-import net.jeedup.net.http.HTML
 
 import java.nio.charset.Charset
 
@@ -17,7 +16,6 @@ class HTMLRender extends Render {
 
     @Override
     void render(OutputStream out) {
-        HTML response = (HTML)this.response
         Object data = response.data
         if (data instanceof String) {
             out.write(data.getBytes(Charset.forName('UTF-8')))

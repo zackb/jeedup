@@ -1,8 +1,6 @@
 package net.jeedup.web.render
 
 import groovy.transform.CompileStatic
-import net.jeedup.net.http.HTML
-import net.jeedup.net.http.JSON
 import net.jeedup.net.http.Response
 
 /**
@@ -14,21 +12,24 @@ abstract class Render {
 
     protected Response response
 
-    public Render() {
-    }
-
     public static Render forResponse(Response response) {
         Render render = null
-        if (response instanceof HTML) {
-            render = new HTMLRender()
-        } else if (response instanceof JSON) {
-            render = new JSONRender()
-        } else {
-            render = new TEXTRender()
+        String contentType = response.contentType
+        if (contentType) {
+            contentType = contentType.toLowerCase()
+            if (contentType.contains('json')) {
+                render = new JSONRender()
+            } else if (contentType.contains('html')) {
+                render = new HTMLRender()
+            } else {
+                render = new TEXTRender()
+            }
         }
 
         render.response = response
+
         return render
+
     }
 
     public abstract void render(OutputStream out)

@@ -1,4 +1,4 @@
-package net.jeedup.net.http
+package net.jeedup.coding
 
 import com.fasterxml.jackson.core.JsonParser
 import groovy.transform.CompileStatic
@@ -8,13 +8,12 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 
-
 /**
  * User: zack
  * Date: 11/10/13
  */
 @CompileStatic
-class JSON extends Response {
+class JSON {
 
     private static final ObjectMapper mapper
     private static final Class mapClass
@@ -35,19 +34,15 @@ class JSON extends Response {
         mapClass = new HashMap<String, Object>().getClass()
     }
 
-    public JSON() {
-        contentType('application/json;charset=UTF-8')
-    }
-
-    static Map parse(String data) {
-        return (Map)parseObject(data, mapClass)
-    }
-
     static String encode(Object obj) {
         return mapper.writeValueAsString(obj)
     }
 
-    static <T> T parseObject(String data, Class clazz) {
+    static <T> T decodeObject(String data, Class clazz) {
         return (T)mapper.readValue(data.getBytes('UTF-8'), clazz)
+    }
+
+    static Map decode(String data) {
+        return (Map)decodeObject(data, mapClass)
     }
 }

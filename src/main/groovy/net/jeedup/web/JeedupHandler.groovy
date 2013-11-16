@@ -10,8 +10,7 @@ import io.undertow.util.HttpString
 import io.undertow.util.Methods
 import net.jeedup.net.http.Response
 import net.jeedup.reflect.ClassEnumerator
-import net.jeedup.net.http.HTML
-import net.jeedup.net.http.JSON
+import net.jeedup.coding.JSON
 import net.jeedup.web.render.Render
 
 import java.lang.annotation.Annotation
@@ -72,11 +71,8 @@ class JeedupHandler implements HttpHandler {
         println 'Request: ' + path + ' ' + requestData
         Response response = route.invoke(requestData)
 
-        if (response instanceof HTML) {
-            HTML html = (HTML)response
-            if (!html.view)
-                html.view(route.path)
-        }
+        if (!response.view)
+            response.view(route.path)
 
         exchange.setResponseCode(response.status)
         exchange.getResponseHeaders().add(Headers.CONTENT_TYPE, response.contentType)
@@ -97,7 +93,7 @@ class JeedupHandler implements HttpHandler {
                 exchange.getInputStream().newReader().eachLine { String line ->
                     json += line
                 }
-                result = JSON.parse(json)
+                result = JSON.decode(json)
             } else {
                 exchange.getInputStream().newReader().eachLine { String line ->
                     result = line.split('&').collectEntries { String param ->

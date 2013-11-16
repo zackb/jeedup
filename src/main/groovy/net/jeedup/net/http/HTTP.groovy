@@ -1,6 +1,7 @@
 package net.jeedup.net.http
 
 import groovy.transform.CompileStatic
+import net.jeedup.coding.JSON
 import net.jeedup.io.IOUtil
 
 /**
@@ -115,7 +116,7 @@ class HTTP {
         Request request = new Request()
                 .url(url)
                 .headers(['Content-Type':'application/json'])
-        return JSON.parseObject(get(request), clazz)
+        return JSON.decodeObject(get(request), clazz)
     }
 
     public static String post(String url, Object data = [:], Map headers = [:]) {

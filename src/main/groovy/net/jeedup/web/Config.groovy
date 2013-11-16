@@ -1,7 +1,7 @@
 package net.jeedup.web
 
 import groovy.transform.CompileStatic
-import net.jeedup.net.http.JSON
+import net.jeedup.coding.JSON
 
 /**
  * User: zack
@@ -19,7 +19,7 @@ class Config implements Map<String, Object> {
 
     private Config(String filename) {
         URL resource = ClassLoader.getSystemResource(filename)
-        data = JSON.parse(resource.text)
+        data = JSON.decode(resource.text)
     }
 
     public static final Config getInstance() {
