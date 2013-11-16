@@ -38,4 +38,19 @@ public class HTTPTest extends TestCase {
         assert obj.socialSharingWatchTimeSecs instanceof Integer
         assert obj.facebookReadScope.contains('read_stream')
     }
+
+    public void testPost() {
+        String resp = HTTP.post('http://zackbartel.com/ua.php', ['foo':'Hello'])
+        assert resp.contains('[CONTENT_TYPE] => application/x-www-form-urlencoded')
+        assert resp.replaceAll('\n', ' ').contains('[_POST] => Array         (             [{foo] => Hello}')
+    }
+    public void testPostJson() {
+        TestJsonClass test = new TestJsonClass()
+        test.minClientVersion = ['mydevice': 123333]
+        test.socialSharingWatchTimeSecs = 100
+        test.facebookReadScope = 'NotAScope'
+        String resp = HTTP.postJSON('http://zackbartel.com/ua.php', test)
+        assert resp.contains('[CONTENT_TYPE] => application/json')
+        assert resp.contains('[HTTP_RAW_POST_DATA] => {"facebookReadScope":"NotAScope","socialSharingWatchTimeSecs":100,"minClientVersion":{"mydevice":123333}}')
+    }
 }

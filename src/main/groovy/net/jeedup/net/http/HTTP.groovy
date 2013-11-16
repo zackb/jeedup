@@ -3,8 +3,6 @@ package net.jeedup.net.http
 import groovy.transform.CompileStatic
 import net.jeedup.io.IOUtil
 
-import java.nio.charset.Charset
-
 /**
  * User: zack
  * Date: 11/15/13
@@ -20,18 +18,19 @@ class HTTP {
                            'Accept':            'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
                            'Accept-Language':   'en-us,en;q=0.8',
                            'Accept-Charset':    'utf-8,ISO-8859-1;q=0.7,*;q=0.7',
+                           //'Content-Type':      'bin/bin',
                            'Connection':        'keep-alive'
         ]
     }
 
-    public Response perform(Request request) {
-        Response response = null
-        return response
+    public static InputStream openInputStrem(Request request) {
+        Response response = performRequest(request)
+        return response.inputStream
     }
 
-    public static InputStream openInputStrem(Request request) {
+    public static Response performRequest(Request request) {
         String urlStr = request.url
-        if (request.data && request.data instanceof Map) {
+        if (request.method == 'GET' && request.data && request.data instanceof Map) {
             Map data = (Map<String, String>)request.data
             if (urlStr.contains('?'))
                 urlStr += '&'
@@ -43,7 +42,8 @@ class HTTP {
         }
 
         URL url = new URL(urlStr)
-        URLConnection conn = url.openConnection()
+        HttpURLConnection conn = (HttpURLConnection)url.openConnection()
+        conn.requestMethod = request.method ?: 'GET'
 
         Map<String, String> hdrs = [:]
         hdrs.putAll(DEFAULT_HEADERS)
@@ -57,13 +57,42 @@ class HTTP {
 
         conn.readTimeout = request.readTimeout
         conn.connectTimeout = request.connectTimeout
-        InputStream ins = conn.getInputStream()
-        if (request.method == 'POST') {
+        if (request.method == 'POST' || request.method == 'PUT') {
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+            conn.setUseCaches(false);
             OutputStream outs = conn.getOutputStream()
-            IOUtil.copyStream(request.getInputStream(), outs)
+            InputStream requestIns = request.getInputStream()
+            IOUtil.copyStream(requestIns, outs)
+            IOUtil.close(requestIns)
+            IOUtil.close(outs)
         }
 
-        return ins
+        Response response = null
+        String contentType = conn.getHeaderField('Content-Type')
+
+        if (contentType) {
+            String contentTypeLower = contentType.toLowerCase()
+            if (contentTypeLower.contains('json')) {
+                response = Response.JSON()
+            } else if (contentTypeLower.contains('html')) {
+                response = Response.HTML()
+            } else {
+                response = Response.TEXT()
+            }
+        }
+
+        response.contentType = contentType
+
+        response.inputStream = conn.getInputStream()
+        response.status = conn.getResponseCode()
+        response.headers = [:]
+
+        for (String name : conn.getHeaderFields()) {
+            response.headers[name] = conn.getHeaderField(name)
+        }
+
+        return response
     }
 
     public static String get(Request request) {
@@ -85,7 +114,17 @@ class HTTP {
         return JSON.parseObject(get(request), clazz)
     }
 
-    public static String post(String url, Map data = null, Map headers = null) {
-        return null
+    public static String post(String url, Object data = [:], Map headers = [:]) {
+        Request request = new Request()
+                 .url(url)
+                 .headers(headers)
+                 .data(data)
+                 .method('POST')
+        return IOUtil.readString(openInputStrem(request))
+    }
+
+    public static String postJSON(String url, Object data = [:], Map headers = [:]) {
+        headers['Content-Type'] = 'application/json'
+        return post(url, JSON.encode(data), headers)
     }
 }

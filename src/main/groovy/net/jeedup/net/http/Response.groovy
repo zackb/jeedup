@@ -13,6 +13,8 @@ abstract class Response {
     public String contentType
     public int status
     public Object data
+    public InputStream inputStream
+    public Map<String, String> headers
 
     //TODO cache headers
 

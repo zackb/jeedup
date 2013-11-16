@@ -13,7 +13,7 @@ class Request {
     String url
     String method
     Map<String, String> headers
-    Object data
+    Object data = ''
     int readTimeout = 1000 * 60 * 20 // 20 seconds
     int connectTimeout = 1000 * 60 * 10 // 20 seconds
 
@@ -44,10 +44,7 @@ class Request {
 
     public InputStream getInputStream() {
         InputStream inputStream = null
-        if (data instanceof String) {
-            inputStream = new ByteArrayInputStream(data.getBytes(Charset.forName('UTF-8')))
-        }
-
+        inputStream = new ByteArrayInputStream(data.toString().getBytes(Charset.forName('UTF-8')))
         return inputStream
     }
 }
