@@ -8,9 +8,11 @@ import io.undertow.server.handlers.resource.ResourceHandler
 import io.undertow.util.Headers
 import io.undertow.util.HttpString
 import io.undertow.util.Methods
+import net.jeedup.net.http.Response
 import net.jeedup.reflect.ClassEnumerator
-import net.jeedup.web.response.HTML
-import net.jeedup.web.response.JSON
+import net.jeedup.net.http.HTML
+import net.jeedup.net.http.JSON
+import net.jeedup.web.render.Render
 
 import java.lang.annotation.Annotation
 import java.lang.reflect.Method
@@ -80,7 +82,8 @@ class JeedupHandler implements HttpHandler {
         exchange.getResponseHeaders().add(Headers.CONTENT_TYPE, response.contentType)
 
         OutputStream outputStream = exchange.getOutputStream()
-        response.render(outputStream)
+        Render render = Render.forResponse(response)
+        render.render(outputStream)
         //exchange.endExchange()
     }
 

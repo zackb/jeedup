@@ -1,6 +1,7 @@
 package net.jeedup.web
 
 import groovy.transform.CompileStatic
+import net.jeedup.net.http.Response
 
 import java.lang.reflect.Method
 

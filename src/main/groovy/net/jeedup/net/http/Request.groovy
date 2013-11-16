@@ -2,6 +2,8 @@ package net.jeedup.net.http
 
 import groovy.transform.CompileStatic
 
+import java.nio.charset.Charset
+
 /**
  * User: zack
  * Date: 11/15/13
@@ -38,5 +40,14 @@ class Request {
     public Request connectTimeout(int connectTimeout) {
         this.connectTimeout = connectTimeout
         return this
+    }
+
+    public InputStream getInputStream() {
+        InputStream inputStream = null
+        if (data instanceof String) {
+            inputStream = new ByteArrayInputStream(data.getBytes(Charset.forName('UTF-8')))
+        }
+
+        return inputStream
     }
 }

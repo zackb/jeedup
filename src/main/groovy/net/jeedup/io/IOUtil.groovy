@@ -1,4 +1,4 @@
-package net.jeedup.util
+package net.jeedup.io
 
 import groovy.transform.CompileStatic
 
@@ -9,20 +9,20 @@ import groovy.transform.CompileStatic
 @CompileStatic
 class IOUtil {
 
-    public static long copyStream(final InputStream instream,
-                                  final OutputStream outstream,
+    public static long copyStream(final InputStream inputStream,
+                                  final OutputStream outputStream,
                                   final int bufferSize = 16384 * 2,
                                   final long maxBytes = -1) throws IOException {
 
         byte[] buffer = new byte[bufferSize]
-        int bytesRead = instream.read(buffer)
+        int bytesRead = inputStream.read(buffer)
         long totalBytes = bytesRead == -1 ? 0 : bytesRead
         while (bytesRead != -1) {
-            outstream.write(buffer, 0, bytesRead)
+            outputStream.write(buffer, 0, bytesRead)
             if (maxBytes > 0 && totalBytes >= maxBytes) {
                 break
             }
-            bytesRead = instream.read(buffer)
+            bytesRead = inputStream.read(buffer)
             if (bytesRead != -1)
                 totalBytes += bytesRead
         }

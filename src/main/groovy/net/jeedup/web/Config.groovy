@@ -1,7 +1,7 @@
 package net.jeedup.web
 
 import groovy.transform.CompileStatic
-import net.jeedup.web.response.JSON
+import net.jeedup.net.http.JSON
 
 /**
  * User: zack

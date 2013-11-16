@@ -3,9 +3,9 @@ package net.jeedup.web.handlers
 import groovy.transform.CompileStatic
 import io.undertow.util.StatusCodes
 import net.jeedup.web.Endpoint
-import net.jeedup.web.Response
+import net.jeedup.net.http.Response
 
-import static net.jeedup.web.Response.HTML
+import static Response.HTML
 
 /**
  * User: zack

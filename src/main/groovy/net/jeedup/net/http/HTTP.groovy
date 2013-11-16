@@ -1,8 +1,9 @@
 package net.jeedup.net.http
 
 import groovy.transform.CompileStatic
-import net.jeedup.util.IOUtil
-import net.jeedup.web.response.JSON
+import net.jeedup.io.IOUtil
+
+import java.nio.charset.Charset
 
 /**
  * User: zack
@@ -21,6 +22,11 @@ class HTTP {
                            'Accept-Charset':    'utf-8,ISO-8859-1;q=0.7,*;q=0.7',
                            'Connection':        'keep-alive'
         ]
+    }
+
+    public Response perform(Request request) {
+        Response response = null
+        return response
     }
 
     public static InputStream openInputStrem(Request request) {
@@ -51,8 +57,13 @@ class HTTP {
 
         conn.readTimeout = request.readTimeout
         conn.connectTimeout = request.connectTimeout
+        InputStream ins = conn.getInputStream()
+        if (request.method == 'POST') {
+            OutputStream outs = conn.getOutputStream()
+            IOUtil.copyStream(request.getInputStream(), outs)
+        }
 
-        return conn.getInputStream()
+        return ins
     }
 
     public static String get(Request request) {

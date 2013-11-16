@@ -3,7 +3,7 @@ package net.jeedup.web.handlers
 import groovy.transform.CompileStatic
 import net.jeedup.web.Endpoint
 
-import static net.jeedup.web.Response.HTML
+import static net.jeedup.net.http.Response.HTML
 
 /**
  * User: zack

@@ -1,10 +1,7 @@
-package net.jeedup.web
+package net.jeedup.net.http
 
 import groovy.transform.CompileStatic
 import io.undertow.util.StatusCodes
-import net.jeedup.web.response.HTML
-import net.jeedup.web.response.JSON
-import net.jeedup.web.response.TEXT
 
 /**
  * User: zack
@@ -15,7 +12,7 @@ abstract class Response {
 
     public String contentType
     public int status
-    protected Object data
+    public Object data
 
     //TODO cache headers
 
@@ -61,6 +58,4 @@ abstract class Response {
         this.data = data
         return this
     }
-
-    abstract void render(OutputStream out)
 }

@@ -1,8 +1,7 @@
-package net.jeedup.web.response
+package net.jeedup.net.http
 
 import com.fasterxml.jackson.core.JsonParser
 import groovy.transform.CompileStatic
-import net.jeedup.web.Response
 import com.fasterxml.jackson.annotation.JsonAutoDetect
 import com.fasterxml.jackson.annotation.PropertyAccessor
 import com.fasterxml.jackson.databind.DeserializationFeature
@@ -40,17 +39,12 @@ class JSON extends Response {
         contentType('application/json;charset=UTF-8')
     }
 
-    @Override
-    void render(OutputStream out) {
-        if (!data) {
-            return
-        }
-        String str = mapper.writeValueAsString(data)
-        out.write(str.getBytes('UTF-8'))
-    }
-
     static Map parse(String data) {
         return (Map)parseObject(data, mapClass)
+    }
+
+    static String encode(Object obj) {
+        return mapper.writeValueAsString(obj)
     }
 
     static <T> T parseObject(String data, Class clazz) {

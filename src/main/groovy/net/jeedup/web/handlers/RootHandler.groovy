@@ -6,9 +6,9 @@ import net.jeedup.model.User
 import net.jeedup.web.Config
 import net.jeedup.web.Endpoint
 
-import static net.jeedup.web.Response.JSON
-import static net.jeedup.web.Response.TEXT
-import static net.jeedup.web.Response.HTML
+import static net.jeedup.net.http.Response.JSON
+import static net.jeedup.net.http.Response.TEXT
+import static net.jeedup.net.http.Response.HTML
 
 /**
  * User: zack
