@@ -4,8 +4,8 @@ import groovy.sql.GroovyResultSet
 import groovy.sql.GroovyRowResult
 import groovy.sql.Sql
 import groovy.transform.CompileStatic
-import net.jeedup.persistence.DB
 import net.jeedup.persistence.Constraints
+import net.jeedup.persistence.DB
 
 import javax.sql.DataSource
 import java.lang.reflect.Field

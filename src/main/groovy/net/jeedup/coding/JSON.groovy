@@ -1,12 +1,12 @@
 package net.jeedup.coding
 
-import com.fasterxml.jackson.core.JsonParser
-import groovy.transform.CompileStatic
 import com.fasterxml.jackson.annotation.JsonAutoDetect
 import com.fasterxml.jackson.annotation.PropertyAccessor
+import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.SerializationFeature
+import groovy.transform.CompileStatic
 
 /**
  * User: zack
