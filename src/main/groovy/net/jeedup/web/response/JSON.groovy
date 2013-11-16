@@ -50,6 +50,10 @@ class JSON extends Response {
     }
 
     static Map parse(String data) {
-        return (Map)mapper.readValue(data.getBytes('UTF-8'), mapClass)
+        return (Map)parseObject(data, mapClass)
+    }
+
+    static <T> T parseObject(String data, Class clazz) {
+        return (T)mapper.readValue(data.getBytes('UTF-8'), clazz)
     }
 }
