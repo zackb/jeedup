@@ -84,7 +84,11 @@ class HTTP {
 
         response.contentType = contentType
 
-        response.inputStream = conn.getInputStream()
+        try {
+            response.inputStream = conn.getInputStream()
+        } catch (Exception e) {
+            response.inputStream = conn.getErrorStream()
+        }
         response.status = conn.getResponseCode()
         response.headers = [:]
 

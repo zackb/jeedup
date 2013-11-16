@@ -5,6 +5,8 @@ import junit.framework.Test
 import junit.framework.TestCase
 import junit.framework.TestSuite
 import net.jeedup.net.http.HTTP
+import net.jeedup.net.http.Request
+import net.jeedup.net.http.Response
 
 /**
  * User: zack
@@ -44,6 +46,7 @@ public class HTTPTest extends TestCase {
         assert resp.contains('[CONTENT_TYPE] => application/x-www-form-urlencoded')
         assert resp.replaceAll('\n', ' ').contains('[_POST] => Array         (             [{foo] => Hello}')
     }
+
     public void testPostJson() {
         TestJsonClass test = new TestJsonClass()
         test.minClientVersion = ['mydevice': 123333]
@@ -52,5 +55,12 @@ public class HTTPTest extends TestCase {
         String resp = HTTP.postJSON('http://zackbartel.com/ua.php', test)
         assert resp.contains('[CONTENT_TYPE] => application/json')
         assert resp.contains('[HTTP_RAW_POST_DATA] => {"facebookReadScope":"NotAScope","socialSharingWatchTimeSecs":100,"minClientVersion":{"mydevice":123333}}')
+    }
+
+    public void test404() {
+        String url = 'http://www.example.com/doesnotexist'
+        Request request = new Request().url(url)
+        Response response = HTTP.performRequest(request)
+        assert response.status == 404
     }
 }
