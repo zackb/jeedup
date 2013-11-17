@@ -11,6 +11,7 @@ import net.jeedup.persistence.sql.DataSources
 
 @CompileStatic
 class Jeedup {
+    private Undertow server
 
     public Jeedup() {
     }
@@ -20,7 +21,7 @@ class Jeedup {
         // configure datasources and data models
         DataSources.getInstance()
 
-        Undertow server = Undertow.builder()
+        server = Undertow.builder()
                 .addListener(Config.port(), Config.host())
                 .setHandler(createHttpHandler())
                 .build()
@@ -37,4 +38,7 @@ class Jeedup {
         return handler
     }
 
+    public void shutdown() {
+        server.stop()
+    }
 }
