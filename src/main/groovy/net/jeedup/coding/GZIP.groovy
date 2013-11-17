@@ -1,5 +1,6 @@
 package net.jeedup.coding
 
+import groovy.transform.CompileStatic
 import net.jeedup.io.IOUtil
 
 import java.util.zip.Deflater
@@ -9,6 +10,7 @@ import java.util.zip.Inflater
  * User: zack
  * Date: 11/16/13
  */
+@CompileStatic
 class GZIP {
 
     public static byte[] compress(byte[] bytes) {
