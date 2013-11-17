@@ -34,6 +34,7 @@ class JeedupHandler implements HttpHandler {
 
     private void createResourceHandler() {
 
+        /** uncomment and edit gradle build to include html in the jar
         String rootPath = getClass().getResource("/html").toString()
         if (rootPath.contains('!')) {
             rootPath = rootPath.substring(0, rootPath.lastIndexOf('!'))
@@ -44,6 +45,8 @@ class JeedupHandler implements HttpHandler {
         if (rootPath.endsWith('/build/resources/main')) {
             rootPath = rootPath.replace('/build/resources/main', '')
         }
+        */
+        String rootPath = '.'
 
         resourceHandler = new ResourceHandler()
                 .setResourceManager(new FileResourceManager(new File(rootPath), 10485760))
