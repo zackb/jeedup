@@ -16,22 +16,27 @@ import groovy.transform.CompileStatic
 class JSON {
 
     private static final ObjectMapper mapper
-    private static final Class mapClass
+    protected static final Class mapClass
 
     static {
         mapper = new ObjectMapper()
-            .setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY)
-            .setVisibility(PropertyAccessor.GETTER, JsonAutoDetect.Visibility.NONE)
-            .setVisibility(PropertyAccessor.SETTER, JsonAutoDetect.Visibility.NONE)
-            .setVisibility(PropertyAccessor.CREATOR, JsonAutoDetect.Visibility.NONE)
-            .setVisibility(PropertyAccessor.IS_GETTER, JsonAutoDetect.Visibility.NONE)
-            //.setSerializationInclusion(JsonInclude.Include.NON_EMPTY)
-            .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
-            .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-            .configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true)
-            //.enableDefaultTyping()
+        configureMapper(mapper)
 
         mapClass = new HashMap<String, Object>().getClass()
+    }
+
+    static void configureMapper(ObjectMapper objectMapper) {
+
+        objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY)
+                .setVisibility(PropertyAccessor.GETTER, JsonAutoDetect.Visibility.NONE)
+                .setVisibility(PropertyAccessor.SETTER, JsonAutoDetect.Visibility.NONE)
+                .setVisibility(PropertyAccessor.CREATOR, JsonAutoDetect.Visibility.NONE)
+                .setVisibility(PropertyAccessor.IS_GETTER, JsonAutoDetect.Visibility.NONE)
+        //.setSerializationInclusion(JsonInclude.Include.NON_EMPTY)
+                .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
+                .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+                .configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true)
+        //.enableDefaultTyping()
     }
 
     static String encode(Object obj) {

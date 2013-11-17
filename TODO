@@ -1,6 +1,4 @@
-HTTP get/post...
-Response headers
-BSON
+REPL
 Queue
 Redis
 Authentication
@@ -14,6 +12,9 @@ Text
    - summarization
 - Parse JSON/XML input request data from post/put
  - Multipart form data?
+* BSON
+* HTTP get/post...
+* Response headers
 * BCrypt
 * Config
 * Database
