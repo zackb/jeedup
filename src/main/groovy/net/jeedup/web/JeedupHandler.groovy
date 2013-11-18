@@ -55,6 +55,10 @@ class JeedupHandler implements HttpHandler {
 
     public void handleRequest(HttpServerExchange exchange) throws Exception {
 
+        if (exchange.isInIoThread()) {
+            exchange.dispatch(this)
+            return
+        }
         String path = exchange.getRequestPath()
         path.trim()
         path = path.startsWith('/') ? path.substring(1) : path
