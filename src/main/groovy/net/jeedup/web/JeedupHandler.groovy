@@ -12,6 +12,7 @@ import net.jeedup.coding.JSON
 import net.jeedup.net.http.Response
 import net.jeedup.reflect.ClassEnumerator
 import net.jeedup.web.render.Render
+import org.xnio.streams.ChannelInputStream
 
 import java.lang.annotation.Annotation
 import java.lang.reflect.Method
@@ -73,7 +74,6 @@ class JeedupHandler implements HttpHandler {
         }
 
         Route route = routes[path] ?: routes['404']
-        exchange.startBlocking()
         Map requestData = parseRequestData(exchange)
         println 'Request: ' + path + ' ' + requestData
         Response response = route.invoke(requestData)
@@ -84,10 +84,10 @@ class JeedupHandler implements HttpHandler {
         exchange.setResponseCode(response.status)
         exchange.getResponseHeaders().add(Headers.CONTENT_TYPE, response.contentType)
 
-        OutputStream outputStream = exchange.getOutputStream()
+        ByteArrayOutputStream outs = new ByteArrayOutputStream()
         Render render = Render.forResponse(response)
-        render.render(outputStream)
-        //exchange.endExchange()
+        render.render(outs)
+        exchange.responseSender.send(outs.toString())
     }
 
     private static Map parseRequestData(HttpServerExchange exchange) {
@@ -95,14 +95,15 @@ class JeedupHandler implements HttpHandler {
         String contentType = exchange.getRequestHeaders().get(Headers.CONTENT_TYPE)
         HttpString method = exchange.getRequestMethod()
         if (method == Methods.POST || method == Methods.PUT) {
+            InputStream ins = new ChannelInputStream(exchange.getRequestChannel())
             if (contentType?.contains('json')) {
                 String json = ''
-                exchange.getInputStream().newReader().eachLine { String line ->
+                ins.newReader().eachLine { String line ->
                     json += line
                 }
                 result = JSON.decode(json)
             } else {
-                exchange.getInputStream().newReader().eachLine { String line ->
+                ins.newReader().eachLine { String line ->
                     result = line.split('&').collectEntries { String param ->
                         param.split('=').collect { String it -> URLDecoder.decode(it, 'UTF-8') }
                     }
