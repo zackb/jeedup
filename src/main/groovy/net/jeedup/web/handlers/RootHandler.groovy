@@ -32,6 +32,27 @@ class RootHandler {
         HTML(null, 'admin/admin')
     }
 
+    @Endpoint('admin/repl')
+    def repl(Map data) {
+        String output = ''
+        String code = data.code
+        GroovyShell shell = new GroovyShell(ClassLoader.getSystemClassLoader())
+        Script scpt = shell.parse(code);
+        Binding binding = new Binding();
+        binding.setVariable ("render", { args ->
+            output += args
+        });
+        scpt.setBinding(binding);
+
+
+        try {
+            String result = '' + scpt.run()
+            return JSON(['result':result])
+        } catch (Exception e) {
+            return JSON(['message': e.message]).status(500)
+        }
+    }
+
     @Endpoint('db')
     def db(Map data) {
         //SqlDB<User> db = DB.sql(User.class)

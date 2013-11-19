@@ -4,9 +4,31 @@
         <div class="page-header">
           <h1>Admin</h1>
         </div>
-        <p class="lead">This is a lead</p>
-        <p>Back to <a href="#">another page</a> from here.</p>
+        <p class="lead">Tool</p>
+        <p></p>
+        <p id="result"></p>
+        <form name="repl" id="repl" action="#" method="post" onsubmit>
+            <textarea name="code" id="code" cols="100" rows="10"></textarea>
+            <input id="submit" type="submit"/>
+        </form>
       </div>
     </div>
+<script>
+$("#repl").submit(function() {
+    var url = "/admin/repl";
+    $.ajax({
+           type: "POST",
+           url: url,
+           data: $("#repl").serialize(),
+           success: function(data) {
+               $("#result").html(data.result);
+           },
+           error: function(d,e) {
+               $("#result").html(d.responseJSON.message);
+           }
+         });
 
+  return false;
+});
+</script>
 {{> footer}}
