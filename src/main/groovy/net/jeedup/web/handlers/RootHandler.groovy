@@ -3,6 +3,7 @@ package net.jeedup.web.handlers
 import groovy.transform.CompileStatic
 
 import net.jeedup.model.User
+import net.jeedup.net.http.Request
 import net.jeedup.web.Config
 import net.jeedup.web.Endpoint
 
@@ -23,8 +24,8 @@ class RootHandler {
     }
 
     @Endpoint('text')
-    def text(Map data) {
-        TEXT(data)
+    def text(Request request) {
+        TEXT(request.data)
     }
 
     @Endpoint('admin')

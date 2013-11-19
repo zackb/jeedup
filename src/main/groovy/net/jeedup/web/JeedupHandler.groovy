@@ -5,10 +5,13 @@ import io.undertow.server.HttpHandler
 import io.undertow.server.HttpServerExchange
 import io.undertow.server.handlers.resource.FileResourceManager
 import io.undertow.server.handlers.resource.ResourceHandler
+import io.undertow.util.HeaderMap
+import io.undertow.util.HeaderValues
 import io.undertow.util.Headers
 import io.undertow.util.HttpString
 import io.undertow.util.Methods
 import net.jeedup.coding.JSON
+import net.jeedup.net.http.Request
 import net.jeedup.net.http.Response
 import net.jeedup.reflect.ClassEnumerator
 import net.jeedup.web.render.Render
@@ -89,7 +92,11 @@ class JeedupHandler implements HttpHandler {
         route = route ?: routes['404']
         parseRequestData(exchange, requestData)
         println 'Request: ' + path + ' ' + requestData
-        Response response = route.invoke(requestData)
+        Request request = new Request()
+                            .data(requestData)
+                            .url(route.path)
+                            .headers(parseRequestHeaders(exchange))
+        Response response = route.invoke(request)
 
         if (!response.view)
             response.view(route.path)
@@ -101,6 +108,21 @@ class JeedupHandler implements HttpHandler {
         Render render = Render.forResponse(response)
         render.render(outs)
         exchange.responseSender.send(outs.toString())
+    }
+
+    private static Map<String, String> parseRequestHeaders(HttpServerExchange exchange) {
+        HeaderMap map = exchange.getRequestHeaders()
+        Map<String, String> headers = new HashMap<String, String>(map.size())
+        for (HttpString name : map.getHeaderNames()) {
+            HeaderValues values = map.get(name)
+            String v = ''
+            for (int i = 0; i < values.size(); i++) {
+                v += values[i]
+            }
+            headers[name.toString()] = v
+        }
+
+        return headers
     }
 
     private static Map parseRequestData(HttpServerExchange exchange, Map result) {

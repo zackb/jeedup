@@ -1,6 +1,7 @@
 package net.jeedup.web
 
 import groovy.transform.CompileStatic
+import net.jeedup.net.http.Request
 import net.jeedup.net.http.Response
 
 import java.lang.reflect.Method
@@ -15,12 +16,18 @@ class Route {
     Object handler
     Method action
 
-    Response invoke(Map data) {
+    Response invoke(Request request) {
         Response response = null
-        if (action.getParameterTypes().size() == 1)
-            response = (Response)action.invoke(handler, data)
-        else
+        Class<?>[] types = action.getParameterTypes()
+        if (types.size() == 1) {
+            if (Request.class.isAssignableFrom(types[0])) {
+                response = (Response)action.invoke(handler, request)
+            } else {
+                response = (Response)action.invoke(handler, request.data)
+            }
+        } else {
             response = (Response)action.invoke(handler)
+        }
 
         return response
     }
