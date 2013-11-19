@@ -1,9 +1,9 @@
 Endpoints have optional (Map data) or (Request request)
-REPL
 Queue
-Redis
 Authentication
+    Cookie/Session
 Authorization
+Redis
 Exec
 FoundationDB
 Scaffolding
@@ -13,6 +13,7 @@ Text
    - summarization
 - Parse JSON/XML input request data from post/put
  - Multipart form data?
+* REPL
 * BSON
 * HTTP get/post...
 * Response headers
