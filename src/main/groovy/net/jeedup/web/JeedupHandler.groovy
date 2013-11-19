@@ -90,7 +90,7 @@ class JeedupHandler implements HttpHandler {
             }
         }
         route = route ?: routes['404']
-        parseRequestData(exchange, requestData)
+        requestData.putAll(parseRequestData(exchange))
         println 'Request: ' + path + ' ' + requestData
         Request request = new Request()
                             .data(requestData)
@@ -125,7 +125,8 @@ class JeedupHandler implements HttpHandler {
         return headers
     }
 
-    private static Map parseRequestData(HttpServerExchange exchange, Map result) {
+    private static Map parseRequestData(HttpServerExchange exchange) {
+        Map result = [:]
         String contentType = exchange.getRequestHeaders().get(Headers.CONTENT_TYPE)
         HttpString method = exchange.getRequestMethod()
         if (method == Methods.POST || method == Methods.PUT) {
