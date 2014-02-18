@@ -279,12 +279,12 @@ class SqlDB<T> extends DB<T> {
         return deleteSql
     }
 
-    protected Object id(T obj) {
+    protected <T> Object id(T obj) {
         Field field = describeFields().get('id')
         return field.get(obj)
     }
 
-    protected void setId(T obj, Object value) {
+    protected <T> void setId(T obj, Object value) {
         Field field = describeFields().get('id')
         field.set(obj, value)
     }
