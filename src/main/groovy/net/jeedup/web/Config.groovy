@@ -37,6 +37,10 @@ class Config implements Map<String, Object> {
         return (Map<String, Map>) getInstance().get('datasources')
     }
 
+    public static final Map<String, Map> getQueues() {
+        return (Map<String, Map>) getInstance().get('queues')
+    }
+
     public static final String host() {
         return (String)getInstance().get('host')
     }

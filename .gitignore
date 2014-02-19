@@ -5,3 +5,6 @@ build
 jeedup.jar
 out/
 .DS_Store
+gradle
+gradlew
+gradlew.bat

@@ -1,22 +1,38 @@
 package net.jeedup.web.handlers
-
 import groovy.transform.CompileStatic
-
+import net.jeedup.message.Brokers
+import net.jeedup.message.RabbitMQBroker
 import net.jeedup.model.User
 import net.jeedup.net.http.Request
 import net.jeedup.web.Config
 import net.jeedup.web.Endpoint
 
-import static net.jeedup.net.http.Response.JSON
-import static net.jeedup.net.http.Response.TEXT
-import static net.jeedup.net.http.Response.HTML
-
+import static net.jeedup.net.http.Response.*
 /**
  * User: zack
  * Date: 11/9/13
  */
 @CompileStatic
 class RootHandler {
+
+    @Endpoint('q')
+    def q(Map data) {
+        RabbitMQBroker broker = (RabbitMQBroker)Brokers.getInstance().named("mainQueue")
+        broker.observe()
+        .subscribe({ s ->
+            System.out.println("Got: " + s)
+            Thread.sleep(1000)
+        }, { Throwable throwable ->
+            throwable.printStackTrace()
+        })
+        HTML("OK")
+    }
+    @Endpoint('send')
+    def send(Map data) {
+        RabbitMQBroker<String> broker = (RabbitMQBroker<String>)Brokers.getInstance().named("mainQueue")
+        broker.sendMessage((String)data.m)
+        HTML("Done")
+    }
 
     @Endpoint('json')
     def json(Map data) {
