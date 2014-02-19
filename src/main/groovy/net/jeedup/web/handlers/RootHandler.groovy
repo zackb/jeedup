@@ -1,7 +1,7 @@
 package net.jeedup.web.handlers
 import groovy.transform.CompileStatic
 import net.jeedup.message.Brokers
-import net.jeedup.message.RabbitMQBroker
+import net.jeedup.message.MessageBroker
 import net.jeedup.model.User
 import net.jeedup.net.http.Request
 import net.jeedup.web.Config
@@ -17,7 +17,7 @@ class RootHandler {
 
     @Endpoint('q')
     def q(Map data) {
-        RabbitMQBroker broker = (RabbitMQBroker)Brokers.getInstance().named("mainQueue")
+        MessageBroker broker = Brokers.getInstance().named("mainQueue")
         broker.observe()
         .subscribe({ s ->
             System.out.println("Got: " + s)
@@ -29,8 +29,8 @@ class RootHandler {
     }
     @Endpoint('send')
     def send(Map data) {
-        RabbitMQBroker<String> broker = (RabbitMQBroker<String>)Brokers.getInstance().named("mainQueue")
-        broker.sendMessage((String)data.m)
+        def broker = Brokers.getInstance().named("mainQueue")
+        broker.sendMessage(data.m)
         HTML("Done")
     }
 

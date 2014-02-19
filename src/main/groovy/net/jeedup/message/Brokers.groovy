@@ -35,7 +35,7 @@ class Brokers {
 
     private void config() {
         Config.getQueues().each { String name, Map data ->
-            RabbitMQBroker<String> broker = new RabbitMQBroker<String>()
+            RabbitMQBroker broker = new RabbitMQBroker()
             broker.name = name
             broker.host = data.host ?: '127.0.0.1'
             broker.port = (int)data.port ?: 5672
