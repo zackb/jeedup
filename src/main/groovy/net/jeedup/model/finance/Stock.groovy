@@ -1,4 +1,4 @@
-package net.jeedup.finance;
+package net.jeedup.model.finance;
 
 import groovy.transform.CompileStatic
 import net.jeedup.persistence.Constraints;
