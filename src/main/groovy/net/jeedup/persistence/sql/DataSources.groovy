@@ -56,7 +56,7 @@ class DataSources {
         Map configs = Config.getDataSources()
         configs.each { String name, Map c ->
             BasicDataSource dataSource = new BasicDataSource()
-            dataSource.driverClassName = c.driverClassName ?: 'com.mysql.jdbc.Driver'
+            dataSource.driverClassName = c.driverClassName ?: 'com.mysql.jdbc.Driver' //'org.mariadb.jdbc.Driver'
             dataSource.url             = c.url
             dataSource.username        = c.username
             dataSource.password        = c.password

@@ -1,9 +1,12 @@
 package net.jeedup.web.handlers
 import groovy.transform.CompileStatic
+import net.jeedup.finance.Stock
 import net.jeedup.message.Brokers
 import net.jeedup.message.MessageBroker
 import net.jeedup.model.User
 import net.jeedup.net.http.Request
+import net.jeedup.persistence.DB
+import net.jeedup.persistence.sql.SqlDB
 import net.jeedup.web.Config
 import net.jeedup.web.Endpoint
 
@@ -15,8 +18,28 @@ import static net.jeedup.net.http.Response.*
 @CompileStatic
 class RootHandler {
 
+    /*
+   import net.jeedup.finance.*
+import net.jeedup.persistence.*
+
+
+DB<Stock> db = DB.sql(Stock.class)
+new File("/Users/zack/Downloads/quandl-stock-code-list.csv").splitEachLine(",") { fields ->
+String s = fields[0]
+String name = fields[1]
+String a = fields[4]
+Stock stock = new Stock()
+stock.id = s
+stock.name = name
+stock.active = a.startsWith('Not') ? 0 : 1
+db.save(stock)
+}
+
+     */
+
     @Endpoint('q')
     def q(Map data) {
+        /*
         MessageBroker broker = Brokers.getInstance().named("mainQueue")
         broker.observe()
         .subscribe({ s ->
@@ -25,6 +48,9 @@ class RootHandler {
         }, { Throwable throwable ->
             throwable.printStackTrace()
         })
+        */
+        SqlDB<Stock> db = DB.sql(Stock.class);
+        db.createTable()
         HTML("OK")
     }
     @Endpoint('send')
@@ -66,6 +92,7 @@ class RootHandler {
             String result = '' + scpt.run()
             return JSON(['result':result])
         } catch (Exception e) {
+            e.printStackTrace();
             return JSON(['message': e.message]).status(500)
         }
     }

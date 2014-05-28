@@ -15,7 +15,7 @@ class Request {
     Map<String, String> headers
     Object data = ''
     int readTimeout = 1000 * 60 * 20 // 20 seconds
-    int connectTimeout = 1000 * 60 * 10 // 20 seconds
+    int connectTimeout = 1000 * 60 * 10 // 10 seconds
 
     public Request url(String url) {
         this.url = url

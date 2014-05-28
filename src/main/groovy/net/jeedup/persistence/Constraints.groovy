@@ -12,7 +12,7 @@ import java.lang.annotation.Target
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface Constraints {
-    boolean index()
-    boolean unique()
-    int max()
+    boolean index() default false
+    boolean unique() default false
+    int max() default -1
 }

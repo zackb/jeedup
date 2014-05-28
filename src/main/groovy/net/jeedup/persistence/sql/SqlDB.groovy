@@ -112,7 +112,7 @@ class SqlDB<T> extends DB<T> {
                 createSql += '`id` varchar(255) character set utf8 not null,'
             }
 
-            constraints << "constraint pk_${clazz.simpleName} primary key(id),"
+            constraints << "constraint pk_${clazz.simpleName} primary key(id),".toString();
         }
 
         fields.each { String name, Field field ->
@@ -128,6 +128,8 @@ class SqlDB<T> extends DB<T> {
                     datatype = "bigint(${options?.max() ?: 10})"
                     break
                 case Integer:
+                case int:
+                case short:
                 case Short:
                     datatype = "int(${options?.max() ?: 10})"
                     break
@@ -149,10 +151,10 @@ class SqlDB<T> extends DB<T> {
             createSql += "`${name}` ${datatype},"
 
             if (options?.unique()) {
-                constraints << " constraint u_${clazz.simpleName}_on_${field.name} unique(${field.name}),"
+                constraints << " constraint u_${clazz.simpleName}_on_${field.name} unique(${field.name}),".toString()
             }
             if (options?.index()) {
-                constraints << " index idx_${clazz.simpleName}_on_${field.name} (${field.name}),"
+                constraints << " index idx_${clazz.simpleName}_on_${field.name} (${field.name}),".toString()
             }
         }
 
@@ -162,7 +164,7 @@ class SqlDB<T> extends DB<T> {
         createSql = createSql.substring(0, createSql.length() - 1)
 
         createSql += ") engine=${engine} default charset=utf8"
-        executeUpdate(createSql)
+        Sql().execute(createSql)
     }
 
     protected Sql Sql() {

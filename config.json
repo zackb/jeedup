@@ -7,7 +7,7 @@
             "username": "jeedup",
             "password": "jeedup"
         },
-        "auxDB": { 
+        "auxDB": {
             "url": "jdbc:mysql://127.0.0.1:3306/jeedup_aux?relaxAutoCommit=true&autoReconnect=true",
             "username": "jeedup",
             "password": "jeedup"

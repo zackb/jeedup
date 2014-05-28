@@ -18,6 +18,7 @@ dependencies {
     compile 'com.github.spullara.mustache.java:compiler:0.8.+'
     compile 'commons-dbcp:commons-dbcp:1.4+'
     compile 'mysql:mysql-connector-java:5.1.+'
+    //compile 'org.jumpmind.symmetric.jdbc:mariadb-java-client:1.1.1'
     compile 'com.netflix.rxjava:rxjava-core:0.+'
     compile 'com.rabbitmq:amqp-client:3.+'
     testCompile 'junit:junit:4.11'
