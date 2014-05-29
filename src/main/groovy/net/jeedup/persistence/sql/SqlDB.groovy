@@ -96,6 +96,17 @@ class SqlDB<T> extends DB<T> {
         executeUpdate(describeDeleteSql(), [id(obj)])
     }
 
+    public <T> T findOne(String query, List args = []) {
+        List<T> ts = executeQuery(query, args);
+        return ts.size() == 0 ? null : ts[0];
+
+    }
+
+    public <T> T findBy(String attributeName, Object attributeValue) {
+        List<T> ts = executeQuery("select * from ${clazz.simpleName} where ${attributeName} = ? limit 1", [attributeValue]);
+        return ts.size() == 0 ? null : ts[0];
+    }
+
     /**
      * Very rudimentary create table syntax
      *
@@ -125,6 +136,7 @@ class SqlDB<T> extends DB<T> {
                     datatype = "varchar(${options?.max() ?: 255}) character set utf8"
                     break
                 case Long:
+                case long:
                     datatype = "bigint(${options?.max() ?: 10})"
                     break
                 case Integer:

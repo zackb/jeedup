@@ -2,7 +2,8 @@ package net.jeedup.model.finance;
 
 import groovy.transform.CompileStatic
 import net.jeedup.persistence.Constraints
-import net.jeedup.persistence.DB;
+import net.jeedup.persistence.DB
+import net.jeedup.persistence.sql.SqlDB;
 import net.jeedup.web.Model;
 
 /**
@@ -17,6 +18,8 @@ public class Stock {
     public int active;
     public Date lastUpdated
 
+    public Long industryId
+    public Long sectorId
 
     public Double ask; //627.61,
     public Double askRealtime; //627.61,
@@ -78,11 +81,11 @@ public class Stock {
     public Double yearHigh; //625.86,
     public Double yearLow; //388.87
 
-    public static DB<Stock> db() {
-        return DB.db(Stock)
+    public static SqlDB<Stock> db() {
+        return DB.sql(Stock)
     }
 
-    public static get(Object id) {
+    public static Stock get(Object id) {
         return db().get(id)
     }
 

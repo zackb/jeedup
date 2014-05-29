@@ -19,14 +19,28 @@ class StockService {
         return instance
     }
 
+    public void retrieveAndUpdateAllData() {
+        YahooAPI.retrieveAllSectorsAndIndustries()
+        YahooAPI.retrieveAllSecurities()
+        retrieveAndUpdateStockData()
+    }
+
+    public void retrieveAndUpdateStockData() {
+        Date now = new Date()
+        List<Stock> stocks = Stock.db().executeQuery("select * from Stock where active = 1 and lastUpdated < ? order by id asc limit 40", [now])
+        while (stocks) {
+            updateStocksFromYahoo(stocks)
+            stocks = Stock.db().executeQuery("select * from Stock where active = 1 and lastUpdated < ? order by id asc limit 40", [now])
+        }
+    }
+
     public void updateStocksFromYahoo(List<Stock> stocks) {
         Map<String, Stock> map = [:]
         for (Stock stock : stocks) {
             map[stock.id] = stock;
         }
 
-        List<Map<String, String>> yahooData = YahooAPI.fetchData(map.keySet())
-        println yahooData
+        List<Map<String, String>> yahooData = YahooCSV.fetchData(map.keySet())
 
         for (Map<String, String> data : yahooData) {
             String symbol = data['Symbol']
@@ -131,6 +145,9 @@ class StockService {
         } else if (str.endsWith('K')) {
             multiplier = 1000
             str = str.replace('K', '')
+        } else if (str.endsWith('T')) {
+            multiplier = 1000000000000
+            str = str.replace('T', '')
         }
 
         return Double.parseDouble(str) * multiplier

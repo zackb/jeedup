@@ -4,7 +4,7 @@ import net.jeedup.coding.CSV
 import net.jeedup.net.http.HTTP
 
 
-class YahooAPI {
+class YahooCSV {
 
     public static List<Map<String, String>> fetchData(Collection<String> symbols) {
         String fields = 'a0b2a2b0b3' + /*b6*/ 'b4c1m7m5k4j5p2c6c4h0g0r1d0y0e0j4e7e9e8q0m3d1l1' + /*k3*/ 't1l3j1j3i0n0t8o0i5r5r0r2m8m6k5j6p0p6r6r7p1p5' + /*s6*/ 's1s7x0s0d2m4v0k0j0'
