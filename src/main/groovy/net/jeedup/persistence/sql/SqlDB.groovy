@@ -134,7 +134,9 @@ class SqlDB<T> extends DB<T> {
                     datatype = "int(${options?.max() ?: 10})"
                     break
                 case Double:
+                case double:
                 case Float:
+                case float:
                     datatype = 'double'
                     break
                 case Date:
@@ -164,7 +166,7 @@ class SqlDB<T> extends DB<T> {
         createSql = createSql.substring(0, createSql.length() - 1)
 
         createSql += ") engine=${engine} default charset=utf8"
-        Sql().execute(createSql)
+        executeUpdate(createSql)
     }
 
     protected Sql Sql() {
