@@ -1,4 +1,4 @@
-package net.jeedup.util;
+package net.jeedup.crypto;
 
 import java.io.UnsupportedEncodingException;
 import java.security.SecureRandom;
