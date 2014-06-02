@@ -25,12 +25,31 @@ class StockService {
         retrieveAndUpdateStockData()
     }
 
-    public void retrieveAndUpdateStockData() {
+    public void retrieveAndUpdateStockData(boolean yahoo = true, boolean morningstar = false) {
         Date now = new Date()
         List<Stock> stocks = Stock.db().executeQuery("select * from Stock where active = 1 and lastUpdated < ? order by id asc limit 40", [now])
         while (stocks) {
-            updateStocksFromYahoo(stocks)
+            if (yahoo) {
+                updateStocksFromYahoo(stocks)
+            }
+            if (morningstar) {
+                updateStocksFromMorningstar(stocks)
+            }
             stocks = Stock.db().executeQuery("select * from Stock where active = 1 and lastUpdated < ? order by id asc limit 40", [now])
+        }
+    }
+
+    public void updateStocksFromMorningstar(List<Stock> stocks) {
+        for (Stock stock : stocks) {
+            println 'Updating ' + stock.id + ' from Morningstar'
+            Map<String, Double> data = MorningstarAPI.fetchMinimalData(stock.id)
+            stock.debtEquity = data[MorningstarAPI.DebtEquity]
+            stock.currentAssets = data[MorningstarAPI.CurrentAssets]
+            stock.currentLiabilities = data[MorningstarAPI.CurrentLiabilities]
+            stock.eps = data[MorningstarAPI.EarningsPerShare]
+            stock.currentRatio = data[MorningstarAPI.CurrentRatio]
+            stock.quickRatio = data[MorningstarAPI.QuickRatio]
+            stock.save()
         }
     }
 
