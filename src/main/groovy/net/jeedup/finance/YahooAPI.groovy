@@ -61,6 +61,7 @@ class YahooAPI {
             }
             Sector s = Sector.db().findBy('title', sector.name)
             if (!s) {
+                println "New sector: " + sector.name
                 s = new Sector()
                 s.title = sector.name
                 s.save()

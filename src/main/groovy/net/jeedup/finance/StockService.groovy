@@ -28,31 +28,23 @@ class StockService {
 
     public void retrieveAndUpdateStockData(boolean yahoo = true, boolean morningstar = false) {
 
-        ThreadedJob<List<Stock>> yahooJob = null
-        ThreadedJob<List<Stock>> morningstarJob = null
-
-        if (yahoo) {
-            yahooJob = new ThreadedJob<List<Stock>>(10, { List<Stock> stocks ->
+        ThreadedJob<List<Stock>> job = new ThreadedJob<List<Stock>>(20, { List<Stock> stocks ->
+            if (yahoo) {
                 updateStocksFromYahoo(stocks)
-            })
-        }
+            }
 
-        if (morningstar) {
-            morningstarJob = new ThreadedJob<List<Stock>>(10, { List<Stock> stocks ->
+            if (morningstar) {
                 updateStocksFromMorningstar(stocks)
-            })
-        }
+            }
+        })
 
-        Date now = new Date()
-        List<Stock> stocks = Stock.db().executeQuery("select * from Stock where active = 1 and lastUpdated < ? order by id asc limit 40", [now])
+        List<Stock> stocks = Stock.db().executeQuery("select * from Stock where active = 1 order by id asc limit 40")
         while (stocks) {
-            yahooJob?.add(stocks)
-            morningstarJob?.add(stocks)
-            stocks = Stock.db().executeQuery("select * from Stock where active = 1 and lastUpdated < ? order by id asc limit 40", [now])
+            job.add(stocks)
+            stocks = Stock.db().executeQuery("select * from Stock where active = 1 and id > ? order by id asc limit 40", [stocks.last().id])
         }
 
-        yahooJob?.waitFor()
-        morningstarJob?.waitFor()
+        job.waitFor()
     }
 
     public void updateStocksFromMorningstar(List<Stock> stocks) {
