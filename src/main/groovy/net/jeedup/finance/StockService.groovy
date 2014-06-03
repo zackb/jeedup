@@ -2,6 +2,7 @@ package net.jeedup.finance
 
 import groovy.transform.CompileStatic
 import net.jeedup.model.finance.Stock
+import net.jeedup.util.ThreadedJob
 
 /**
  * Created by zack on 5/28/14.
@@ -26,17 +27,32 @@ class StockService {
     }
 
     public void retrieveAndUpdateStockData(boolean yahoo = true, boolean morningstar = false) {
+
+        ThreadedJob<List<Stock>> yahooJob = null
+        ThreadedJob<List<Stock>> morningstarJob = null
+
+        if (yahoo) {
+            yahooJob = new ThreadedJob<List<Stock>>(10, { List<Stock> stocks ->
+                updateStocksFromYahoo(stocks)
+            })
+        }
+
+        if (morningstar) {
+            morningstarJob = new ThreadedJob<List<Stock>>(10, { List<Stock> stocks ->
+                updateStocksFromMorningstar(stocks)
+            })
+        }
+
         Date now = new Date()
         List<Stock> stocks = Stock.db().executeQuery("select * from Stock where active = 1 and lastUpdated < ? order by id asc limit 40", [now])
         while (stocks) {
-            if (yahoo) {
-                updateStocksFromYahoo(stocks)
-            }
-            if (morningstar) {
-                updateStocksFromMorningstar(stocks)
-            }
+            yahooJob?.add(stocks)
+            morningstarJob?.add(stocks)
             stocks = Stock.db().executeQuery("select * from Stock where active = 1 and lastUpdated < ? order by id asc limit 40", [now])
         }
+
+        yahooJob?.waitFor()
+        morningstarJob?.waitFor()
     }
 
     public void updateStocksFromMorningstar(List<Stock> stocks) {
@@ -171,16 +187,4 @@ class StockService {
 
         return Double.parseDouble(str) * multiplier
     }
-
-
-    /*
-    import net.jeedup.finance.*
-    import net.jeedup.model.finance.*
-
-    List<Stock> stocks = Stock.db().executeQuery("select * from Stock where active = 1 and lastUpdated < date('2014-05-28') order by id asc limit 40")
-    while (stocks) {
-        StockService.getInstance().updateStocksFromYahoo(stocks)
-        stocks = Stock.db().executeQuery("select * from Stock where active = 1 and lastUpdated < date('2014-05-28') order by id asc limit 40")
-    }
-     */
 }
