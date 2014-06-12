@@ -21,7 +21,7 @@ class Jeedup {
         DataSources.getInstance()
 
         server = Undertow.builder()
-                .addListener(Config.port(), Config.host())
+                .addHttpListener(Config.port(), Config.host())
                 .setHandler(createHttpHandler())
                 .setWorkerThreads(400)
                 .build()

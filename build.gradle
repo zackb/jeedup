@@ -9,20 +9,20 @@ repositories {
 }
 
 dependencies {
-    //compile 'org.codehaus.groovy:groovy-all:2.2+'
     compile 'org.codehaus.groovy:groovy-all:2.3+'
     compile 'io.undertow:undertow-core:1.0.0+'
-    //compile 'io.undertow:undertow-servlet:1.0.0+'
     compile 'com.fasterxml.jackson.core:jackson-core:2.2.+'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.2.+'
     compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-smile:2.2.+'
     compile 'com.github.spullara.mustache.java:compiler:0.8.+'
     compile 'commons-dbcp:commons-dbcp:1.4+'
     compile 'mysql:mysql-connector-java:5.1.+'
-    //compile 'org.jumpmind.symmetric.jdbc:mariadb-java-client:1.1.1'
     compile 'com.netflix.rxjava:rxjava-core:0.+'
     compile 'com.rabbitmq:amqp-client:3.+'
     testCompile 'junit:junit:4.11'
+    //compile 'com.drewnoakes:metadata-extractor:2.6.2'
+    //compile 'org.jumpmind.symmetric.jdbc:mariadb-java-client:1.1.1'
+    //compile 'io.undertow:undertow-servlet:1.0.0+'
 }
 
 task uberjar(type: Jar) {
