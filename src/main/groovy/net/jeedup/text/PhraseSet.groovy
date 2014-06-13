@@ -9,7 +9,7 @@ import groovy.transform.CompileStatic
 class PhraseSet {
 
     public String title
-    List<String> urls
+    public List<String> urls
 
     public static PhraseSet newsSources() {
         PhraseSet result = new PhraseSet()

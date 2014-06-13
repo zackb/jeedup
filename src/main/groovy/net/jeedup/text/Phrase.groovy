@@ -9,9 +9,10 @@ import groovy.transform.CompileStatic
 class Phrase {
     public String text
     public String description
-    public List<String> urls
+    public String url
+    public Set<Phrase> relatedPhrases = []
 
     public String toString() {
-        return "Text: ${text} Urls: ${urls}"
+        return "Text: ${text} Url: ${url} Related: ${relatedPhrases}"
     }
 }

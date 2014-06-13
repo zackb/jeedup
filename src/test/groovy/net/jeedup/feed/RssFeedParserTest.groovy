@@ -3,8 +3,10 @@ package net.jeedup.feed
 import junit.framework.Test
 import junit.framework.TestCase
 import junit.framework.TestSuite
+import net.jeedup.text.Phrase
 import net.jeedup.text.PhraseSet
 import net.jeedup.text.RssFeedPhraseParser
+import net.jeedup.text.cluster.CosineDistancePhraseCluserAlgorithm
 
 /**
  * Created by zack on 6/13/14.
@@ -34,6 +36,9 @@ class RssFeedParserTest extends TestCase {
 
     public void testRssFeedPhraseParser() {
         PhraseSet set = PhraseSet.newsSources()
-        println new RssFeedPhraseParser().parsePhrases(set)
+        List<Phrase> phrases = new RssFeedPhraseParser().parsePhrases(set)
+        List<Phrase> cluster = new CosineDistancePhraseCluserAlgorithm().cluserPhrases(phrases)
+        cluster = cluster.sort { -it.relatedPhrases.size() }
+        println cluster
     }
 }

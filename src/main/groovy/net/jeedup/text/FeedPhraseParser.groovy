@@ -38,6 +38,7 @@ abstract class FeedPhraseParser implements IPhraseParser {
         Phrase phrase = new Phrase()
         phrase.text = item.title
         phrase.description = item.description
+        phrase.url = item.link
         return phrase
     }
 }
