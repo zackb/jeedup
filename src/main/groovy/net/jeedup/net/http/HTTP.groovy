@@ -69,7 +69,7 @@ class HTTP {
             IOUtil.close(outs)
         }
 
-        Response response = null
+        Response response = new Response()
         String contentType = conn.getHeaderField('Content-Type')
 
         if (contentType) {
@@ -83,14 +83,14 @@ class HTTP {
             }
         }
 
-        response.contentType = contentType
-
         try {
             response.inputStream = conn.getInputStream()
         } catch (Exception e) {
             response.inputStream = conn.getErrorStream()
         }
+
         response.status = conn.getResponseCode()
+        response.contentType = contentType
         response.headers = [:]
 
         for (String name : conn.getHeaderFields()) {
