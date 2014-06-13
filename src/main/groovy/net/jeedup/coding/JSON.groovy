@@ -43,7 +43,7 @@ class JSON {
         return mapper.writeValueAsString(obj)
     }
 
-    static <T> T decodeObject(String data, Class clazz) {
+    static <T> T decodeObject(String data, Class<T> clazz) {
         return (T)mapper.readValue(data.getBytes('UTF-8'), clazz)
     }
 

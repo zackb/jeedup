@@ -1,11 +1,16 @@
 package net.jeedup.web.handlers
 
 import groovy.transform.CompileStatic
+import net.jeedup.coding.JSON
 import net.jeedup.model.finance.Stock
 import net.jeedup.message.Brokers
 import net.jeedup.net.http.Request
 import net.jeedup.persistence.DB
 import net.jeedup.persistence.sql.SqlDB
+import net.jeedup.text.Phrase
+import net.jeedup.text.PhraseSet
+import net.jeedup.text.RssFeedPhraseParser
+import net.jeedup.text.cluster.CosineDistancePhraseCluserAlgorithm
 import net.jeedup.web.Config
 import net.jeedup.web.Endpoint
 
@@ -16,6 +21,25 @@ import static net.jeedup.net.http.Response.*
  */
 @CompileStatic
 class RootHandler {
+
+    @Endpoint('admin/news')
+    def news(Map data) {
+        String text = new File('/Users/zack/Desktop/cluster.json').text
+        List<Phrase> phrases = new ArrayList<Phrase>()
+        phrases = (List<Phrase>)JSON.decodeObject(text, phrases.class)
+        HTML([phrases:phrases], 'admin/news')
+    }
+
+    @Endpoint('news/run')
+    def runNews(Map data) {
+        PhraseSet set = PhraseSet.newsSources()
+        List<Phrase> phrases = new RssFeedPhraseParser().parsePhrases(set)
+        List<Phrase> cluster = new CosineDistancePhraseCluserAlgorithm().cluserPhrases(phrases)
+        cluster = cluster.sort { Phrase phrase -> -phrase.relatedPhrases.size() }
+        String json = JSON.encode(cluster)
+        new File('/Users/zack/Desktop/cluster.json').write(json)
+        JSON(cluster)
+    }
 
     @Endpoint('q')
     def q(Map data) {

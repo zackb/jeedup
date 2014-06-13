@@ -1,0 +1,19 @@
+{{> header}}
+      <div class="container">
+        <div class="page-header">
+          <h1>News</h1>
+        </div>
+        <p class="lead">Main News</p>
+        <ul>
+        {{#phrases}}
+            <li>
+                <strong>{{text}}</strong> <a href="{{url}}">link</a></br>
+                {{#relatedPhrases}}
+                <i>{{text}}</i> - <a href="{{url}}">link</a></br>
+                {{/relatedPhrases}}
+                <br/>
+            </li>
+        {{/phrases}}
+        </ul>
+      </div>
+{{> footer}}

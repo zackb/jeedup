@@ -17,7 +17,7 @@ import net.jeedup.util.StringUtil
  */
 class CosineDistancePhraseCluserAlgorithm implements IPhraseClusterAlgoritm {
 
-    static final TokenizerFactory TOKENIZER_FACTORY = tokenizerFactory();
+    static final TokenizerFactory TOKENIZER_FACTORY = tokenizerFactory()
 
     static TokenizerFactory tokenizerFactory() {
         TokenizerFactory factory = IndoEuropeanTokenizerFactory.INSTANCE
@@ -53,20 +53,19 @@ class CosineDistancePhraseCluserAlgorithm implements IPhraseClusterAlgoritm {
             return []
         }
 
-        // eval clusterers
-        HierarchicalClusterer<Document> clClusterer = new CompleteLinkClusterer<Document>(COSINE_DISTANCE)
-        Dendrogram<Document> completeLinkDendrogram = null
+        HierarchicalClusterer<Document> clusterer = new CompleteLinkClusterer<Document>(COSINE_DISTANCE)
+        Dendrogram<Document> dendrogram
         try {
-            completeLinkDendrogram = clClusterer.hierarchicalCluster(docSet);
+            dendrogram = clusterer.hierarchicalCluster(docSet)
         } catch(IllegalArgumentException iae) {
             System.err.println('Failed cluster: ' + iae.message)
             return []
         }
 
-        Set<Set<Document>> slResponsePartition = completeLinkDendrogram.partitionDistance(0.5)
+        Set<Set<Document>> partition = dendrogram.partitionDistance(0.5)
 
         List<Phrase> result = new ArrayList<Phrase>()
-        for (Set<Document> set : slResponsePartition) {
+        for (Set<Document> set : partition) {
             Phrase main = null
             for (Document doc : set) {
                 if (main == null) {
@@ -83,21 +82,22 @@ class CosineDistancePhraseCluserAlgorithm implements IPhraseClusterAlgoritm {
 
     private static class Document {
 
-        final ObjectToCounterMap<String> mTokenCounter = new ObjectToCounterMap<String>()
+        final ObjectToCounterMap<String> tokenCounter = new ObjectToCounterMap<String>()
         final double mLength
         final Phrase phrase
 
         private Document(Phrase _phrase) {
-            this.phrase = _phrase;
+            this.phrase = _phrase
 
+            // TODO: really do want to use description as well
             String string = phrase.text// + ' ' + phrase.description
             string = StringUtil.removeIgnoraleWordsFromNews(string)
             Tokenizer tokenizer = TOKENIZER_FACTORY.tokenizer(string.toCharArray(), 0, string.size())
             String token
             while ((token = tokenizer.nextToken()) != null)
-                mTokenCounter.increment(token.toLowerCase())
+                tokenCounter.increment(token.toLowerCase())
 
-            mLength = length(mTokenCounter)
+            mLength = length(tokenCounter)
         }
 
         double cosine(Document doc) {
@@ -106,12 +106,12 @@ class CosineDistancePhraseCluserAlgorithm implements IPhraseClusterAlgoritm {
 
         double product(Document thatDoc) {
             double sum = 0.0
-            for (String token : mTokenCounter.keySet()) {
-                int count = thatDoc.mTokenCounter.getCount(token)
+            for (String token : tokenCounter.keySet()) {
+                int count = thatDoc.tokenCounter.getCount(token)
                 if (count == 0) {
                     continue
                 }
-                sum += Math.sqrt(count * mTokenCounter.getCount(token))
+                sum += Math.sqrt(count * tokenCounter.getCount(token))
             }
             return sum
         }
