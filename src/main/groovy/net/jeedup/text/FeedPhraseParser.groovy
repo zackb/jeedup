@@ -17,7 +17,7 @@ abstract class FeedPhraseParser implements IPhraseParser {
 
         List<Phrase> phrases = []
 
-        ThreadedJob<String> job = new ThreadedJob<String>(5, { String url ->
+        ThreadedJob<String> job = new ThreadedJob<String>(10, { String url ->
             RssFeed feed = new RssFeed()
             feed.url = url
             phrases.addAll(parseFeed(feed))

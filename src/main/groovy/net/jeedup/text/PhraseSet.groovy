@@ -22,7 +22,7 @@ class PhraseSet {
             "http://rss.cnn.com/rss/cnn_topstories.rss",
             "http://newsrss.bbc.co.uk/rss/newsonline_world_edition/front_page/rss.xml",
             "http://www.nytimes.com/services/xml/rss/nyt/GlobalHome.xml",
-            "http://feeds.reuters.com/reuters/topNews",
+            "http://feeds.reuters.com/reuters/topNews", // http://www.reuters.com/tools/rss
             "http://hosted.ap.org/lineups/TOPHEADS-rss_2.0.xml?SITE=TXHAR&SECTION=HOME",
             "http://online.wsj.com/xml/rss/3_7085.xml",
             "http://feeds.feedburner.com/euronews/en/world?format=xml",
@@ -46,6 +46,7 @@ class PhraseSet {
             "http://rss.upi.com/news/news.rss",
             "http://news.sky.com/feeds/rss/home.xml", // http://news.sky.com/info/rss
             "http://feeds.nbcnews.com/feeds/topstories",
+            // "http://www.vox.com/rss/index.xml" // Atom. not news
             //"http://feeds.huffingtonpost.com/huffingtonpost/LatestNews"
         ]
         return result

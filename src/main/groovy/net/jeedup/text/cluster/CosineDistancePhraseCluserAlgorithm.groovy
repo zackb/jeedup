@@ -91,7 +91,7 @@ class CosineDistancePhraseCluserAlgorithm implements IPhraseClusterAlgoritm {
 
             // TODO: really do want to use description as well
             String string = phrase.text// + ' ' + phrase.description
-            string = StringUtil.removeIgnoraleWordsFromNews(string)
+            string = StringUtil.removeIgnorableWordsFromNews(string)
             Tokenizer tokenizer = TOKENIZER_FACTORY.tokenizer(string.toCharArray(), 0, string.size())
             String token
             while ((token = tokenizer.nextToken()) != null)

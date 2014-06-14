@@ -3,6 +3,7 @@ package net.jeedup.feed
 import junit.framework.Test
 import junit.framework.TestCase
 import junit.framework.TestSuite
+import net.jeedup.feed.parser.RssFeedParser
 import net.jeedup.text.Phrase
 import net.jeedup.text.PhraseSet
 import net.jeedup.text.RssFeedPhraseParser
@@ -23,6 +24,20 @@ class RssFeedParserTest extends TestCase {
     public void testSimpleParse() {
         RssFeed feed = new RssFeed()
         feed.url = 'http://news.google.com/news?pz=1&ned=us&hl=en&output=rss'
+        List<FeedItem> items = new RssFeedParser().parse(feed)
+        items.each { FeedItem item ->
+            assert item
+            assert item.title
+            assert item.description
+            assert item.pubDate
+            assert item.guid
+            assert item.link
+        }
+    }
+
+    public void testAtomParse() {
+        RssFeed feed = new RssFeed()
+        feed.url = 'http://www.vox.com/rss/index.xml'
         List<FeedItem> items = new RssFeedParser().parse(feed)
         items.each { FeedItem item ->
             assert item

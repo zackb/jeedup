@@ -3,7 +3,7 @@ package net.jeedup.text
 import groovy.transform.CompileStatic
 import net.jeedup.feed.FeedItem
 import net.jeedup.feed.IFeed
-import net.jeedup.feed.RssFeedParser
+import net.jeedup.feed.parser.RssFeedParser
 
 /**
  * Created by zack on 6/13/14.

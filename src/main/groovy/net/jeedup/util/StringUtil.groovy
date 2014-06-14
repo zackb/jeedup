@@ -14,7 +14,7 @@ class StringUtil {
         return text?.replaceAll('<.*?>', ' ')?.trim()
     }
 
-    public static String removeIgnoraleWordsFromNews(String text) {
+    public static String removeIgnorableWordsFromNews(String text) {
         text = ' ' + text + ' '
         Set<String> ignores = []
         ignores.addAll(IGNORABLE_WORDS)
