@@ -3,6 +3,7 @@ package net.jeedup.text
 import groovy.transform.CompileStatic
 import net.jeedup.feed.FeedItem
 import net.jeedup.feed.IFeed
+import net.jeedup.feed.RssFeed
 import net.jeedup.feed.parser.RssFeedParser
 
 /**
@@ -17,6 +18,9 @@ class RssFeedPhraseParser extends FeedPhraseParser {
         List<Phrase> phrases = []
         new RssFeedParser().parse(feed).each { FeedItem item ->
             phrases << parseFeedItem(item)
+        }
+        if (!phrases) {
+            System.err.println('No entries for: ' + ((RssFeed)feed).url)
         }
         return phrases
     }

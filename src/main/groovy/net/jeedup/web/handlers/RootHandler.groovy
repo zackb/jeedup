@@ -32,7 +32,7 @@ class RootHandler {
 
     @Endpoint('news/run')
     def runNews(Map data) {
-        PhraseSet set = PhraseSet.newsSources()
+        PhraseSet set = PhraseSet.sportsSources()
         List<Phrase> phrases = new RssFeedPhraseParser().parsePhrases(set)
         List<Phrase> cluster = new CosineDistancePhraseCluserAlgorithm().cluserPhrases(phrases)
         cluster = cluster.sort { Phrase phrase -> -phrase.relatedPhrases.size() }

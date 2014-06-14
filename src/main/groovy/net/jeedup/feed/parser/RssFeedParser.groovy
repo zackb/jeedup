@@ -17,12 +17,16 @@ class RssFeedParser implements IFeedParser {
         List<FeedItem> items = []
         RssFeed rssFeed = (RssFeed)feed
         String xml = HTTP.get(rssFeed.url)
-        def slurper = new XmlSlurper(false, true).parseText(xml)
+        try {
+            def slurper = new XmlSlurper(false, true).parseText(xml)
 
-        if (slurper[0].namespaceURI?.equals('http://www.w3.org/2005/Atom')) {
-            items = parseAtomFeed(slurper)
-        } else {
-            items = parseRssFeed(slurper)
+            if (slurper[0].namespaceURI?.equals('http://www.w3.org/2005/Atom')) {
+                items = parseAtomFeed(slurper)
+            } else {
+                items = parseRssFeed(slurper)
+            }
+        } catch (Exception e) {
+            System.err.println('Failed parsing feed: ' + rssFeed.url + ' ' + e.message)
         }
         return items
     }

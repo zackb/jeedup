@@ -11,6 +11,23 @@ class PhraseSet {
     public String title
     public List<String> urls
 
+    public static PhraseSet sportsSources() {
+        PhraseSet result = new PhraseSet()
+        result.title = 'Sports'
+        result.urls = [
+                'http://sports.espn.go.com/espn/rss/news',
+                'http://feeds.foxsports.com/feedout/syndicatedContent?categoryId=0',
+                'http://www.nbcsports.com/rss/section/all/feed',
+                'http://www.cbssports.com/partners/feeds/rss/home_news',
+                'http://feeds.bbci.co.uk/sport/0/rss.xml?edition=uk',
+                'http://sports.yahoo.com/top/rss.xml', // http://sports.yahoo.com/top/rss
+                'http://rssfeeds.usatoday.com/UsatodaycomSports-TopStories', // http://content.usatoday.com/marketing/rss/index.aspx
+                'http://www.skysports.com/rss/0,20514,12040,00.xml', // http://www.skysports.com/rss_home/0,20366,,00.html
+                'http://www.sportingnews.com/rss',
+        ]
+        return result
+    }
+
     public static PhraseSet newsSources() {
         PhraseSet result = new PhraseSet()
         result.title = 'News'
@@ -32,6 +49,7 @@ class PhraseSet {
             "http://rss.feedsportal.com/c/32158/f/414206/index.rss",
             "http://news.sky.com/sky-news/rss/world-news/rss.xml",
             "http://rssfeeds.usatoday.com/usatoday-NewsTopStories",
+            // ??? 'http://content.usatoday.com/marketing/rss/rsstrans.aspx?feedId=news1',
             "http://rss.news.yahoo.com/rss/topstories",
             "http://news.google.com/news?pz=1&ned=us&hl=en&output=rss",
             //"http://feeds.washingtonpost.com/wp-dyn/rss/print/index_xml",
