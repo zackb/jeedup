@@ -84,7 +84,7 @@ abstract class DB<T> {
     }
 
     public <T> T instantiate(Map<String, Object> values = null) {
-        Object obj = clazz.newInstance()
+        Object obj = (T)clazz.newInstance()
         describeFields().each { String name, Field field ->
             field.set(obj, values[name])
         }

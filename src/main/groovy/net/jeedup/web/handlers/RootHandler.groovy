@@ -1,6 +1,7 @@
 package net.jeedup.web.handlers
 
 import groovy.transform.CompileStatic
+import io.undertow.util.StatusCodes
 import net.jeedup.coding.JSON
 import net.jeedup.model.finance.Stock
 import net.jeedup.message.Brokers
@@ -11,6 +12,7 @@ import net.jeedup.text.Phrase
 import net.jeedup.text.PhraseSet
 import net.jeedup.text.RssFeedPhraseParser
 import net.jeedup.text.cluster.CosineDistancePhraseCluserAlgorithm
+import net.jeedup.util.FileStoreCache
 import net.jeedup.web.Config
 import net.jeedup.web.Endpoint
 
@@ -22,19 +24,52 @@ import static net.jeedup.net.http.Response.*
 @CompileStatic
 class RootHandler {
 
+    FileStoreCache<List<Phrase>> phraseSetStore = new FileStoreCache<List<Phrase>>({ String key ->
+        PhraseSet set
+        switch (key) {
+            case 'news':
+                set = PhraseSet.newsSources()
+                break
+            case 'sports':
+                set = PhraseSet.sportsSources()
+                break
+            default:
+                throw new Exception('No such news category')
+        }
+        List<Phrase> phrases = new RssFeedPhraseParser().parsePhrases(set)
+        List<Phrase> cleaned = []
+        Set<String> seen = []
+        phrases.each { Phrase phrase ->
+            if (!seen.contains(phrase.url)) {
+                cleaned << phrase
+            }
+            seen << phrase.url
+        }
+        List<Phrase> cluster = new CosineDistancePhraseCluserAlgorithm().cluserPhrases(cleaned)
+        cluster = cluster.sort { Phrase phrase -> -phrase.relatedPhrases.size() }
+        return cluster
+    }, 10 * 60 * 1000)
+
     @Endpoint('admin/news')
     def news(Map data) {
-        String text = new File('/Users/zack/Desktop/cluster.json').text
-        List<Phrase> phrases = new ArrayList<Phrase>()
-        phrases = (List<Phrase>)JSON.decodeObject(text, phrases.class)
+        List<Phrase> phrases = phraseSetStore.get((String)data.id)
         HTML([phrases:phrases], 'admin/news')
     }
 
     @Endpoint('news/run')
     def runNews(Map data) {
-        PhraseSet set = PhraseSet.sportsSources()
+        //PhraseSet set = PhraseSet.sportsSources()
+        PhraseSet set = PhraseSet.newsSources()
         List<Phrase> phrases = new RssFeedPhraseParser().parsePhrases(set)
-        List<Phrase> cluster = new CosineDistancePhraseCluserAlgorithm().cluserPhrases(phrases)
+        List<Phrase> cleaned = []
+        Set<String> seen = []
+        phrases.each { Phrase phrase ->
+            if (!seen.contains(phrase.url)) {
+                cleaned << phrase
+            }
+            seen << phrase.url
+        }
+        List<Phrase> cluster = new CosineDistancePhraseCluserAlgorithm().cluserPhrases(cleaned)
         cluster = cluster.sort { Phrase phrase -> -phrase.relatedPhrases.size() }
         String json = JSON.encode(cluster)
         new File('/Users/zack/Desktop/cluster.json').write(json)

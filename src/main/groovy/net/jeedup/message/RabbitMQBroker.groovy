@@ -54,8 +54,9 @@ public class RabbitMQBroker<T> implements MessageBroker<T> {
         }
         mainConnection = null;
 
-        if (executorService != null)
+        if (executorService != null) {
             executorService.shutdown();
+        }
         executorService = null;
     }
 
