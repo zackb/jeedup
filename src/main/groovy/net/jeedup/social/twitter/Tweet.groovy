@@ -7,5 +7,7 @@ import groovy.transform.CompileStatic
  */
 @CompileStatic
 class Tweet {
+    public BigInteger id
+    public String id_str
     public String text
 }

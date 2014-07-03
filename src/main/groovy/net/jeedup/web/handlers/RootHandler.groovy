@@ -22,6 +22,16 @@ class RootHandler {
 
     @Endpoint('stream')
     def stream(Map data) {
+        def ids = ["126855687060987904",
+                   "126855171702661120",
+                   "126854999442587648",
+                   "126854818101858304",
+                   "126854423317188608"]
+        def result = TwitterService.getInstance().lookupStatuses(ids)
+        println result.class
+        println result[0].class
+        JSON(result)
+        /*
         TwitterService.getInstance().stream(['aapl, world cup'])
         .subscribe(new Subscriber<Tweet>() {
             @Override
@@ -32,6 +42,7 @@ class RootHandler {
             @Override
             void onError(Throwable e) {
                 println 'ERROR'
+                e.printStackTrace()
             }
 
             @Override
@@ -40,6 +51,7 @@ class RootHandler {
             }
         })
         HTML('OK')
+        */
     }
 
     @Endpoint('q')

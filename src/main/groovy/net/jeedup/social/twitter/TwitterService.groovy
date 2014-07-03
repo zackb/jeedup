@@ -22,7 +22,9 @@ class TwitterService {
 
     private static TwitterService instance = new TwitterService()
 
-    private static final String API_STREAM_URL = "https://stream.twitter.com/1.1/statuses/filter.json?track="
+    private static final String API_URL = 'https://api.twitter.com/1.1/'
+    private static final String API_STREAM_URL = 'https://stream.twitter.com/1.1/statuses/filter.json?track='
+    private static final String API_LOOKUP_URL = API_URL + 'statuses/lookup.json?id='
 
     private static String consumerKey
     private static String consumerSecret
@@ -45,23 +47,32 @@ class TwitterService {
 
     public Observable<Tweet> stream(List<String> terms) {
         try {
-            OAuthConsumer consumer = new CommonsHttpOAuthConsumer(consumerKey, consumerSecret);
-            consumer.setTokenWithSecret(token, tokenSecret)
             String track = terms.collect { URLEncoder.encode(it, 'UTF-8')}.join(',')
-            String url = API_STREAM_URL + track
-            String signedUrl = consumer.sign(url);
+            String url = sign(API_STREAM_URL + track)
 
-            return HTTP.streamLines(signedUrl)
+            return HTTP.streamLines(url)
                 .map(new Func1<String, Tweet>() {
                     public Tweet call(String line) {
-                        Map json = JSON.decode(line);
-                        Tweet tweet = new Tweet()
-                        tweet.text = json.text
+                        Tweet tweet = JSON.decodeObject(line, Tweet.class)
                         return tweet
                     }
                 })
         } catch (Exception e) {
             return Observable.error(e)
         }
+    }
+
+    public List<Tweet> lookupStatuses(List<String> statusIds) {
+        String url = API_LOOKUP_URL + statusIds.join(',') + '&include_entities=false&trim_user=true'
+        url = sign(url)
+        String data = HTTP.get(url)
+        List<Tweet> result = JSON.decodeList(data, Tweet.class)
+        return result
+    }
+
+    private String sign(String url) {
+        OAuthConsumer consumer = new CommonsHttpOAuthConsumer(consumerKey, consumerSecret);
+        consumer.setTokenWithSecret(token, tokenSecret)
+        return consumer.sign(url)
     }
 }

@@ -47,6 +47,11 @@ class JSON {
         return (T)mapper.readValue(data.getBytes('UTF-8'), clazz)
     }
 
+    static <T> List<T> decodeList(String data, Class<T> clazz) {
+        List<T> result = (List<T>)mapper.readValue(data, mapper.getTypeFactory().constructCollectionType(List.class, clazz))
+        return result
+    }
+
     static Map decode(String data) {
         return (Map)decodeObject(data, mapClass)
     }
