@@ -1,20 +1,16 @@
 package net.jeedup.web.handlers
 
 import groovy.transform.CompileStatic
-import io.undertow.util.StatusCodes
-import net.jeedup.coding.JSON
 import net.jeedup.model.finance.Stock
 import net.jeedup.message.Brokers
 import net.jeedup.net.http.Request
 import net.jeedup.persistence.DB
 import net.jeedup.persistence.sql.SqlDB
-import net.jeedup.text.Phrase
-import net.jeedup.text.PhraseSet
-import net.jeedup.text.RssFeedPhraseParser
-import net.jeedup.text.cluster.CosineDistancePhraseCluserAlgorithm
-import net.jeedup.util.FileStoreCache
+import net.jeedup.social.twitter.Tweet
+import net.jeedup.social.twitter.TwitterService
 import net.jeedup.web.Config
 import net.jeedup.web.Endpoint
+import rx.Subscriber
 
 import static net.jeedup.net.http.Response.*
 /**
@@ -24,56 +20,26 @@ import static net.jeedup.net.http.Response.*
 @CompileStatic
 class RootHandler {
 
-    FileStoreCache<List<Phrase>> phraseSetStore = new FileStoreCache<List<Phrase>>({ String key ->
-        PhraseSet set
-        switch (key) {
-            case 'news':
-                set = PhraseSet.newsSources()
-                break
-            case 'sports':
-                set = PhraseSet.sportsSources()
-                break
-            default:
-                throw new Exception('No such news category')
-        }
-        List<Phrase> phrases = new RssFeedPhraseParser().parsePhrases(set)
-        List<Phrase> cleaned = []
-        Set<String> seen = []
-        phrases.each { Phrase phrase ->
-            if (!seen.contains(phrase.url)) {
-                cleaned << phrase
+    @Endpoint('stream')
+    def stream(Map data) {
+        TwitterService.getInstance().stream(['aapl, world cup'])
+        .subscribe(new Subscriber<Tweet>() {
+            @Override
+            void onCompleted() {
+                println 'COMPLETE'
             }
-            seen << phrase.url
-        }
-        List<Phrase> cluster = new CosineDistancePhraseCluserAlgorithm().cluserPhrases(cleaned)
-        cluster = cluster.sort { Phrase phrase -> -phrase.relatedPhrases.size() }
-        return cluster
-    }, 10 * 60 * 1000)
 
-    @Endpoint('admin/news')
-    def news(Map data) {
-        List<Phrase> phrases = phraseSetStore.get((String)data.id)
-        HTML([phrases:phrases], 'admin/news')
-    }
-
-    @Endpoint('news/run')
-    def runNews(Map data) {
-        //PhraseSet set = PhraseSet.sportsSources()
-        PhraseSet set = PhraseSet.newsSources()
-        List<Phrase> phrases = new RssFeedPhraseParser().parsePhrases(set)
-        List<Phrase> cleaned = []
-        Set<String> seen = []
-        phrases.each { Phrase phrase ->
-            if (!seen.contains(phrase.url)) {
-                cleaned << phrase
+            @Override
+            void onError(Throwable e) {
+                println 'ERROR'
             }
-            seen << phrase.url
-        }
-        List<Phrase> cluster = new CosineDistancePhraseCluserAlgorithm().cluserPhrases(cleaned)
-        cluster = cluster.sort { Phrase phrase -> -phrase.relatedPhrases.size() }
-        String json = JSON.encode(cluster)
-        new File('/Users/zack/Desktop/cluster.json').write(json)
-        JSON(cluster)
+
+            @Override
+            void onNext(Tweet tweet) {
+                println tweet.text
+            }
+        })
+        HTML('OK')
     }
 
     @Endpoint('q')
@@ -113,29 +79,6 @@ class RootHandler {
     def admin(Map data) {
         HTML(null, 'admin/admin')
     }
-
-    @Endpoint('admin/repl')
-    def repl(Map data) {
-        String output = ''
-        String code = data.code
-        GroovyShell shell = new GroovyShell(ClassLoader.getSystemClassLoader())
-        Script scpt = shell.parse(code);
-        Binding binding = new Binding();
-        binding.setVariable ("render", { args ->
-            output += args
-        });
-        scpt.setBinding(binding);
-
-
-        try {
-            String result = '' + scpt.run()
-            return JSON(['result':result])
-        } catch (Exception e) {
-            e.printStackTrace();
-            return JSON(['message': e.message]).status(500)
-        }
-    }
-
     @Endpoint('db')
     def db(Map data) {
         //SqlDB<User> db = DB.sql(User.class)
