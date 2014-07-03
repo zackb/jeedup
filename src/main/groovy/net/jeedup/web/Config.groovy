@@ -41,6 +41,10 @@ class Config implements Map<String, Object> {
         return (Map<String, Map>) getInstance().get('queues')
     }
 
+    public static final Map<String, String> getTwitter() {
+        return (Map<String, String>)getInstance().get('twitter')
+    }
+
     public static final String host() {
         return (String)getInstance().get('host')
     }
