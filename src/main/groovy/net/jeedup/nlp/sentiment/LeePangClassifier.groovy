@@ -1,16 +1,20 @@
 package net.jeedup.nlp.sentiment
 
 import com.aliasi.util.Files
+import groovy.transform.CompileStatic
 import net.jeedup.nlp.sentiment.Constants.Type
 
 /**
  * Created by zack on 7/3/14.
  */
+@CompileStatic
 class LeePangClassifier extends Classifier {
 
     public static String dataDir = ''
 
-    private LeePangClassifier() { super() }
+    private LeePangClassifier() {
+        super()
+    }
 
     public LeePangClassifier(String dataDir) {
         super()

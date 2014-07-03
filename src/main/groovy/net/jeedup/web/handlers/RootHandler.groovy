@@ -4,6 +4,7 @@ import groovy.transform.CompileStatic
 import net.jeedup.model.finance.Stock
 import net.jeedup.message.Brokers
 import net.jeedup.net.http.Request
+import net.jeedup.nlp.sentiment.TwitterClassifier
 import net.jeedup.persistence.DB
 import net.jeedup.persistence.sql.SqlDB
 import net.jeedup.social.twitter.Tweet
@@ -22,16 +23,10 @@ class RootHandler {
 
     @Endpoint('stream')
     def stream(Map data) {
-        def ids = ["126855687060987904",
-                   "126855171702661120",
-                   "126854999442587648",
-                   "126854818101858304",
-                   "126854423317188608"]
-        def result = TwitterService.getInstance().lookupStatuses(ids)
-        println result.class
-        println result[0].class
-        JSON(result)
-        /*
+
+        TwitterClassifier classifier = new TwitterClassifier('/Users/zack/Downloads/sanders-twitter-0.2/')
+        classifier.retrain()
+
         TwitterService.getInstance().stream(['aapl, world cup'])
         .subscribe(new Subscriber<Tweet>() {
             @Override
@@ -47,11 +42,10 @@ class RootHandler {
 
             @Override
             void onNext(Tweet tweet) {
-                println tweet.text
+                println classifier.classify(tweet.text).name + ': ' + tweet.text
             }
         })
         HTML('OK')
-        */
     }
 
     @Endpoint('q')

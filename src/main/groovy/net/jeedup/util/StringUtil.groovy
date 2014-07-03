@@ -14,6 +14,10 @@ class StringUtil {
         return text?.replaceAll('<.*?>', ' ')?.trim()
     }
 
+    public static String removeUrls(String text) {
+        return text.replaceAll(/\w+:\\/{2}[\d\w-]+(\.[\d\w-]+)*(?:(?:\\/[^\s\/]*))*/, '')
+    }
+
     public static String removeIgnorableWordsFromNews(String text) {
         text = ' ' + text + ' '
         Set<String> ignores = []
