@@ -1,4 +1,4 @@
-package net.jeedup.nlp.sentiment
+package net.jeedup.nlp.sentiment.classify
 
 import net.jeedup.storage.FileStorageService
 

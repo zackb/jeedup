@@ -1,11 +1,12 @@
-package net.jeedup.nlp.sentiment
+package net.jeedup.nlp.sentiment.classify
 
 import com.aliasi.classify.Classification
 import com.aliasi.classify.LMClassifier
 import com.aliasi.lm.NGramProcessLM
 import com.aliasi.stats.MultivariateEstimator
 import com.aliasi.util.AbstractExternalizable
-import net.jeedup.nlp.sentiment.Constants.Type
+import net.jeedup.nlp.sentiment.classify.Constants.Type
+import net.jeedup.nlp.sentiment.ModelTrainer
 
 /**
  * Created by zack on 7/3/14.

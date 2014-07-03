@@ -4,7 +4,7 @@ import groovy.transform.CompileStatic
 import net.jeedup.model.finance.Stock
 import net.jeedup.message.Brokers
 import net.jeedup.net.http.Request
-import net.jeedup.nlp.sentiment.TwitterClassifier
+import net.jeedup.nlp.sentiment.classify.TwitterClassifier
 import net.jeedup.persistence.DB
 import net.jeedup.persistence.sql.SqlDB
 import net.jeedup.social.twitter.Tweet

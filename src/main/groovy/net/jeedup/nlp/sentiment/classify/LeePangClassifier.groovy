@@ -1,8 +1,9 @@
-package net.jeedup.nlp.sentiment
+package net.jeedup.nlp.sentiment.classify
 
 import com.aliasi.util.Files
 import groovy.transform.CompileStatic
-import net.jeedup.nlp.sentiment.Constants.Type
+import net.jeedup.nlp.sentiment.classify.Constants.Type
+import net.jeedup.nlp.sentiment.ModelTrainer
 
 /**
  * Created by zack on 7/3/14.

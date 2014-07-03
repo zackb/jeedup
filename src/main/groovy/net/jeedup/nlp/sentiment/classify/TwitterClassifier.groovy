@@ -1,8 +1,9 @@
-package net.jeedup.nlp.sentiment
+package net.jeedup.nlp.sentiment.classify
 
 import groovy.transform.CompileStatic
 import net.jeedup.coding.CSV
 import net.jeedup.coding.JSON
+import net.jeedup.nlp.sentiment.ModelTrainer
 import net.jeedup.social.twitter.Tweet
 import net.jeedup.social.twitter.TwitterService
 import net.jeedup.util.CollectionUtil

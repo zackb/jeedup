@@ -5,6 +5,7 @@ import com.aliasi.classify.Classified
 import com.aliasi.classify.DynamicLMClassifier
 import com.aliasi.lm.NGramProcessLM
 import com.aliasi.util.AbstractExternalizable
+import net.jeedup.nlp.sentiment.classify.Constants
 
 /**
  * Created by zack on 7/3/14.
