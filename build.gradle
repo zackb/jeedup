@@ -19,6 +19,8 @@ dependencies {
     compile 'mysql:mysql-connector-java:5.1.+'
     compile 'com.netflix.rxjava:rxjava-core:0.+'
     compile 'com.rabbitmq:amqp-client:3.+'
+    compile 'oauth.signpost:signpost-commonshttp4:1.2.+'
+
     compile files(fileTree(dir: 'lib', includes: ['*.jar']))
     testCompile 'junit:junit:4.11'
     //compile 'com.drewnoakes:metadata-extractor:2.6.2'
