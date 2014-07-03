@@ -3,6 +3,8 @@ package net.jeedup.net.http
 import groovy.transform.CompileStatic
 import net.jeedup.coding.JSON
 import net.jeedup.io.IOUtil
+import net.jeedup.util.RxUtil
+import rx.Observable
 
 /**
  * User: zack
@@ -131,5 +133,37 @@ class HTTP {
     public static String postJSON(String url, Object data = [:], Map headers = [:]) {
         headers['Content-Type'] = 'application/json'
         return post(url, JSON.encode(data), headers)
+    }
+
+    /**
+     * String line based streamer
+     *
+     * @param url
+     * @param data
+     * @param headers
+     * @return
+     */
+    public static Observable<String> streamLines(String url, Object data = [:], Map headers = [:]) {
+        try {
+            Request request = new Request()
+                    .url(url)
+                    .headers(headers)
+                    .data(data).method('GET')
+            return RxUtil.streamLines(openInputStrem(request))
+        } catch (Exception e) {
+            return Observable.error(e)
+        }
+    }
+
+    public static Observable<byte[]> stream(String url, Object data = [:], Map headers = [:]) {
+        try {
+            Request request = new Request()
+                    .url(url)
+                    .headers(headers)
+                    .data(data).method('GET')
+            return RxUtil.stream(openInputStrem(request))
+        } catch (Exception e) {
+            return Observable.error(e)
+        }
     }
 }

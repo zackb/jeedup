@@ -54,13 +54,22 @@ class IOUtil {
         }
     }
 
-
     public static void close(InputStream ins) {
         try {
             if (ins != null) {
                 ins.close();
             }
         } catch (IOException e) {
+            e.printStackTrace()
+        }
+    }
+
+    public static void close(Reader reader) {
+        try {
+            if (reader != null) {
+                reader.close()
+            }
+        } catch (Exception e) {
             e.printStackTrace()
         }
     }
