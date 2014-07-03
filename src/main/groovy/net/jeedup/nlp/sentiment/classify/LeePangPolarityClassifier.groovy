@@ -9,15 +9,15 @@ import net.jeedup.nlp.sentiment.ModelTrainer
  * Created by zack on 7/3/14.
  */
 @CompileStatic
-class LeePangClassifier extends Classifier {
+class LeePangPolarityClassifier extends Classifier {
 
     public static String dataDir = ''
 
-    private LeePangClassifier() {
+    private LeePangPolarityClassifier() {
         super()
     }
 
-    public LeePangClassifier(String dataDir) {
+    public LeePangPolarityClassifier(String dataDir) {
         super()
         this.dataDir = dataDir
         initialize()
@@ -50,7 +50,7 @@ class LeePangClassifier extends Classifier {
     public static void main(String[] args) {
         String TRAIN_DATA = '/Users/zack/Desktop/polarity/txt_sentoken'
 
-        LeePangClassifier classifier = new LeePangClassifier(TRAIN_DATA)
+        LeePangPolarityClassifier classifier = new LeePangPolarityClassifier(TRAIN_DATA)
 
         println classifier.classify('big happy happy happy. I liked everything so much. That thing is a thing')
     }
