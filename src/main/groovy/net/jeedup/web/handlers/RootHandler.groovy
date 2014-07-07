@@ -27,7 +27,7 @@ class RootHandler {
         TwitterClassifier classifier = new TwitterClassifier('/Users/zack/Downloads/sanders-twitter-0.2/')
         classifier.retrain()
 
-        TwitterService.getInstance().stream(['aapl, world cup'])
+        TwitterService.getInstance().stream(['dessert'])
         .subscribe(new Subscriber<Tweet>() {
             @Override
             void onCompleted() {
@@ -42,7 +42,8 @@ class RootHandler {
 
             @Override
             void onNext(Tweet tweet) {
-                println classifier.classify(tweet.text).name + ': ' + tweet.text
+                if (tweet)
+                    println classifier.classify(tweet.text).name + ': ' + tweet.text
             }
         })
         HTML('OK')

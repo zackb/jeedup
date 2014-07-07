@@ -53,8 +53,13 @@ class TwitterService {
             return HTTP.streamLines(url)
                 .map(new Func1<String, Tweet>() {
                     public Tweet call(String line) {
-                        Tweet tweet = JSON.decodeObject(line, Tweet.class)
-                        return tweet
+                        try {
+                            Tweet tweet = JSON.decodeObject(line, Tweet.class)
+                            return tweet
+                        } catch (Exception e) {
+                            System.err.println('Failed parsing tweet: ' + line + ' ' + e.message)
+                        }
+                        return null
                     }
                 })
         } catch (Exception e) {

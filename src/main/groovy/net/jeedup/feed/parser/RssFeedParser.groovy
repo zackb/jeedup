@@ -18,7 +18,9 @@ class RssFeedParser implements IFeedParser {
         RssFeed rssFeed = (RssFeed)feed
         String xml = HTTP.get(rssFeed.url)
         try {
-            def slurper = new XmlSlurper(false, true).parseText(xml)
+            def slurper = new XmlSlurper(false, true)
+            slurper.setFeature("http://apache.org/xml/features/disallow-doctype-decl", false)
+            slurper = slurper.parseText(xml)
 
             if (slurper[0].namespaceURI?.equals('http://www.w3.org/2005/Atom')) {
                 items = parseAtomFeed(slurper)
