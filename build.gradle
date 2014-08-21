@@ -33,7 +33,7 @@ task uberjar(type: Jar) {
     from configurations.runtime.asFileTree.files.collect { zipTree(it) }
 
     manifest {
-        attributes 'Main-Class': 'net.jeedup.web.Main'
+        attributes 'Main-Class': mainClassName
     }
 }
 
@@ -41,7 +41,7 @@ jar {
     dependsOn configurations.runtime
     from { configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) } }
     manifest {
-        attributes 'Main-Class': 'net.jeedup.web.Main'
+        attributes 'Main-Class': mainClassName
     }
 }
 
@@ -53,7 +53,7 @@ processResources {
     //from('js'){ into 'js' }
 }
 
-task archive(dependsOn: 'jar',type: Tar) {
+task archive(dependsOn: 'jar', type: Tar) {
     baseName = project.name
     destinationDir = new File(project.buildDir.path + '/installer')
     compression = Compression.GZIP
