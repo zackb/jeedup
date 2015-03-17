@@ -6,14 +6,19 @@ import net.jeedup.net.http.HTTP
 
 class YahooCSV {
 
+    // Broken as of 3/12/15. Doesnt return all data
     public static List<Map<String, String>> fetchData(Collection<String> symbols) {
-        String fields = 'a0b2a2b0b3' + /*b6*/ 'b4c1m7m5k4j5p2c6c4h0g0r1d0y0e0j4e7e9e8q0m3d1l1' + /*k3*/ 't1l3j1j3i0n0t8o0i5r5r0r2m8m6k5j6p0p6r6r7p1p5' + /*s6*/ 's1s7x0s0d2m4v0k0j0'
+        String fields = 'sab2a2bb3' + /*b6*/ 'b4c1m7m5k4j5p2c6c4hgr1dyej4e7e9e8qm3d1l1' + /*k3*/ 't1l3j1j3int8oi5r5rr2m8m6k5j6pp6r6r7p1p5' + /*s6*/ 's1s7xd2m4vkj'
         String url = 'http://download.finance.yahoo.com/d/quotes.csv?s=' + symbols.join('+') + '&f=' + fields + '&e=.csv';
+        if (symbols.contains('AAPL')) {
+            println url
+        }
         String csv = HTTP.get(url)
         return CSV.decode(data, csv)
     }
 
     static def data = [
+            'Symbol', //   Symbol s0 CHANGED TO 's'
             //'AfterHoursChangeRealtime', //     After Hours Change (Realtime)  c8
             //'AnnualizedGain', //   Annualized Gain    g3
             'Ask', //  Ask    a0
@@ -92,7 +97,6 @@ class YahooCSV {
             //'SharesOutstanding', //    Shares Outstanding j2
             'ShortRatio', //   Short Ratio    s7
             'StockExchange', //    Stock Exchange x0
-            'Symbol', //   Symbol s0
             //'TickerTrend', //  Ticker Trend   t7
             'TradeDate', //    Trade Date d2
             //'TradeLinks', //   Trade Links    t6

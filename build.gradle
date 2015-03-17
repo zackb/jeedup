@@ -6,6 +6,9 @@ mainClassName = 'net.jeedup.web.Main'
 
 repositories {
     mavenCentral()
+    maven {
+        url 'https://oss.sonatype.org/content/repositories/snapshots'
+    }
 }
 
 dependencies {
@@ -20,6 +23,16 @@ dependencies {
     compile 'com.netflix.rxjava:rxjava-core:0.+'
     compile 'com.rabbitmq:amqp-client:3.+'
     compile 'oauth.signpost:signpost-commonshttp4:1.2.+'
+
+    // Sphinx
+    // compile 'edu.cmu.sphinx:sphinx4-core:1.0-SNAPSHOT'
+    // compile 'edu.cmu.sphinx:sphinx4-data:1.0-SNAPSHOT'
+
+    // Mallet
+    // compile 'cc.mallet:mallet:2.0.7'
+
+    // JSoup
+    compile 'org.jsoup:jsoup:1.8+'
 
     compile files(fileTree(dir: 'lib', includes: ['*.jar']))
     testCompile 'junit:junit:4.11'

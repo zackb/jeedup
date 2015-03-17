@@ -121,4 +121,32 @@ public class Stock {
         order by
             `peRatio` asc;
      */
+
+
+
+
+    /*
+    select
+            s.id, s.ask, s.yearLow, s.yearHigh, s.pegRatio,
+            s.debtEquity, s.peRatio, s.eps, a.strongBuy,
+            a.buy, a.hold, a.underperform, a.sell, a.meanRating
+        from
+            Stock s, Analyst a
+        where
+            `pegRatio` < 1
+        and
+            `debtEquity` < 1
+        and
+            `currentAssets` >= `currentLiabilities`*2
+        and
+            peRatio is not null
+        and
+            `open` <= `bookValuePerShare`
+        and
+        	s.id = a.symbol
+       	and
+       		a.meanRating is not null
+        order by
+            `peRatio` asc;
+     */
 }

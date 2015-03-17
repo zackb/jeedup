@@ -17,7 +17,7 @@ class CSV {
     public static List<Map<String, String>> decode(List<String> header, String csv) {
         List<Map<String, Object>> result = []
 
-        String[] lines = csv.split('\r\n')
+        String[] lines = csv.split('\r?\n')
         for (String line : lines) {
             String[] fields = parse(line)
             Map<String, Object> obj = [:]

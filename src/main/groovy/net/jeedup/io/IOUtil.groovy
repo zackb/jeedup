@@ -30,8 +30,12 @@ class IOUtil {
     }
 
     public static String readString(InputStream ins) throws IOException {
+        return new String(readBytes(ins), 'UTF-8')
+    }
 
-        ByteArrayOutputStream bout = new ByteArrayOutputStream();
+    public static byte[] readBytes(InputStream ins) throws IOException {
+
+        ByteArrayOutputStream bout = new ByteArrayOutputStream()
         try {
             copyStream(ins, bout)
             close(bout)
@@ -40,7 +44,7 @@ class IOUtil {
             close(ins)
         }
 
-        return new String(bout.toByteArray(), 'UTF-8')
+        return bout.toByteArray()
     }
 
     public static void close(OutputStream out) {

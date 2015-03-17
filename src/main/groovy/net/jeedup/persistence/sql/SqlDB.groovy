@@ -76,9 +76,9 @@ class SqlDB<T> extends DB<T> {
 
         List<T> results = []
 
-        query = query.toLowerCase().trim().replaceAll("\n|\t|\r", ' ')
-        if (query.startsWith('from')) {
-            query = 'select * ' + query
+        query = query/*.toLowerCase()*/.trim().replaceAll("\n|\t|\r", ' ')
+        if (!query.startsWith('select')) {
+            query = 'select * from ' + clazz.simpleName + ' where ' + query
         }
 
         Sql().eachRow(query, args ?: [], { GroovyResultSet row ->

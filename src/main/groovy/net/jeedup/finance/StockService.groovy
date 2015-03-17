@@ -26,7 +26,7 @@ class StockService {
         retrieveAndUpdateStockData()
     }
 
-    public void retrieveAndUpdateStockData(boolean yahoo = true, boolean morningstar = false) {
+    public void retrieveAndUpdateStockData(boolean yahoo = true, boolean morningstar = true) {
 
         ThreadedJob<List<Stock>> job = new ThreadedJob<List<Stock>>(20, { List<Stock> stocks ->
             if (yahoo) {
@@ -177,6 +177,10 @@ class StockService {
             str = str.replace('T', '')
         }
 
-        return Double.parseDouble(str) * multiplier
+        try {
+            return Double.parseDouble(str) * multiplier
+        } catch (NumberFormatException e) {
+        }
+        return null
     }
 }
