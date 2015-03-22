@@ -6,9 +6,9 @@ import net.jeedup.net.http.HTTP
 
 class YahooCSV {
 
-    // Broken as of 3/12/15. Doesnt return all data
+    // Broken as of 3/12/15. The trailing 0s have to be removed
     public static List<Map<String, String>> fetchData(Collection<String> symbols) {
-        String fields = 'sab2a2bb3' + /*b6*/ 'b4c1m7m5k4j5p2c6c4hgr1dyej4e7e9e8qm3d1l1' + /*k3*/ 't1l3j1j3int8oi5r5rr2m8m6k5j6pp6r6r7p1p5' + /*s6*/ 's1s7xd2m4vkj'
+        String fields = 'sab2a2bb3' + /*b6*/ 'b4c1m7m5k4j5p2c6c4hgr1dyej4e7e9e8qm3d1l1' + /*k3*/ 't1l3j1j3int8oi5r5rr2m8m6k5j6pp6r6r7p1p5' + /*s6*/ 's1j2s7xd2m4vkj'
         String url = 'http://download.finance.yahoo.com/d/quotes.csv?s=' + symbols.join('+') + '&f=' + fields + '&e=.csv';
         if (symbols.contains('AAPL')) {
             println url
@@ -94,7 +94,7 @@ class YahooCSV {
             'PriceSales', //   Price Sales    p5
             //'Revenue', //  Revenue    s6
             'SharesOwned', //  Shares Owned   s1
-            //'SharesOutstanding', //    Shares Outstanding j2
+            'SharesOutstanding', //    Shares Outstanding j2
             'ShortRatio', //   Short Ratio    s7
             'StockExchange', //    Stock Exchange x0
             //'TickerTrend', //  Ticker Trend   t7

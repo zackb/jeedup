@@ -1,4 +1,4 @@
-package net.jeedup.model.finance
+package net.jeedup.finance.model
 
 import groovy.transform.CompileStatic
 import net.jeedup.persistence.Constraints
@@ -74,6 +74,7 @@ public class Stock {
     public Double priceSales //3.06,
     public Double revenue //176.0B,
     public Double sharesOwned //-,
+    public Double sharesOutstanding //111111111,
     public Double shortRatio //1.80,
     public String stockExchange //NasdaqNM,
     public Double twoHundreddayMovingAverage //546.26,
@@ -87,6 +88,23 @@ public class Stock {
     public Double eps
     public Double currentRatio
     public Double quickRatio
+
+    public Double totalAssets
+    public Double totalLiabilities
+
+    public Double enterpriseValue
+    public Double enterpriseValueRevenue
+    public Double enterpriseValueEbitda
+    public Double profitMargin // percent
+    public Double operatingMargin // percent
+    public Double returnOnAssets // percent
+    public Double returnOnEquity // percent
+    public Double revenuePerShare
+    public Double grossProfit
+    public Double cash
+    public Double cashPerShare
+    public Double debt
+
 
 
     public static SqlDB<Stock> db() {

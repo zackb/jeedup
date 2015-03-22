@@ -19,7 +19,11 @@ class Config implements Map<String, Object> {
 
     private Config(String filename) {
         URL resource = ClassLoader.getSystemResource(filename)
-        data = JSON.decode(resource.text)
+        if (resource) {
+            data = JSON.decode(resource.text)
+        } else {
+            data = JSON.decode(new File(filename).text)
+        }
     }
 
     public static final Config getInstance() {

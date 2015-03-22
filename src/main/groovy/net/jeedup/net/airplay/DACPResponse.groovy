@@ -1,4 +1,4 @@
-package net.jeedup.net.aiplay
+package net.jeedup.net.airplay
 
 import groovy.transform.CompileStatic
 

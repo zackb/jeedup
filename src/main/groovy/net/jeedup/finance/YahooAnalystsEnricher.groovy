@@ -1,9 +1,9 @@
 package net.jeedup.finance
 
-import net.jeedup.model.finance.Analyst
-import net.jeedup.model.finance.Stock
+import groovy.transform.CompileStatic
+import net.jeedup.finance.model.Analyst
+import net.jeedup.finance.model.Stock
 import net.jeedup.net.http.HTTP
-import net.jeedup.util.ThreadedJob
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
@@ -15,15 +15,22 @@ import org.jsoup.select.Elements
  * Key Statistics: http://finance.yahoo.com/q/ks?s=AAPL+Key+Statistics
  * Analyst Opinion: http://finance.yahoo.com/q/ao?s=AAPL+Analyst+Opinion
  */
-class YahooHTML {
+@CompileStatic
+class YahooAnalystsEnricher implements StockEnricher {
 
     public static Collection<Analyst> fetchAnalysis(String symbol) {
+        println 'Analysts for : ' + symbol
         String url = 'http://finance.yahoo.com/q/ao?s=' + symbol + '+Analyst+Opinion'
         String html = HTTP.get(url)
         Document doc = Jsoup.parse(html)
 
+        Elements tables = doc.select('table[cellpadding=0].yfnc_datamodoutline1')
+        if (!tables || tables.size() < 1) {
+            return []
+        }
 
-        Element table = doc.select('table[cellpadding=0].yfnc_datamodoutline1').get(0).select('table[cellpadding=2]').get(0)
+        Element table = tables.get(0).select('table[cellpadding=2]').get(0)
+        //Element table = doc.select('table[cellpadding=0].yfnc_datamodoutline1').get(0).select('table[cellpadding=2]').get(0)
         Elements trs = table.select('tr')
         List<Integer> strongBuys = parseValues(trs.get(1))
         List<Integer> buys = parseValues(trs.get(2))
@@ -38,7 +45,10 @@ class YahooHTML {
 
         current.symbol = lastMonth.symbol = twoMonth.symbol = threeMonth.symbol = symbol
 
-        current.meanRating = doc.select('table[cellpadding=2].yfnc_datamodoutline1').get(0).select('tr > td').get(1).text().toDouble()
+        String meanRating = doc.select('table[cellpadding=2].yfnc_datamodoutline1').get(0).select('tr > td').get(1)?.text()
+        if (meanRating?.isNumber()) {
+            current.meanRating = meanRating.toDouble()
+        }
 
         // TODO: saveUpdate for mean rating
         return [current, lastMonth, twoMonth, threeMonth]
@@ -82,23 +92,20 @@ class YahooHTML {
         return values
     }
 
-    public static void main(String[] args) {
-        ThreadedJob<Stock> job = new ThreadedJob<>(20, { Stock stock ->
-            // TODO: dont overwrite old entries
-            try {
-                fetchAnalysis(stock.id).each {
-                    it.save()
-                }
-            } catch (Exception e) {
-                println 'Failed parsing ' + stock.id + ': ' +  e.message
-            }
-        })
 
-        List<Stock> stocks = Stock.db().executeQuery('id not in (select symbol from Analyst)')
-        stocks.each { Stock stock ->
-            job.add(stock)
-        }
+    @Override
+    public void enrich(Stock stock) {
+        Collection<Analyst> analysis = fetchAnalysis(stock.id)
+        analysis*.save()
+    }
 
-        job.waitFor()
+    @Override
+    public void enrich(List<Stock> stocks) {
+        stocks.each { try { enrich it } catch (Exception e) { e.printStackTrace() } }
+    }
+
+    @Override
+    public UpdateFrequency getUpdateFrequency() {
+        return UpdateFrequency.YEAR
     }
 }

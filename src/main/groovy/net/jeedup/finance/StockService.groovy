@@ -1,7 +1,7 @@
 package net.jeedup.finance
 
 import groovy.transform.CompileStatic
-import net.jeedup.model.finance.Stock
+import net.jeedup.finance.model.Stock
 import net.jeedup.util.ThreadedJob
 
 /**
@@ -12,6 +12,16 @@ class StockService {
 
     private static StockService instance = new StockService()
 
+    private final Set<StockEnricher> enrichers =
+            new TreeSet<StockEnricher>(new Comparator<StockEnricher>() {
+                @Override
+                public int compare(StockEnricher s1, StockEnricher s2) {
+                    return s2.updateFrequency.compareTo(s1.updateFrequency) // reverse the compare. Oldest first
+                }
+            })
+
+    private boolean enriching = false
+
     private StockService() {
         super()
     }
@@ -20,21 +30,56 @@ class StockService {
         return instance
     }
 
-    public void retrieveAndUpdateAllData() {
-        YahooAPI.retrieveAllSectorsAndIndustries()
-        YahooAPI.retrieveAllSecurities()
+    public void enrich() {
+        if (enriching) {
+            throw new Exception('Enrich job already in progress')
+        }
+        enriching = true
         retrieveAndUpdateStockData()
+        enriching = false
     }
 
-    public void retrieveAndUpdateStockData(boolean yahoo = true, boolean morningstar = true) {
+    private void addEnrichers(Collection<StockEnricher> newEnrichers) {
+        synchronized (enrichers) {
+            enrichers.addAll(newEnrichers)
+        }
+    }
+
+    private void addEnricher(StockEnricher enricher) {
+        synchronized (enrichers) {
+            enrichers.add(enricher)
+        }
+    }
+
+    private void removeEnricher(StockEnricher enricher) {
+        synchronized (enrichers) {
+            enrichers.remove(enricher)
+        }
+    }
+
+    public void updateSectorAndIndustryData() {
+        YahooAPI.retrieveAllSectorsAndIndustries()
+    }
+
+    public void updateSecuritiesData() {
+        YahooAPI.retrieveAllSecurities()
+    }
+
+    public void retrieveAndUpdateStockData() {
 
         ThreadedJob<List<Stock>> job = new ThreadedJob<List<Stock>>(20, { List<Stock> stocks ->
-            if (yahoo) {
-                updateStocksFromYahoo(stocks)
-            }
+            for (StockEnricher enricher : enrichers) {
+                enricher.enrich(stocks.findAll {
+                    it.lastUpdated.time < (System.currentTimeMillis() - enricher.updateFrequency.value)
+                } as List<Stock>)
 
-            if (morningstar) {
-                updateStocksFromMorningstar(stocks)
+            }
+            for (Stock stock : stocks) {
+                try {
+                    stock.save()
+                } catch (Exception e) {
+                    System.err.println('Failed saving stock: ' + e.message)
+                }
             }
         })
 
@@ -47,140 +92,10 @@ class StockService {
         job.waitFor()
     }
 
-    public void updateStocksFromMorningstar(List<Stock> stocks) {
-        for (Stock stock : stocks) {
-            println 'Updating ' + stock.id + ' from Morningstar'
-            Map<String, Double> data = MorningstarAPI.fetchMinimalData(stock.id)
-            stock.debtEquity = data[MorningstarAPI.DebtEquity]
-            stock.currentAssets = data[MorningstarAPI.CurrentAssets]
-            stock.currentLiabilities = data[MorningstarAPI.CurrentLiabilities]
-            stock.eps = data[MorningstarAPI.EarningsPerShare]
-            stock.currentRatio = data[MorningstarAPI.CurrentRatio]
-            stock.quickRatio = data[MorningstarAPI.QuickRatio]
-            stock.save()
-        }
-    }
-
-    public void updateStocksFromYahoo(List<Stock> stocks) {
-        Map<String, Stock> map = [:]
-        for (Stock stock : stocks) {
-            map[stock.id] = stock;
-        }
-
-        List<Map<String, String>> yahooData = YahooCSV.fetchData(map.keySet())
-
-        for (Map<String, String> data : yahooData) {
-            String symbol = data['Symbol']
-            Stock stock = map[symbol]
-            if (stock == null) {
-                println "No symbol for: " + symbol
-                stock = stocks.find { it.id.startsWith(symbol) }
-                if (!stock) {
-                    continue
-                }
-                println "Replaced with: " + stock.id
-            }
-            fillStockWithYahooData(stock, data)
-            stock.save()
-        }
-    }
-
-    private void fillStockWithYahooData(Stock stock, Map<String, String> data) {
-        println "Filling: ${data['Symbol']}"
-        stock.ask = parseDouble(data['Ask'])
-        stock.askRealtime = parseDouble(data['AskRealtime'])
-        stock.averageDailyVolume = parseDouble(data['AverageDailyVolume'])
-        stock.bid = parseDouble(data['Bid'])
-        stock.bidRealtime = parseDouble(data['BidRealtime'])
-        stock.bidSize = parseDouble(data['BidSize'])
-        stock.bookValuePerShare = parseDouble(data['BookValuePerShare'])
-        stock.change = parseDouble(data['Change'])
-        stock.changeFromFiftydayMovingAverage = parseDouble(data['ChangeFromFiftydayMovingAverage'])
-        stock.changeFromTwoHundreddayMovingAverage = parseDouble(data['ChangeFromTwoHundreddayMovingAverage'])
-        stock.changeFromYearHigh = parseDouble(data['ChangeFromYearHigh'])
-        stock.changeFromYearLow = parseDouble(data['ChangeFromYearLow'])
-        stock.changeInPercent = parseDouble(data['ChangeInPercent'])
-        stock.changeRealtime = parseDouble(data['ChangeRealtime'])
-        stock.currency = data['Currency']
-        stock.daysHigh = parseDouble(data['DaysHigh'])
-        stock.daysLow = parseDouble(data['DaysLow'])
-        // TODO stock.dividendPayDate; //May 15,
-        stock.trailingAnnualDividendYield = parseDouble(data['TrailingAnnualDividendYield'])
-        stock.trailingAnnualDividendYieldInPercent = parseDouble(data['TrailingAnnualDividendYieldInPercent'])
-        stock.dilutedEPS = parseDouble(data['DilutedEPS'])
-        stock.ebitda = parseDouble(data['EBITDA'])
-        stock.epsEstimateCurrentYear = parseDouble(data['EPSEstimateCurrentYear'])
-        stock.epsEstimateNextQuarter = parseDouble(data['EPSEstimateNextQuarter'])
-        stock.epsEstimateNextYear = parseDouble(data['EPSEstimateNextYear'])
-        // TODO stock.exDividendDate; //May  8,
-        stock.fiftydayMovingAverage = parseDouble(data['FiftydayMovingAverage'])
-        // TODO stock.lastTradeDate; //5/28/2014,
-        stock.lastTradePriceOnly = parseDouble(data['LastTradePriceOnly'])
-        stock.lastTradeSize = parseDouble(data['LastTradeSize'])
-        // TODO stock.lastTradeTime; //1:52pm,
-        stock.lowLimit = parseDouble(data['LowLimit'])
-        stock.marketCapitalization = parseDouble(data['MarketCapitalization'])
-        stock.marketCapRealtime = parseDouble(data['MarketCapRealtime'])
-        stock.moreInfo = data['MoreInfo']
-        stock.oneyrTargetPrice = parseDouble(data['OneyrTargetPrice'])
-        stock.open = parseDouble(data['Open'])
-        stock.orderBookRealtime = parseDouble(data['OrderBookRealtime'])
-        stock.pegRatio = parseDouble(data['PEGRatio'])
-        stock.peRatio = parseDouble(data['PERatio'])
-        stock.peRatioRealtime = parseDouble(data['PERatioRealtime'])
-        stock.percentChangeFromFiftydayMovingAverage = parseDouble(data['PercentChangeFromFiftydayMovingAverage'])
-        stock.percentChangeFromTwoHundreddayMovingAverage = parseDouble(data['PercentChangeFromTwoHundreddayMovingAverage'])
-        stock.changeInPercentFromYearHigh = parseDouble(data['ChangeInPercentFromYearHigh'])
-        stock.percentChangeFromYearLow = parseDouble(data['PercentChangeFromYearLow'])
-        stock.previousClose = parseDouble(data['PreviousClose'])
-        stock.priceBook = parseDouble(data['PriceBook'])
-        stock.priceEPSEstimateCurrentYear = parseDouble(data['PriceEPSEstimateCurrentYear'])
-        stock.priceEPSEstimateNextYear = parseDouble(data['PriceEPSEstimateNextYear'])
-        stock.pricePaid = parseDouble(data['PricePaid'])
-        stock.priceSales = parseDouble(data['PriceSales'])
-        stock.revenue = parseDouble(data['Revenue'])
-        stock.sharesOwned = parseDouble(data['SharesOwned'])
-        stock.shortRatio = parseDouble(data['ShortRatio'])
-        stock.stockExchange = data['StockExchange']
-        stock.twoHundreddayMovingAverage = parseDouble(data['TwoHundreddayMovingAverage'])
-        stock.volume = parseDouble(data['Volume'])
-        stock.yearHigh = parseDouble(data['YearHigh'])
-        stock.yearLow = parseDouble(data['YearLow'])
-    }
-
-    private Double parseDouble(String str) {
-        if (str == null) {
-            return null
-        }
-
-        str = str.trim()
-
-        def invalid = ['', '-', 'N/A', '"N/A"']
-        if (invalid.contains(str)) {
-            return null
-        }
-
-        str = str.replace('%', '')
-
-        double multiplier = 1
-        if (str.endsWith('B')) {
-            multiplier = 1000000000
-            str = str.replace('B', '')
-        } else if (str.endsWith('M')) {
-            multiplier = 1000000
-            str = str.replace('M', '')
-        } else if (str.endsWith('K')) {
-            multiplier = 1000
-            str = str.replace('K', '')
-        } else if (str.endsWith('T')) {
-            multiplier = 1000000000000
-            str = str.replace('T', '')
-        }
-
-        try {
-            return Double.parseDouble(str) * multiplier
-        } catch (NumberFormatException e) {
-        }
-        return null
+    public static void main(String[] args) {
+        //getInstance().addEnrichers([new MorningstarStockEnricher(), new YahooStockEnricher(), new YahooAnalystsEnricher(), new YahooKeyStatisticsStockEnricher()])
+        getInstance().addEnricher(new YahooBalanceSheetStockEnricher())
+        println getInstance().enrichers
+        getInstance().enrich()
     }
 }

@@ -1,7 +1,6 @@
-package net.jeedup.model.finance
+package net.jeedup.finance.model
 
 import groovy.transform.CompileStatic
-import net.jeedup.persistence.Constraints
 import net.jeedup.persistence.DB
 import net.jeedup.persistence.sql.SqlDB
 import net.jeedup.web.Model
@@ -11,21 +10,17 @@ import net.jeedup.web.Model
  */
 @CompileStatic
 @Model('mainDB')
-class Industry {
-
+class Sector {
     public Long id
-    @Constraints(unique = true, max = 128)
-    public String title // name
-    public Long sectorId
-    public Long yahooId
+    public String title
     public Date lastUpdated
     public Date dateCreated
 
-    public static SqlDB<Industry> db() {
-        return DB.sql(Industry)
+    public static SqlDB<Sector> db() {
+        return DB.sql(Sector)
     }
 
-    public static Industry get(Object id) {
+    public static Sector get(Object id) {
         return db().get(id)
     }
 

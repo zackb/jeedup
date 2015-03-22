@@ -1,7 +1,7 @@
 package net.jeedup.web.handlers
 
 import groovy.transform.CompileStatic
-import net.jeedup.model.finance.Stock
+import net.jeedup.finance.model.Stock
 import net.jeedup.message.Brokers
 import net.jeedup.net.http.Request
 import net.jeedup.nlp.sentiment.classify.TwitterClassifier

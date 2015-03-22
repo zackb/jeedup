@@ -48,7 +48,13 @@ class DataSources {
     }
 
     public static DataSource forClass(Class clazz) {
-        return getInstance().models[clazz]
+        DataSource ds = getInstance().models[clazz]
+        if (!ds) {
+            // TODO: Clean this all up
+            ds = getInstance().findDataSource(clazz)
+            if (ds) getInstance().models[clazz] = ds
+        }
+        return ds
     }
 
 
@@ -70,26 +76,34 @@ class DataSources {
     }
 
     private void registerModels(String packageName) {
-
         List<Class> classes = ClassEnumerator.getClassesForPackage(packageName)
         for (Class<?> clazz : classes) {
-            // no inner classes
-            if (clazz.name.contains('$'))
-                continue
-
-            Annotation annotation = clazz.getAnnotation(Model.class)
-            if (annotation) {
-                if (Entity.class.isAssignableFrom(clazz)) {
-                    // hack to initialize type information
-                    clazz.newInstance()
-                }
-                String dsName = annotation.value()
-                DataSource ds = dataSources[dsName]
-                if (!ds) {
-                    throw new IllegalArgumentException("No such datasource ${dsName} for model ${clazz.name}")
-                }
+            DataSource ds = findDataSource(clazz)
+            if (ds) {
                 models[clazz] = ds
             }
         }
+    }
+
+    private DataSource findDataSource(Class clazz) {
+        DataSource ds = null
+        // no inner classes
+        if (clazz.name.contains('$')) {
+            return null
+        }
+
+        Annotation annotation = clazz.getAnnotation(Model.class)
+        if (annotation) {
+            if (Entity.class.isAssignableFrom(clazz)) {
+                // hack to initialize type information
+                clazz.newInstance()
+            }
+            String dsName = annotation.value()
+            ds = dataSources[dsName]
+            if (!ds) {
+                throw new IllegalArgumentException("No such datasource ${dsName} for model ${clazz.name}")
+            }
+        }
+        return ds
     }
 }

@@ -2,13 +2,15 @@ package net.jeedup.finance
 
 import groovy.transform.CompileStatic
 import net.jeedup.coding.CSV
+import net.jeedup.finance.model.Stock
 import net.jeedup.net.http.HTTP
 
 /**
  * Created by zack on 5/28/14.
  */
 @CompileStatic
-class MorningstarAPI {
+class MorningstarStockEnricher implements StockEnricher {
+
     //http://financials.morningstar.com/ajax/exportKR2CSV.html?&callback=?&t=XNAS:TSLA&region=usa&culture=en-US&cur=USD&order=asc
 
     public static final String CurrentRatio = 'Current Ratio'
@@ -18,15 +20,31 @@ class MorningstarAPI {
     public static final String CurrentLiabilities = 'Total Current Liabilities'
     public static final String EarningsPerShare = 'Earnings Per Share USD'
 
-    public static List<Map<String, String>> fetchData(List<String> symbols) {
-        List<Map<String, String>> results = []
+    @Override
+    public void enrich(Stock stock) {
+        println 'Updating ' + stock.id + ' from Morningstar'
+        Map<String, Double> data = fetchMinimalData(stock.id)
+        stock.debtEquity = data[DebtEquity] //
+        stock.currentAssets = data[CurrentAssets] //
+        stock.currentLiabilities = data[CurrentLiabilities] //
+        stock.eps = data[EarningsPerShare] //
+        stock.currentRatio = data[CurrentRatio] //
+        stock.quickRatio = data[QuickRatio]
+    }
 
-        String url = "http://financials.morningstar.com/ajax/exportKR2CSV.html?&callback=?&t=%s&region=usa&culture=en-US&cur=USD&order=asc"
-        return results
+    @Override
+    public void enrich(List<Stock> stocks) {
+        stocks.each { try { enrich it } catch (Exception e) { e.printStackTrace() } }
+    }
+
+    @Override
+    public  UpdateFrequency getUpdateFrequency() {
+        return UpdateFrequency.MONTH
     }
 
     public static Map<String, Double> fetchMinimalData(String symbol) {
         Map<String, Double> data = [:]
+        // NOT WHAT I THINK IT IS. These are rations not raw data
         String url = "http://financials.morningstar.com/ajax/exportKR2CSV.html?&callback=?&t=%s&region=usa&culture=en-US&cur=USD&order=asc"
 
         String dataStr = HTTP.get(sprintf(url, symbol))

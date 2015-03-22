@@ -1,4 +1,4 @@
-package net.jeedup.net.aiplay
+package net.jeedup.net.airplay
 
 import java.awt.*;
 import java.awt.image.*;

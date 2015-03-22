@@ -1,8 +1,8 @@
 package net.jeedup.finance
 
-import net.jeedup.model.finance.Industry
-import net.jeedup.model.finance.Sector
-import net.jeedup.model.finance.Stock
+import net.jeedup.finance.model.Industry
+import net.jeedup.finance.model.Sector
+import net.jeedup.finance.model.Stock
 import net.jeedup.net.http.HTTP
 import net.jeedup.util.ThreadedJob
 import org.jsoup.Jsoup

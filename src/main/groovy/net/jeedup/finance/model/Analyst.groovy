@@ -1,4 +1,4 @@
-package net.jeedup.model.finance
+package net.jeedup.finance.model
 
 import groovy.transform.CompileStatic
 import net.jeedup.persistence.DB
