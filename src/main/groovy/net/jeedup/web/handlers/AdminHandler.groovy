@@ -22,12 +22,12 @@ class AdminHandler {
         String output = ''
         String code = data.code
         GroovyShell shell = new GroovyShell(ClassLoader.getSystemClassLoader())
-        Script scpt = shell.parse(code);
-        Binding binding = new Binding();
-        binding.setVariable ("render", { args ->
+        Script scpt = shell.parse(code)
+        Binding binding = new Binding()
+        binding.setVariable ('render', { args ->
             output += args
-        });
-        scpt.setBinding(binding);
+        })
+        scpt.setBinding(binding)
 
 
         try {
