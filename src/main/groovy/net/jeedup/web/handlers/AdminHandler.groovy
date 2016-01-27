@@ -2,6 +2,7 @@ package net.jeedup.web.handlers
 
 import groovy.transform.CompileStatic
 import net.jeedup.coding.JSON
+import net.jeedup.util.StringUtil
 import net.jeedup.web.Endpoint
 import static net.jeedup.net.http.Response.*
 
@@ -55,10 +56,11 @@ class AdminHandler {
         List<Phrase> cleaned = []
         Set<String> seen = []
         phrases.each { Phrase phrase ->
-            if (!seen.contains(phrase.url)) {
+            String url = phrase.url.trim()
+            if (!seen.contains(url)) {
                 cleaned << phrase
+                seen.add(url)
             }
-            seen << phrase.url
         }
         List<Phrase> cluster = new CosineDistancePhraseCluserAlgorithm().cluserPhrases(cleaned)
         cluster = cluster.sort { Phrase phrase -> -phrase.relatedPhrases.size() }

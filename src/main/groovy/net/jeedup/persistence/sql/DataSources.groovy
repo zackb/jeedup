@@ -66,11 +66,11 @@ class DataSources {
             dataSource.url             = c.url
             dataSource.username        = c.username
             dataSource.password        = c.password
-            dataSource.initialSize     = (int)c.initialSize ?: 10
-            dataSource.maxActive       = (int)c.maxActive ?: 600
-            dataSource.maxIdle         = (int)c.maxIdle ?: 10
-            dataSource.testOnBorrow    = (boolean)c.testOnBorrow ?: false
-            dataSource.testWhileIdle   = (boolean)c.testWhileIdle ?: true
+            dataSource.initialSize     = (int)(c.initialSize ?: 10)
+            dataSource.maxActive       = (int)(c.maxActive ?: 600)
+            dataSource.maxIdle         = (int)(c.maxIdle ?: 10)
+            dataSource.testOnBorrow    = (boolean)(c.testOnBorrow ?: false)
+            dataSource.testWhileIdle   = (boolean)(c.testWhileIdle ?: true)
             dataSources[name] = dataSource
         }
     }

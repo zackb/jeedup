@@ -93,7 +93,7 @@ class StockService {
     }
 
     public static void main(String[] args) {
-        //getInstance().addEnrichers([new MorningstarStockEnricher(), new YahooStockEnricher(), new YahooAnalystsEnricher(), new YahooKeyStatisticsStockEnricher()])
+        getInstance().addEnrichers([new MorningstarStockEnricher(), new YahooStockEnricher(), new YahooAnalystsEnricher(), new YahooKeyStatisticsStockEnricher()] as List<StockEnricher>)
         getInstance().addEnricher(new YahooBalanceSheetStockEnricher())
         println getInstance().enrichers
         getInstance().enrich()
