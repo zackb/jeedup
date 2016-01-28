@@ -49,6 +49,9 @@ class AdminHandler {
             case 'sports':
                 set = PhraseSet.sportsSources()
                 break
+            case 'money':
+                set = PhraseSet.moneySources()
+                break
             default:
                 throw new Exception('No such news category')
         }

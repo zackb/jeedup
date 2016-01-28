@@ -69,4 +69,38 @@ class PhraseSet {
         ]
         return result
     }
+
+    public static PhraseSet moneySources() {
+        PhraseSet result = new PhraseSet()
+        result.title = 'Money'
+        result.urls = [
+                "http://www.fool.com/feeds/index.aspx?id=foolwatch&format=rss2",
+                "http://feeds.reuters.com/news/wealth",
+                //"http://feeds.reuters.com/reuters/businessNews",
+                "http://feeds.feedburner.com/reuters/blogs/data-dive",
+                "http://feeds.reuters.com/reuters/USenergyNews",
+                "http://feeds.reuters.com/reuters/hotStocksNews",
+                "http://feeds.reuters.com/news/economy",
+                "http://feeds.reuters.com/news/usmarkets",
+                "http://rss.cnn.com/rss/money_latest.rss",
+                "http://rss.cnn.com/rss/money_markets.rss",
+                "http://rss.cnn.com/cnnmoneymorningbuzz",
+                "http://www.ft.com/rss/companies",
+                "http://www.ft.com/rss/companies/us",
+                "http://www.ft.com/rss/markets",
+                "http://www.ft.com/rss/personal-finance/top-tips",
+                "http://finance.yahoo.com/rss/popularstories",
+                "http://www.marketwatch.com/rss/topstories",
+                "http://www.marketwatch.com/rss/realtimeheadlines",
+                "http://www.marketwatch.com/rss/StockstoWatch",
+                "http://www.marketwatch.com/rss/commentary",
+                "http://www.marketwatch.com/rss/marketpulse",
+                "http://feeds.marketwatch.com/marketwatch/bulletins",
+                "http://www.forbes.com/business/index.xml",
+                "http://www.forbes.com/markets/index.xml",
+                "http://www.cnbc.com/id/100003114/device/rss/rss.html",
+                "http://feeds.thestreet.com/TheRealStory",
+        ]
+        return result
+    }
 }
