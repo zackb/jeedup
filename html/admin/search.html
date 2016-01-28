@@ -9,10 +9,55 @@
           <div class="col-md-2">
             <iframe width='300px' height='410px' style='border-radius: 10px;' src='https://simplywall.st/api/snowflake/US:{{ stock.id }}/widget/trans' frameborder='0'></iframe>
         </div>
+
+          <div class="col-md-2">
+            Stock: {{ stock.id }}
+          </div>
+          <div class="col-md-8">
+          </div>
+          <div class="col-md-2">
+        <div id="z-stocktwits"></div>
+        </div>
     </div>
+
+
+
+
+
+
+
+
+
+
     <script src="//code.highcharts.com/stock/highstock.js"></script>
+    <script src="//stocktwits.com/addon/widget/2/widget-loader.min.js"></script>
     <script>
-$(document).ready(function() {
+
+$(function() {
+        STWT.Widget({
+            container: 'z-stocktwits',
+            symbol: 'AAPL',
+            header: 0,
+            width: '300',
+            height: '300',
+            limit: '15',
+            scrollbars: 1,
+            streaming: 'true',
+            style: {
+                link_color: '4871a8',
+                link_hover_color: '4871a8',
+                header_text_color: '272b30',
+                border_color: '272b30',
+                divider_color: '272b30',
+                divider_color: '272b30',
+                divider_type: 'none',
+                box_color: '272b30',
+                stream_color: 'ffffff',
+                text_color: '000000',
+                time_color: '999999'
+            }
+        });
+
 // Load the fonts
 Highcharts.createElement('link', {
    href: '//fonts.googleapis.com/css?family=Unica+One',
