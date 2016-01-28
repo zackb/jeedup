@@ -17,6 +17,11 @@ import net.jeedup.util.FileStoreCache
 @CompileStatic
 class AdminHandler {
 
+    @Endpoint('admin/home')
+    def index(Map data) {
+        HTML([:], 'admin/home')
+    }
+
     @Endpoint('admin/repl')
     def repl(Map data) {
         String output = ''
@@ -89,5 +94,25 @@ class AdminHandler {
             stock = new Stock(id:data.q.toString())
         }
         HTML([stock:stock,lwr:stock.id.toLowerCase()], 'admin/search')
+    }
+
+    @Endpoint('admin/suggest')
+    def suggest(Map data) {
+        String q = ((String)data.q)?.trim()
+        //if (!q) return new Response().data(data).status(400)
+        List<Stock> stocks = null
+        if (q) {
+            String like = q.replaceAll(' ', '%') + '%'
+            stocks = Stock.db().executeQuery('id like ? or name like ? ', [like, like])
+        } else {
+            stocks = Stock.db().getAll()
+        }
+
+        List<Map<String, String>> symbs = new ArrayList<Map<String,String>>()
+        for (Stock stock : stocks) {
+            symbs.add([id: stock.id, name: stock.name])
+        }
+
+        JSON([data:symbs])
     }
 }
