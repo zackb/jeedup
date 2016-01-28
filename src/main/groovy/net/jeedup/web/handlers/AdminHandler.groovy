@@ -1,8 +1,7 @@
 package net.jeedup.web.handlers
 
 import groovy.transform.CompileStatic
-import net.jeedup.coding.JSON
-import net.jeedup.util.StringUtil
+import net.jeedup.finance.model.Stock
 import net.jeedup.web.Endpoint
 import static net.jeedup.net.http.Response.*
 
@@ -76,5 +75,19 @@ class AdminHandler {
     def news(Map data) {
         List<Phrase> phrases = phraseSetStore.get((String)data.id)
         HTML([phrases:phrases], 'admin/news')
+    }
+
+    @Endpoint('admin/tool')
+    def tool(Map data) {
+        HTML([:], 'admin/tool')
+    }
+
+    @Endpoint('admin/search')
+    def search(Map data) {
+        Stock stock = Stock.get(data.q)
+        if (!stock) {
+            stock = new Stock(id:data.q.toString())
+        }
+        HTML([stock:stock,lwr:stock.id.toLowerCase()], 'admin/search')
     }
 }
