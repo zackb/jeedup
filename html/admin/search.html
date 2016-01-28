@@ -1,13 +1,13 @@
 {{> header}}
       <div class="container">
-          <div class="col-md-2">
+          <div class="col-md-2 well well-sm">
             Stock: {{ stock.id }}
           </div>
           <div class="col-md-8">
             <div id="z-stock-chart"></div>
           </div>
           <div class="col-md-2">
-            <iframe width='300px' height='410px' style='border-radius: 10px;' src='https://simplywall.st/api/snowflake/US:{{ stock.id }}/widget/trans' frameborder='0'></iframe>
+            <iframe width='300px' height='410px' style='border-radius: 10px;' src='https://simplywall.st/api/snowflake/US:{{ stock.id }}/widget/272b30' frameborder='0'></iframe>
         </div>
 
           <div class="col-md-2">
@@ -16,7 +16,7 @@
           <div class="col-md-8">
           </div>
           <div class="col-md-2">
-        <div id="z-stocktwits"></div>
+            <div id="z-stocktwits"></div>
         </div>
     </div>
 
@@ -36,7 +36,7 @@
 $(function() {
         STWT.Widget({
             container: 'z-stocktwits',
-            symbol: 'AAPL',
+            symbol: '{{ stock.id }}',
             header: 0,
             width: '300',
             height: '300',
@@ -52,18 +52,23 @@ $(function() {
                 divider_color: '272b30',
                 divider_type: 'none',
                 box_color: '272b30',
-                stream_color: 'ffffff',
-                text_color: '000000',
+                stream_color: '272b30',
+                username_color: 'c8c8c8',
+                username_size: 10,
+                time_font_size: 8,
+                text_color: 'c8c8c8',
                 time_color: '999999'
             }
         });
 
 // Load the fonts
+/*
 Highcharts.createElement('link', {
    href: '//fonts.googleapis.com/css?family=Unica+One',
    rel: 'stylesheet',
    type: 'text/css'
 }, null, document.getElementsByTagName('head')[0]);
+*/
 
 Highcharts.theme = {
    colors: ["#2b908f", "#90ee7e", "#f45b5b", "#7798BF", "#aaeeee", "#ff0066", "#eeaaee",
@@ -72,8 +77,8 @@ Highcharts.theme = {
       backgroundColor: {
          linearGradient: { x1: 0, y1: 0, x2: 1, y2: 1 },
          stops: [
-            [0, '#2a2a2b'],
-            [1, '#3e3e40']
+            [0, '#272b30'],
+            [1, '#272b30']
          ]
       },
       style: {
