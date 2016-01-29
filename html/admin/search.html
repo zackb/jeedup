@@ -1,6 +1,9 @@
 {{> header}}
       <div class="container">
           <div class="col-md-2">
+            <div class="well">
+                <h4>{{ stock.id }}</h4>
+            </div>
             <div class="panel panel-sm z-stock-box z-green">
                 <div class="panel-body z-stock-box-body">
                     <span>+</span>
@@ -9,6 +12,9 @@
                         <div>0.51%</div>
                     </span>
                 </div>
+            </div>
+            <div class="well">
+                Foo
             </div>
           </div>
           <div class="col-md-8">
@@ -27,9 +33,6 @@
             <div id="z-stocktwits"></div>
         </div>
     </div>
-
-
-
 
 
 
@@ -318,15 +321,12 @@ Highcharts.setOptions(Highcharts.theme);
 
         // create the chart
         $('#z-stock-chart').highcharts('StockChart', {
-
             rangeSelector: {
                 selected: 1
             },
-
             title: {
                 text: '{{ stock.id }} Historical'
             },
-
             yAxis: [{
                 labels: {
                     align: 'right',
@@ -335,7 +335,7 @@ Highcharts.setOptions(Highcharts.theme);
                 title: {
                     text: 'OHLC'
                 },
-                height: '60%',
+                height: '90%',
                 lineWidth: 2
             }, {
                 labels: {
@@ -345,7 +345,7 @@ Highcharts.setOptions(Highcharts.theme);
                 title: {
                     text: 'Volume'
                 },
-                top: '65%',
+                top: '85%',
                 height: '35%',
                 offset: 0,
                 lineWidth: 2
