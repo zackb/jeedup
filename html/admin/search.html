@@ -14,7 +14,7 @@
                 </div>
             </div>
             <div class="well">
-                Foo
+                <input class="z-52wk" type='range' min='56' max='186' value='160' step='1'/>
             </div>
           </div>
           <div class="col-md-8">
@@ -371,4 +371,101 @@ Highcharts.setOptions(Highcharts.theme);
     });
 });
     </script>
+
+
+    <!-- BEGIN 52wk widget -->
+    <style>
+input[type='range'].z-52wk {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  border: solid 0 transparent;
+  border-width: 0 1em;
+  padding: 1em 0 0;
+  width: 100%;
+  height: 2em;
+  border-radius: .25em;
+  transform: translate(-50%, -50%);
+  background: transparent;
+  font-size: 1em;
+  font-color: #FFFFFF !important;
+  <!-- cursor: pointer; -->
+}
+input[type='range'], input[type='range']::-webkit-slider-runnable-track, input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+}
+input[type='range']::-webkit-slider-runnable-track {
+  position: relative;
+  width: 12em;
+  height: 0.375em;
+  background: linear-gradient(90deg, #ffffff 0.125em, rgba(0, 0, 0, 0) 0.125em)-0.0625em 50%, linear-gradient(90deg, #e60000, #e63900, #e67300, #e6ac00, #e6e600, #ace600, #73e600);
+  background-size: 1em 100%, 100% 100%;
+}
+input[type='range']::-moz-range-track {
+  width: 12em;
+  height: 0.375em;
+  background: linear-gradient(90deg, #ffffff 0.125em, rgba(0, 0, 0, 0) 0.125em)-0.0625em 50%, linear-gradient(90deg, #e60000, #e63900, #e67300, #e6ac00, #e6e600, #ace600, #73e600);
+  background-size: 1em 100%, 100% 100%;
+}
+input[type='range']::-ms-track {
+  border: none;
+  width: 12em;
+  height: 0.375em;
+  background: linear-gradient(90deg, #ffffff 0.125em, rgba(0, 0, 0, 0) 0.125em)-0.0625em 50%, linear-gradient(90deg, #e60000, #e63900, #e67300, #e6ac00, #e6e600, #ace600, #73e600);
+  background-size: 1em 100%, 100% 100%;
+  color: transparent;
+}
+input[type='range']::-ms-fill-lower {
+  display: none;
+}
+input[type='range']::-webkit-slider-thumb {
+  margin-top: -0.8125em;
+  box-sizing: border-box;
+  border: solid 1px transparent;
+  width: 2em;
+  height: 2em;
+  border-radius: 0;
+  transform: translateY(75%) rotate(30deg) skewY(30deg) scaleX(0.86603);
+  background: linear-gradient(135deg, #a7a6a2 25%, rgba(0, 0, 0, 0) 25%) content-box, linear-gradient(135deg, #ffffff 25%, rgba(0, 0, 0, 0) 25%) border-box;
+}
+input[type='range']::-moz-range-thumb {
+  box-sizing: border-box;
+  border: solid 1px transparent;
+  width: 2em;
+  height: 2em;
+  border-radius: 0;
+  transform: translateY(75%) rotate(30deg) skewY(30deg) scaleX(0.86603);
+  background: linear-gradient(135deg, #a7a6a2 25%, rgba(0, 0, 0, 0) 25%) content-box, linear-gradient(135deg, #ffffff 25%, rgba(0, 0, 0, 0) 25%) border-box;
+}
+input[type='range']::-ms-thumb {
+  box-sizing: border-box;
+  border: solid 1px transparent;
+  width: 2em;
+  height: 2em;
+  border-radius: 0;
+  transform: translateY(75%) rotate(30deg) skewY(30deg) scaleX(0.86603);
+  background: linear-gradient(135deg, #a7a6a2 25%, rgba(0, 0, 0, 0) 25%) content-box, linear-gradient(135deg, #ffffff 25%, rgba(0, 0, 0, 0) 25%) border-box;
+}
+input[type='range']::-webkit-slider-runnable-track:before, input[type='range']::-webkit-slider-runnable-track:after, input[type='range'] /deep/ #track:before, input[type='range'] /deep/ #track:after {
+  position: absolute;
+  bottom: 100%;
+  color: #c8c8c8 !important;
+}
+input[type='range']::-webkit-slider-runnable-track:before, input[type='range'] /deep/ #track:before {
+  left: 0.8125em;
+  word-spacing: 1.4375em;
+  content: '56';
+}
+input[type='range']::-webkit-slider-runnable-track:after, input[type='range'] /deep/ #track:after {
+  right: 0.625em;
+  word-spacing: 0.875em;
+  content: '186'
+}
+input[type='range']:focus {
+  outline: none;
+  box-shadow: 0 0 .25em orange;
+}
+    </style>
+    <!-- END 52wk widget -->
+    <style>
 {{> footer}}
