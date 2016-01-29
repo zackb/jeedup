@@ -25,7 +25,21 @@ class FinanceHandler {
 
     @Endpoint('stock/history')
     def history(Map data) {
+        Stock stock = Stock.get(data.id)
+        if (stock && (!stock.lastUpdated || stock.lastUpdated.time < System.currentTimeMillis() - 1000 * 60 * 15))
+            StockService.instance.enrich(stock)
         List<Price> prices = YahooCSV.retieveHistoricalData((String)data.id)
+        if (stock && stock.open && stock.daysHigh && stock.daysLow && stock.volume) {
+            prices.add(new Price(
+                    symbol: stock.id,
+                    date: stock.lastTradeDate ?: stock.lastUpdated,
+                    open: stock.open,
+                    high: stock.daysHigh,
+                    low: stock.daysLow,
+                    close: stock.lastTradePriceOnly,
+                    volume: stock.volume?.intValue()
+            ))
+        }
 
         if (!data.callback) {
             return JSON(prices)
