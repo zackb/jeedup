@@ -6,7 +6,7 @@
  * Based on Bootstrap
 */
 /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
-@import '//fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic';
+@import '//fonts.googleapis.com/css?family=Lato:100,300,400,500,700,800,400italic,700italic';
 html {
   font-family: sans-serif;
   -ms-text-size-adjust: 100%;
