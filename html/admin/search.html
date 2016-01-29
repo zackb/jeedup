@@ -279,7 +279,7 @@ Highcharts.theme = {
 
 // Apply the theme
 Highcharts.setOptions(Highcharts.theme);
-    $.getJSON('//www.highcharts.com/samples/data/jsonp.php?filename={{ lwr }}-ohlcv.json&callback=?', function (data) {
+    $.getJSON('/stock/history/{{ stock.id }}?callback=?', function (data) {
         if (!data) {
             console.log('No data!' + '{{ lwr }}');
             return;

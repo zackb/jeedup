@@ -136,6 +136,8 @@ class YahooCSV {
             result << price
         }
 
+        result.sort true, { it.date.time }
+
         return result
     }
 }
