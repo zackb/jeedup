@@ -54,7 +54,7 @@ class YahooBalanceSheetStockEnricher implements StockEnricher {
 
     @Override
     public UpdateFrequency getUpdateFrequency() {
-        return UpdateFrequency.SECOND
+        return UpdateFrequency.DAY
     }
 
     public static void main(String[] args) {

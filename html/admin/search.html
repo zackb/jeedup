@@ -2,7 +2,7 @@
       <div class="container">
           <div class="col-md-2">
             <div class="well">
-                <h4>{{ stock.id }}</h4>
+                <div>{{ stock.id }}</div>
             </div>
             <div class="panel panel-sm z-stock-box z-green">
                 <div class="panel-body z-stock-box-body">
@@ -13,15 +13,15 @@
                     </span>
                 </div>
             </div>
-            <div class="well">
-                <input class="z-52wk" type='range' min='56' max='186' value='160' step='1'/>
+            <div class="panel panel-sm">
+                <input class="z-52wk" type='range' disabled min='56' max='186' value='{{ stock.ask }}' step='1'/>
             </div>
           </div>
           <div class="col-md-8">
             <div id="z-stock-chart"></div>
           </div>
           <div class="col-md-2">
-            <iframe width='300px' height='410px' style='border-radius: 10px;' src='https://simplywall.st/api/snowflake/US:{{ stock.id }}/widget/272b30' frameborder='0'></iframe>
+            <iframe width='300px' height='410px' style='border-radius: 5px;' src='https://simplywall.st/api/snowflake/US:{{ stock.id }}/widget/272b30' frameborder='0'></iframe>
         </div>
 
           <div class="col-md-2">
@@ -93,7 +93,7 @@ Highcharts.theme = {
          ]
       },
       style: {
-         fontFamily: "'Unica One', sans-serif"
+         fontFamily: "'Unica One', 'Helvetica Neue',Helvetica,Arial,sans-serif"
       },
       plotBorderColor: '#606063'
    },
@@ -241,7 +241,41 @@ Highcharts.theme = {
       },
       labelStyle: {
          color: 'silver'
-      }
+      },
+      buttons: [{
+            type : 'week',
+            count : 1,
+            text : '1w'
+        }, {
+            type: 'month',
+            count: 1,
+            text: '1m'
+        }, {
+            type: 'month',
+            count: 3,
+            text: '3m'
+        }, {
+            type: 'month',
+            count: 6,
+            text: '6m'
+        }, {
+            type: 'ytd',
+            text: 'YTD'
+        }, {
+            type: 'year',
+            count: 1,
+            text: '1y'
+        }, {
+            type: 'year',
+            count: 5,
+            text: '5y'
+        }, {
+            type : 'all',
+            count : 1,
+            text : 'All'
+        }],
+      selected : 1,
+      inputEnabled : true
    },
 
    navigator: {
@@ -381,14 +415,13 @@ input[type='range'].z-52wk {
   left: 50%;
   border: solid 0 transparent;
   border-width: 0 1em;
-  padding: 1em 0 0;
+  padding: 5em 0em 0em 0em;
   width: 100%;
   height: 2em;
   border-radius: .25em;
   transform: translate(-50%, -50%);
   background: transparent;
   font-size: 1em;
-  font-color: #FFFFFF !important;
   <!-- cursor: pointer; -->
 }
 input[type='range'], input[type='range']::-webkit-slider-runnable-track, input[type='range']::-webkit-slider-thumb {
@@ -399,7 +432,7 @@ input[type='range']::-webkit-slider-runnable-track {
   width: 12em;
   height: 0.375em;
   background: linear-gradient(90deg, #ffffff 0.125em, rgba(0, 0, 0, 0) 0.125em)-0.0625em 50%, linear-gradient(90deg, #e60000, #e63900, #e67300, #e6ac00, #e6e600, #ace600, #73e600);
-  background-size: 1em 100%, 100% 100%;
+  background-size: 0em 100%, 100% 100%;
 }
 input[type='range']::-moz-range-track {
   width: 12em;
@@ -421,7 +454,6 @@ input[type='range']::-ms-fill-lower {
 input[type='range']::-webkit-slider-thumb {
   margin-top: -0.8125em;
   box-sizing: border-box;
-  border: solid 1px transparent;
   width: 2em;
   height: 2em;
   border-radius: 0;
@@ -452,14 +484,14 @@ input[type='range']::-webkit-slider-runnable-track:before, input[type='range']::
   color: #c8c8c8 !important;
 }
 input[type='range']::-webkit-slider-runnable-track:before, input[type='range'] /deep/ #track:before {
-  left: 0.8125em;
+  left: 0em;
   word-spacing: 1.4375em;
-  content: '56';
+  content: '{{ stock.yearLow }}';
 }
 input[type='range']::-webkit-slider-runnable-track:after, input[type='range'] /deep/ #track:after {
-  right: 0.625em;
+  right: 0em;
   word-spacing: 0.875em;
-  content: '186'
+  content: '{{ stock.yearHigh }}'
 }
 input[type='range']:focus {
   outline: none;

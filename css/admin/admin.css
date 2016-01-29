@@ -22,6 +22,10 @@
     padding: 4px !important;
 }
 
+.highcharts-container > svg > text {
+    display: none;
+}
+
 
 
 
