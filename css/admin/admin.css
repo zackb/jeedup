@@ -4,9 +4,23 @@
     padding: 11px 11px !important;
 }
 
+.z-red {
+    background-color: #ee5f5b !important;
+    border-color: #ed4d63 !important;
+}
 
+.z-green {
+    background-color: #62c462 !important;
+    border-color: #62bd4f !important;
+}
 
+.z-stock-box {
+    color: #ffffff !important;
+}
 
+.z-stock-box-body {
+    padding: 4px !important;
+}
 
 
 /* Sticky footer styles
