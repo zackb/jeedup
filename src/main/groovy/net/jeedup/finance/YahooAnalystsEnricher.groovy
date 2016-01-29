@@ -106,6 +106,6 @@ class YahooAnalystsEnricher implements StockEnricher {
 
     @Override
     public UpdateFrequency getUpdateFrequency() {
-        return UpdateFrequency.YEAR
+        return UpdateFrequency.MONTH
     }
 }

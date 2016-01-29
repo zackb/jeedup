@@ -1,7 +1,9 @@
 package net.jeedup.finance
 
 import net.jeedup.coding.CSV
+import net.jeedup.finance.model.Price
 import net.jeedup.net.http.HTTP
+import net.jeedup.util.DateTimeUtil
 
 
 class YahooCSV {
@@ -109,16 +111,31 @@ class YahooCSV {
 
     ]
 
-    public static void main(String[] args) {
-        def syms = ['AAPL', 'MSFT', 'FB']
-        def fields = 'a0b2a2b0b3b6b4c1m7m5k4j5p2c6c4h0g0r1d0y0e0j4e7e9e8q0m3d1l1' /*k3*/ +'t1l3j1j3i0n0t8o0i5r5r0r2m8m6k5j6p0p6r6r7p1p5s6s1s7x0s0d2m4v0k0j0'
 
-        println data.size()
-        println fields.length()
-        String url = 'http://download.finance.yahoo.com/d/quotes.csv?s=' + syms.join('+') + '&f=' + fields + '&e=.csv';
-        String csv = HTTP.get(url)
-        println csv
-        List<Map> data = CSV.decode(data, csv)
-        println data[0]
+    private static final List<String> histHeader = ['Date', 'Open', 'High', 'Low', 'Close', 'Volume', 'Adj Close']
+
+    public static List<Price> retieveHistoricalData(String symbol) {
+        String url = 'http://ichart.finance.yahoo.com/table.csv?s=' + symbol
+
+        List<Price> result = []
+
+        String csvs = HTTP.get(url)
+        csvs = csvs.substring(csvs.indexOf('\n') + 1)
+
+        List<Map<String, String>> csv =  CSV.decode(histHeader, csvs)
+
+        for (Map<String, String> d : csv) {
+            Price price = new Price(symbol:symbol)
+            price.date = DateTimeUtil.parseDate(d.Date)
+            price.open = Double.parseDouble(d.Open)
+            price.high = Double.parseDouble(d.High)
+            price.low = Double.parseDouble(d.Low)
+            price.close = Double.parseDouble(d.Close)
+            price.volume = Integer.parseInt(d.Volume)
+            price.adjClose = Double.parseDouble(d.'Adj Close')
+            result << price
+        }
+
+        return result
     }
 }

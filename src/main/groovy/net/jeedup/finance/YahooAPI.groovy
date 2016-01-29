@@ -35,7 +35,7 @@ class YahooAPI {
         job.waitFor()
     }
 
-    public static retrieveIndustrySecurities(Industry industry) {
+    public static void retrieveIndustrySecurities(Industry industry) {
         String url = "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.industry%20where%20id%3D%22${industry.yahooId}%22&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback="
         Map<String, Object> data = HTTP.getJSON(url)
         if (!data.query) {
@@ -164,7 +164,6 @@ class YahooAPI {
             }
         }
     }
-
 
     public static void main(String[] args) {
         println StockService.getInstance().retrieveAndUpdateStockData(true, false)

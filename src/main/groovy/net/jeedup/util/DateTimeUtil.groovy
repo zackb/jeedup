@@ -49,6 +49,7 @@ class DateTimeUtil {
 
     public static Date parseDate(String date) {
         String[] formats = [
+            "yyyy-MM-dd",
             "EEE MMM dd HH:mm:ss z yyyy",
             "yyyy-MM-dd'T'HH:mm:ss",
             "MMMM dd, yyyy, h:mm a z",
