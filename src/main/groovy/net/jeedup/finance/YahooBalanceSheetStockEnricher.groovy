@@ -16,7 +16,7 @@ class YahooBalanceSheetStockEnricher implements StockEnricher {
     @Override
     public void enrich(Stock stock) {
         println 'Adding Balance Sheet: ' + stock.id
-        String url = 'http://finance.yahoo.com/q/bs?s=' + stock.id + '+Balance+Sheet&annual'
+        String url = 'http://finance.yahoo.com/q/bs?s=' + stock.id
         String html = HTTP.get(url)
         Document doc = Jsoup.parse(html)
         Elements tables = doc.select('table[cellpadding=2][width=100%][cellspacing=0][border=0]')
@@ -26,9 +26,9 @@ class YahooBalanceSheetStockEnricher implements StockEnricher {
 
         Elements trs = tables.select('tr')
         Element currentAssets = trs.get(10)
-        Element totalAssets = trs.get(19)
-        Element currentLiabilities = trs.get(27)
-        Element totalLiabilities = trs.get(34)
+        Element totalAssets = trs.get(18)
+        Element currentLiabilities = trs.get(24)
+        Element totalLiabilities = trs.get(30)
         stock.currentAssets = parseTableRowDouble(currentAssets)
         stock.totalAssets = parseTableRowDouble(totalAssets)
         stock.currentLiabilities = parseTableRowDouble(currentLiabilities)
@@ -58,7 +58,7 @@ class YahooBalanceSheetStockEnricher implements StockEnricher {
     }
 
     public static void main(String[] args) {
-        Stock stock = new Stock(id:'0945.HK')
+        Stock stock = new Stock(id:'AAPL')
         new YahooBalanceSheetStockEnricher().enrich(stock)
         println stock.currentAssets
         println stock.totalAssets

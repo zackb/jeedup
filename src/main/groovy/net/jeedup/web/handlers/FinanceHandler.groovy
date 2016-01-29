@@ -2,6 +2,7 @@ package net.jeedup.web.handlers
 
 import groovy.transform.CompileStatic
 import net.jeedup.coding.JSON
+import net.jeedup.finance.StockService
 import net.jeedup.finance.YahooCSV
 import net.jeedup.finance.model.Price
 import net.jeedup.finance.model.Stock
@@ -16,7 +17,10 @@ class FinanceHandler {
 
     @Endpoint('stock')
     def get(Map data) {
-        JSON(Stock.get(data.id))
+        Stock stock = Stock.get(data.id)
+        if (stock.lastUpdated.time < System.currentTimeMillis() - 1000 * 60 * 15)
+            StockService.instance.enrich(stock)
+        JSON(stock)
     }
 
     @Endpoint('stock/history')

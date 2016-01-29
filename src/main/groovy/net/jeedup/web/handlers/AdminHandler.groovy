@@ -1,6 +1,7 @@
 package net.jeedup.web.handlers
 
 import groovy.transform.CompileStatic
+import net.jeedup.finance.StockService
 import net.jeedup.finance.model.Stock
 import net.jeedup.web.Endpoint
 import static net.jeedup.net.http.Response.*
@@ -93,6 +94,8 @@ class AdminHandler {
         if (!stock) {
             stock = new Stock(id:data.q.toString())
         }
+        if (!stock.lastUpdated || stock.lastUpdated.time < System.currentTimeMillis() - 1000 * 60 * 15)
+            StockService.instance.enrich(stock)
         HTML([stock:stock,lwr:stock.id.toLowerCase()], 'admin/search')
     }
 

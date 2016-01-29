@@ -24,10 +24,22 @@ class StockService {
 
     private StockService() {
         super()
+        addEnrichers([new MorningstarStockEnricher(),
+                      new YahooStockEnricher(),
+                      new YahooAnalystsEnricher(),
+                      new YahooKeyStatisticsStockEnricher(),
+                      new YahooBalanceSheetStockEnricher()]
+                as List<StockEnricher>)
     }
 
     public static StockService getInstance() {
         return instance
+    }
+
+    public void enrich(Stock stock) {
+        for (StockEnricher enricher : enrichers)
+            enricher.enrich([stock])
+        stock.save()
     }
 
     public void enrich() {
