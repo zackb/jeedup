@@ -36,4 +36,9 @@ class Analyst {
     public void save() {
         db().save(this)
     }
+
+    public static List<Analyst> forSymbol(String id, int limit = 4) {
+        return db().executeQuery('id like ? order by date desc limit ?', [id + '_%', limit]).reverse()
+    }
+
 }

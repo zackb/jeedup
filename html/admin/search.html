@@ -11,11 +11,54 @@
             <div class="sm-change-div"><div>{{plus}}{{ stock.change }}</div><div>{{ stock.changeInPercent }}%</div></div>
         </div>
 
-
-
             </div>
+
+            {{#analys}}
+            <div class="panel panel-sm z-analyst">
+                <table class="table">
+                    <tr><td></td><td>3m</td><td>2m</td><td>1m</td><td></td></tr>
+                    <tr><td>Strong</td>
+                    {{#analys}}
+                        {{#strong}}
+                            <td>{{.}}</td>
+                        {{/strong}}
+                    {{/analys}}
+                    </tr>
+                    <tr><td>Buy</td>
+                    {{#analys}}
+                        {{#buy}}
+                            <td>{{.}}</td>
+                        {{/buy}}
+                    {{/analys}}
+                    </tr>
+                    <tr><td>Hold</td>
+                    {{#analys}}
+                        {{#hold}}
+                            <td>{{.}}</td>
+                        {{/hold}}
+                    {{/analys}}
+                    </tr>
+                    <tr><td>Under</td>
+                    {{#analys}}
+                        {{#under}}
+                            <td>{{.}}</td>
+                        {{/under}}
+                    {{/analys}}
+                    <tr><td>Sell</td>
+                    {{#analys}}
+                        {{#sell}}
+                            <td>{{.}}</td>
+                        {{/sell}}
+                    {{/analys}}
+                    </tr>
+                    </tr>
+                </table>
+            </div>
+            {{/analys}}
+
+
             <div class="panel panel-sm">
-                <input class="z-52wk" type='range' disabled min='56' max='186' value='{{ stock.ask }}' step='1'/>
+                <input class="z-52wk" type='range' disabled min='{{ stock.yearLow }}' max='{{ stock.yearHigh }}' value='92' step='1'/>
             </div>
           </div>
           <div class="col-md-8">
@@ -26,7 +69,7 @@
         </div>
 
           <div class="col-md-2">
-            Stock: {{ stock.id }}
+            <div>Stock: {{ stock.id }}</div>
           </div>
           <div class="col-md-8">
           </div>
@@ -412,15 +455,14 @@ input[type='range'].z-52wk {
   top: 50%;
   left: 50%;
   border: solid 0 transparent;
-  border-width: 0 1em;
+  border-width: 0 5px;
   padding: 5em 0em 0em 0em;
   width: 100%;
   height: 2em;
-  border-radius: .25em;
+  border-radius: 0.25em;
   transform: translate(-50%, -50%);
   background: transparent;
-  font-size: 1em;
-  <!-- cursor: pointer; -->
+  font-size: 0.8em;
 }
 input[type='range'], input[type='range']::-webkit-slider-runnable-track, input[type='range']::-webkit-slider-thumb {
   -webkit-appearance: none;

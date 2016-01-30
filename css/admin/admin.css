@@ -26,6 +26,15 @@
     display: none;
 }
 
+.z-analyst table {
+    font-size: 10px !important;
+    border-spacing: 0px;
+}
+
+.z-analyst td {
+    padding: 3px !important;
+}
+
 
 /* START QUOTE */
 
@@ -59,7 +68,7 @@
 
 .sm-frame3 .sm-symbol {
   color: #fff;
-  font-size: 1.55em;
+  font-size: 1.75em;
   font-weight: bold;  
 }
 

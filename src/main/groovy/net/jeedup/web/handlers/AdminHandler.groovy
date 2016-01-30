@@ -2,6 +2,7 @@ package net.jeedup.web.handlers
 
 import groovy.transform.CompileStatic
 import net.jeedup.finance.StockService
+import net.jeedup.finance.model.Analyst
 import net.jeedup.finance.model.Stock
 import net.jeedup.web.Endpoint
 import static net.jeedup.net.http.Response.*
@@ -90,18 +91,33 @@ class AdminHandler {
 
     @Endpoint('admin/search')
     def search(Map data) {
+
         Stock stock = Stock.get(data.q)
         if (!stock) {
             stock = new Stock(id:data.q.toString())
         }
+
         if (!stock.lastUpdated || stock.lastUpdated.time < System.currentTimeMillis() - 1000 * 60 * 15)
             StockService.instance.enrich(stock)
+
         String cls = 'up green', plus = '+'
         if (stock.change < 0) {
             cls = 'down red'
-            plus = '-'
+            plus = ''
         }
-        HTML([stock:stock,lwr:stock.id.toLowerCase(), cls:cls, plus:plus], 'admin/search')
+
+        List<Analyst> analysts = Analyst.forSymbol(stock.id)
+        def ass = [strong:[],buy:[],hold:[],under:[],sell:[]]
+        boolean agood = false
+        analysts.each { Analyst a ->
+            agood = true
+            ass.strong << a.strongBuy
+            ass.buy << a.buy
+            ass.hold << a.hold
+            ass.under << a.underperform
+            ass.sell << a.sell
+        }
+        HTML([stock:stock,lwr:stock.id.toLowerCase(), cls:cls, plus:plus, analys:agood ? ass : null], 'admin/search')
     }
 
     @Endpoint('admin/suggest')
