@@ -357,6 +357,11 @@ Highcharts.theme = {
 
 // Apply the theme
 Highcharts.setOptions(Highcharts.theme);
+Highcharts.setOptions({
+    lang: {
+        rangeSelectorZoom :""
+    }
+});
     $.getJSON('/stock/history/{{ stock.id }}?callback=?', function (data) {
         if (!data) {
             console.log('No data!' + '{{ lwr }}');
