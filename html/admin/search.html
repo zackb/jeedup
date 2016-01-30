@@ -1,17 +1,18 @@
 {{> header}}
       <div class="container">
           <div class="col-md-2">
-            <div class="well">
-                <div>{{ stock.id }}</div>
-            </div>
-            <div class="panel panel-sm z-stock-box z-green">
-                <div class="panel-body z-stock-box-body">
-                    <span>+</span>
-                    <span>
-                        <div>10.18</div>
-                        <div>0.51%</div>
-                    </span>
-                </div>
+            <div class="panel panel-sm">
+
+
+        <div class="sm-frame3">
+            <div class="sm-company">Apple Inc.</div>
+            <div class="sm-symbol">AAPL</div>  
+            <div class="sm-quote-div"><i class="arrow sm-icon down red"></i><span class="sm-quote">96.895</span></div>
+            <div class="sm-change-div"><div>+2.805</div><div>+2.981%</div></div>
+        </div>
+
+
+
             </div>
             <div class="panel panel-sm">
                 <input class="z-52wk" type='range' disabled min='56' max='186' value='{{ stock.ask }}' step='1'/>

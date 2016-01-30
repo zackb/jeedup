@@ -27,6 +27,115 @@
 }
 
 
+/* START QUOTE */
+
+/*
+ * # Semantic UI
+ * https://github.com/Semantic-Org/Semantic-UI
+ * http://www.semantic-ui.com/
+ *
+ * Copyright 2014 Contributors
+ * Released under the MIT license
+ * http://opensource.org/licenses/MIT
+ *
+ */
+@font-face {
+  font-family: 'Icons';
+  src: url("../fonts/icons.svg#icons") format('svg'), url("../fonts/icons.ttf") format('truetype');
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-decoration: inherit;
+  text-transform: none;
+}
+.sm-frame3 {
+  padding: 5px;
+  background: #000;
+}
+
+.sm-frame3 .sm-company {  
+  color: #CACACA;
+  font-size: 0.9375em;
+}
+
+.sm-frame3 .sm-symbol {
+  color: #fff;
+  font-size: 1.25em;
+  font-weight: bold;  
+}
+
+.sm-frame3 .sm-quote {
+  color: #fff;
+  margin-left: -5px;
+  font-size: 0.8em;
+}
+
+.sm-frame3 .sm-quote-div {
+  display: inline-block;
+}
+
+.sm-frame3 .sm-quote-div i {
+  font-size: 0.8em;
+}
+
+.sm-frame3 .sm-change-div {
+  color: #999;
+  text-align: right;
+  display: inline-block;
+  float: right;
+  font-size: 0.8em;
+}
+
+
+
+
+i.sm-icon {
+  display: inline-block;
+  opacity: 1;
+  margin: 0em 0.25rem 0em 0em;
+  width: 1.23em;
+  height: 0.9em;
+  font-family: 'Icons';
+  font-style: normal;
+  line-height: 1;
+  font-weight: normal;
+  text-decoration: inherit;
+  text-align: center;
+  speak: none;
+  font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+}
+
+i.sm-icon:before {
+  background: none !important;
+}
+
+i.green.sm-icon,
+span.green {
+  color: #5bbd72 !important;
+}
+
+i.red.sm-icon,
+span.red {
+  color: #d95c5c !important;
+}
+
+i.sm-icon.arrow.up:before {
+  content: "\f062";
+}
+i.sm-icon.arrow.down:before {
+  content: "\f063";
+}
+i.sm-icon.caret.down:before {
+  content: "\f0d7";
+}
+i.sm-icon.caret.up:before {
+  content: "\f0d8";
+}
+/* END QUOTE */
+
 
 
 
