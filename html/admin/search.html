@@ -5,10 +5,10 @@
 
 
         <div class="sm-frame3">
-            <div class="sm-company">Apple Inc.</div>
-            <div class="sm-symbol">AAPL</div>  
-            <div class="sm-quote-div"><i class="arrow sm-icon down red"></i><span class="sm-quote">96.895</span></div>
-            <div class="sm-change-div"><div>+2.805</div><div>+2.981%</div></div>
+            <div class="sm-company">{{ stock.name }}</div>
+            <div class="sm-symbol">{{ stock.id }}</div>  
+            <div class="sm-quote-div"><i class="arrow sm-icon {{ cls }}"></i><span class="sm-quote">{{ stock.ask }}</span></div>
+            <div class="sm-change-div"><div>{{plus}}{{ stock.change }}</div><div>{{ stock.changeInPercent }}%</div></div>
         </div>
 
 

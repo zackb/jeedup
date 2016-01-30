@@ -50,23 +50,21 @@
 }
 .sm-frame3 {
   padding: 5px;
-  background: #000;
 }
 
 .sm-frame3 .sm-company {  
   color: #CACACA;
-  font-size: 0.9375em;
+  font-size: 0.7375em;
 }
 
 .sm-frame3 .sm-symbol {
   color: #fff;
-  font-size: 1.25em;
+  font-size: 1.55em;
   font-weight: bold;  
 }
 
 .sm-frame3 .sm-quote {
   color: #fff;
-  margin-left: -5px;
   font-size: 0.8em;
 }
 
@@ -83,6 +81,7 @@
   text-align: right;
   display: inline-block;
   float: right;
+  margin-top: -14px;
   font-size: 0.8em;
 }
 

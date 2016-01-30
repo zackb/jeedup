@@ -96,7 +96,12 @@ class AdminHandler {
         }
         if (!stock.lastUpdated || stock.lastUpdated.time < System.currentTimeMillis() - 1000 * 60 * 15)
             StockService.instance.enrich(stock)
-        HTML([stock:stock,lwr:stock.id.toLowerCase()], 'admin/search')
+        String cls = 'up green', plus = '+'
+        if (stock.change < 0) {
+            cls = 'down red'
+            plus = '-'
+        }
+        HTML([stock:stock,lwr:stock.id.toLowerCase(), cls:cls, plus:plus], 'admin/search')
     }
 
     @Endpoint('admin/suggest')
