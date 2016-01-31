@@ -19,7 +19,7 @@ import net.jeedup.util.FileStoreCache
 @CompileStatic
 class AdminHandler {
 
-    @Endpoint('admin/home')
+    @Endpoint('home')
     def index(Map data) {
         HTML([:], 'admin/home')
     }
@@ -78,9 +78,9 @@ class AdminHandler {
 
     }, 10 * 60 * 1000)
 
-    @Endpoint('admin/news')
+    @Endpoint('n')
     def news(Map data) {
-        List<Phrase> phrases = phraseSetStore.get((String)data.id)
+        List<Phrase> phrases = phraseSetStore.get((String)data.id ?: 'news')
         HTML([phrases:phrases], 'admin/news')
     }
 
@@ -89,12 +89,16 @@ class AdminHandler {
         HTML([:], 'admin/tool')
     }
 
-    @Endpoint('admin/search')
-    def search(Map data) {
+    @Endpoint('f/lookup')
+    def lookup(Map data) {
 
-        Stock stock = Stock.get(data.q)
+        String id = data.id?.toString()?.trim()
+        if (!id) {
+            throw new Exception('Missing required id')
+        }
+        Stock stock = Stock.get(id)
         if (!stock) {
-            stock = new Stock(id:data.q.toString())
+            stock = new Stock(id:id)
         }
 
         if (!stock.lastUpdated || stock.lastUpdated.time < System.currentTimeMillis() - 1000 * 60 * 15)
@@ -120,7 +124,7 @@ class AdminHandler {
         HTML([stock:stock,lwr:stock.id.toLowerCase(), cls:cls, plus:plus, analys:agood ? ass : null], 'admin/search')
     }
 
-    @Endpoint('admin/suggest')
+    @Endpoint('f/suggest')
     def suggest(Map data) {
         String q = ((String)data.q)?.trim()
         //if (!q) return new Response().data(data).status(400)

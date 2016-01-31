@@ -1,5 +1,5 @@
 function search(a,b) {
-    document.location = '/admin/search?q=' + $('.z-search-q').val();
+    document.location = '/f/lookup/' + $('.z-search-q').val();
     return false;
 }
 
@@ -11,7 +11,7 @@ function typeaheadSearch() {
         autoSelect: true,
         items: 16,
         source: function (q, process) {
-            return $.get('/admin/suggest', { q: q }, function (data) {
+            return $.get('/f/suggest', { q: q }, function (data) {
                 syms = [];
                 $.each(data.data, function (i, s) {
                     key = s.id + ' - ' + s.name
@@ -23,7 +23,7 @@ function typeaheadSearch() {
         },
         updater: function(q) {
             if (map[q]) q = map[q]
-            document.location = '/admin/search?q=' + q
+            document.location = '/f/lookup/' + q
         }
     }); 
 }

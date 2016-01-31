@@ -1,4 +1,5 @@
 package net.jeedup.web
+
 import groovy.transform.CompileStatic
 import io.undertow.Undertow
 import io.undertow.predicate.Predicates
