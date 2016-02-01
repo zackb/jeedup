@@ -1,6 +1,9 @@
 package net.jeedup.finance
 
 import groovy.transform.CompileStatic
+import net.jeedup.feed.FeedItem
+import net.jeedup.feed.RssFeed
+import net.jeedup.feed.parser.RssFeedParser
 import net.jeedup.finance.model.Stock
 import net.jeedup.persistence.sql.SqlDB
 import net.jeedup.util.ThreadedJob
@@ -141,6 +144,15 @@ class StockService {
         'JNJ', 'JPM', 'MCD', 'MRK', 'MSFT', 'NKE',
         'PFE', 'PG', 'TRV', 'UTX', 'UNH', 'VZ', 'V', 'WMT'
     ]
+
+    public List<FeedItem> retrieveNewsItems(String symbol) {
+        List<FeedItem> result = []
+        result.addAll(YahooAPI.retrieveNewsItems(symbol))
+        String googleUrl = 'https://www.google.com/finance/company_news?q=' + symbol + '&output=rss'
+        result.addAll(new RssFeedParser().parse(new RssFeed(url:googleUrl)))
+        result.sort true, { FeedItem it -> -it.pubDate.time }
+        return result
+    }
 
     public static void main(String[] args) {
         /*

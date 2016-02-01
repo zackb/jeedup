@@ -63,7 +63,7 @@ class FinanceHandler {
         if (!id) {
             throw new Exception('Missing required id')
         }
-        HTML([items:YahooAPI.retrieveNewsItems(id)], 'admin/stock_news_embed')
+        HTML([items:StockService.instance.retrieveNewsItems(id)], 'admin/stock_news_embed')
     }
 
     @Endpoint('f/suggest')
