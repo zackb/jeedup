@@ -47,6 +47,10 @@ class CnbcStockEntricher implements StockEnricher {
 
     @Override
     public UpdateFrequency getUpdateFrequency() {
-        return UpdateFrequency.MINUTE
+        return UpdateFrequency.DAY
+    }
+
+    public String getEarningsHistory() {
+        String url = "http://apps.cnbc.com/resources/asp/getBufferedEarningsChart.asp' --data 'cht=earnings&IBESTicker=AAPL&annQtr=qtr"
     }
 }

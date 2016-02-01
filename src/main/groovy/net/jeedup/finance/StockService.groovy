@@ -120,16 +120,17 @@ class StockService {
 	and priceBook > ask
 	and oneyrTargetPrice > ask
 	and enterpriseValue > marketCapitalization
-    order by (oneyrTargetPrice - ask) desc""")
+    order by (oneyrTargetPrice - ask) desc limit 200""")
 
     }
 
     public List<Stock> findGrowthStocks() {
         return Stock.db().executeQuery("""
     epsEstimateNextYear > eps
+    and oneyrTargetPrice > ask
 	and  DATEDIFF(now(),lastUpdated) < 4
 	and stockExchange in ('NYQ', 'NMS', 'NGM', 'NCM')
-    order by returnOnEquity desc limit 100""")
+    order by (oneyrTargetPrice - ask) desc, returnOnEquity desc limit 100""")
     }
 
     public List<Stock> findDogsOfTheDow() {
