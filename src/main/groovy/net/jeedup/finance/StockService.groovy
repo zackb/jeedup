@@ -104,25 +104,22 @@ class StockService {
         job.waitFor()
     }
 
-    public void findValueStocks() {
-        /*
-        select * from Stock
-where
-	`pegRatio` < 1.10
-	and
-	`currentAssets` > (currentLiabilities * 1.5)
-	and  DATEDIFF(now(),`lastUpdated`) < 4
+    public List<Stock> findValueStocks() {
+        return Stock.db().executeQuery("""
+	pegRatio < 1.10
+	and currentAssets > (currentLiabilities * 1.5)
+	and  DATEDIFF(now(),lastUpdated) < 4
 	and ask < yearLow + (yearHigh - yearLow)
 	and stockExchange in ('NYQ', 'NMS', 'NGM', 'NCM')
-
-order by (yearHigh - yearLow);
-         */
+    order by (yearHigh - yearLow)""")
 
     }
 
     public static void main(String[] args) {
+        /*
         getInstance().addEnrichers([new MorningstarStockEnricher(), new YahooStockEnricher(), new YahooAnalystsEnricher(), new YahooKeyStatisticsStockEnricher()] as List<StockEnricher>)
         getInstance().addEnricher(new YahooBalanceSheetStockEnricher())
+        */
         println getInstance().enrichers
         getInstance().enrich()
     }
