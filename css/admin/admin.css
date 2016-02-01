@@ -1,5 +1,17 @@
 /* Jeedup */
 
+/*
+* {
+    background: blue !important;
+    border-radius: 25px;
+    border: 2px solid #73AD21;
+}
+*/
+
+.z-content {
+    padding-top: 4.75em;
+}
+
 .z-btn-search {
     padding: 11px 11px !important;
 }

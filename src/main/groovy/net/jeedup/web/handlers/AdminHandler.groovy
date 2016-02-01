@@ -121,7 +121,15 @@ class AdminHandler {
             ass.under << a.underperform
             ass.sell << a.sell
         }
-        HTML([stock:stock,lwr:stock.id.toLowerCase(), cls:cls, plus:plus, analys:agood ? ass : null], 'admin/search')
+        HTML([
+                stock:stock,
+                lwr:stock.id.toLowerCase(),
+                cls:cls,
+                plus:plus,
+                analys:agood ? ass : null,
+                mcap: String.format("%.2fM", stock.marketCapitalization / 1000000.0),
+                eval: String.format("%.2fM", stock.enterpriseValue / 1000000.0)
+        ], 'admin/search')
     }
 
     @Endpoint('f/suggest')

@@ -1,17 +1,14 @@
 {{> header}}
-      <div class="container">
+      <div class="container-fluid z-content">
           <div class="col-md-2">
             <div class="panel panel-sm">
-
-
-        <div class="sm-frame3">
-            <div class="sm-company">{{ stock.name }}</div>
-            <div class="sm-symbol">{{ stock.id }}</div>  
-            <div class="sm-quote-div"><i class="arrow sm-icon {{ cls }}"></i><span class="sm-quote">{{ stock.ask }}</span></div>
-            <div class="sm-change-div"><div>{{plus}}{{ stock.change }}</div><div>{{ stock.changeInPercent }}%</div></div>
-        </div>
-
-            </div>
+                <div class="sm-frame3">
+                    <div class="sm-company">{{ stock.name }}</div>
+                    <div class="sm-symbol">{{ stock.id }}</div>  
+                    <div class="sm-quote-div"><i class="arrow sm-icon {{ cls }}"></i><span class="sm-quote">{{ stock.ask }}</span></div>
+                    <div class="sm-change-div"><div>{{plus}}{{ stock.change }}</div><div>{{ stock.changeInPercent }}%</div></div>
+                </div>
+            </div> <!-- /panel -->
 
             {{#analys}}
             <div class="panel panel-sm z-analyst">
@@ -53,33 +50,43 @@
                     </tr>
                     </tr>
                 </table>
-            </div>
+            </div> <!-- /panel -->
             {{/analys}}
 
 
             <div class="panel panel-sm">
                 <input class="z-52wk" type='range' disabled min='{{ stock.yearLow }}' max='{{ stock.yearHigh }}' value='{{ stock.ask }}' step='1'/>
             </div>
-          </div>
-          <div class="col-md-8">
+
+          </div> <!-- /col-md-2 -->
+
+          <div class="col-md-7">
             <div id="z-stock-chart"></div>
           </div>
-          <div class="col-md-2">
-            <iframe width='300px' height='400px' style='border-radius: 5px;' src='https://simplywall.st/api/snowflake/US:{{ stock.id }}/widget/272b30' frameborder='0'></iframe>
-        </div>
+
+
+          <!-- simplywall -->
+          <div class="col-md-3">
+            <iframe width='310px' height='408px' style='border-radius: 5px;' src='https://simplywall.st/api/snowflake/US:{{ stock.id }}/widget/trans' frameborder='0'></iframe>
+          </div>
+          <!-- /simplywall -->
 
           <div class="col-md-2">
-            <div>{{ stock.id }}</div>
+            <div class="panel panel-sm">{{ stock.id }}</div>
           </div>
-          <div class="col-md-8">
-          <table>
-          <tr><td>EPS</td><td>10</td>m<td></td><td></td><td></td><td></td></tr>
-          </table>
+
+          <div class="col-md-7">
+            <table>
+                <tr><td>EPS</td><td>10</td><td>M</td><td>Z</td><td>Z</td><td>Z</td></tr>
+            </table>
           </div>
-          <div class="col-md-2">
+
+
+          <div class="col-md-3">
             <div id="z-stocktwits"></div>
         </div>
-    </div>
+
+    </div> <!-- /.container-fluid -->
 
 
 
@@ -98,7 +105,7 @@ $(function() {
             header: 0,
             title: '',
             avatars: 0,
-            width: '300',
+            width: '310',
             height: '300',
             limit: '30',
             scrollbars: 1,
