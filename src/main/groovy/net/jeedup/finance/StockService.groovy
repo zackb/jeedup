@@ -112,7 +112,10 @@ class StockService {
 	and  DATEDIFF(now(),lastUpdated) < 4
 	and ask < yearLow + (yearHigh - yearLow)
 	and stockExchange in ('NYQ', 'NMS', 'NGM', 'NCM')
-    order by (yearHigh - yearLow)""")
+	and priceBook > ask
+	and oneyrTargetPrice > ask
+	and enterpriseValue > marketCapitalization
+    order by (oneyrTargetPrice - ask) desc""")
 
     }
 

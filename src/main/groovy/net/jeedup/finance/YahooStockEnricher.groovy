@@ -104,7 +104,6 @@ class YahooStockEnricher implements StockEnricher {
         stock.volume = parseDouble(data['Volume'])
         stock.yearHigh = parseDouble(data['YearHigh'])
         stock.yearLow = parseDouble(data['YearLow'])
-        stock.dividendYield = parseDouble(data['DividendYield'])
     }
 
     public static Double parseDouble(String str) {
