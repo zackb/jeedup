@@ -143,6 +143,8 @@ class FinanceHandler {
                   stocks: StockService.instance.findValueStocks()
                 ], [ name : 'Growth',
                   stocks: StockService.instance.findGrowthStocks()
+                ], [ name: 'Top Analysts Recommended',
+                    stocks: StockService.instance.findTopAnalyst()
                 ], [ name: 'Dogs of the Dow',
                     stocks: StockService.instance.findDogsOfTheDow()
                 ]

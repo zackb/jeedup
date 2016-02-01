@@ -43,14 +43,24 @@
 .z-news-links a {
     font-size: 9px !important;
 }
+
 .z-news-list {
     padding: 0 0 1em 0 !important;
-    font-size: 10px !important;
 }
 .z-news-list a {
     border: 0px;
     padding: 0 2px 10px 2px !important;
     background-color: #272b30;
+}
+
+.z-news-list h6 {
+    font-weight: 300 !important;
+    font-size: 12px !important;
+}
+
+.z-news-list p {
+    font-weight: 300 !important;
+    font-size: 10px !important;
 }
 
 a.z-news-list:hover,

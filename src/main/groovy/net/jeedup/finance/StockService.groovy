@@ -9,7 +9,7 @@ import net.jeedup.persistence.sql.SqlDB
 import net.jeedup.util.ThreadedJob
 
 /**
- * Created by zack on 5/28/14.
+ * Stocks
  */
 @CompileStatic
 class StockService {
@@ -34,7 +34,8 @@ class StockService {
             new YahooAnalystsEnricher(),
             new YahooKeyStatisticsStockEnricher(),
             new YahooBalanceSheetStockEnricher(),
-            new MorningstarStockHTMLEnricher()
+            new MorningstarStockHTMLEnricher(),
+            new CnbcStockEntricher()
         ] as List<StockEnricher>)
     }
 
@@ -128,7 +129,7 @@ class StockService {
     epsEstimateNextYear > eps
 	and  DATEDIFF(now(),lastUpdated) < 4
 	and stockExchange in ('NYQ', 'NMS', 'NGM', 'NCM')
-    order by returnOnEquity""")
+    order by returnOnEquity desc limit 100""")
     }
 
     public List<Stock> findDogsOfTheDow() {
@@ -136,6 +137,17 @@ class StockService {
 	DATEDIFF(now(),lastUpdated) < 4
 	and id in (${SqlDB.questionMarksWithCommas(DOW.size())})
     order by trailingAnnualDividendYieldInPercent desc limit 10""", DOW)
+    }
+
+    public List<Stock> findTopAnalyst() {
+        return Stock.db().executeQuery("""
+	DATEDIFF(now(),lastUpdated) < 4
+	and active = 1
+	and meanAnalystRating > 0
+	and meanAnalystRating is not null
+	and stockExchange in ('NYQ', 'NMS', 'NGM', 'NCM')
+	order by analystStrongBuy desc, analystBuy desc, meanAnalystRating desc, analystSell asc, analystUnderperform asc limit 100
+""")
     }
 
     private static final List<String> DOW = [

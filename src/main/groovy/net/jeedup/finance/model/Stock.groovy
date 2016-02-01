@@ -87,6 +87,7 @@ public class Stock {
     public Double currentAssets
     public Double currentLiabilities
     public Double eps
+    public Double beta
     public Double currentRatio
     public Double quickRatio
 
@@ -106,6 +107,17 @@ public class Stock {
     public Double cashPerShare
     public Double debt
 
+
+    // Analysts
+    public Double meanAnalystRating
+    public Integer analystStrongBuy
+    public Integer analystBuy
+    public Integer analystHold
+    public Integer analystUnderperform
+    public Integer analystSell
+
+    public Date yearHighDate
+    public Date yearLowDate
 
 
     public static SqlDB<Stock> db() {

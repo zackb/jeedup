@@ -1,5 +1,6 @@
 package net.jeedup.finance
 
+import groovy.transform.CompileStatic
 import net.jeedup.finance.model.Stock
 import net.jeedup.net.http.HTTP
 import org.jsoup.Jsoup
@@ -9,6 +10,7 @@ import org.jsoup.nodes.Element
 /**
  * Get morningstar HTML data
  */
+@CompileStatic
 class MorningstarStockHTMLEnricher implements StockEnricher {
 
     @Override
@@ -32,9 +34,5 @@ class MorningstarStockHTMLEnricher implements StockEnricher {
     @Override
     public UpdateFrequency getUpdateFrequency() {
         return UpdateFrequency.YEAR
-    }
-
-    public static void main(String[] args) {
-        println new MorningstarStockHTMLEnricher().enrich(new Stock(id:'AAPL'))
     }
 }

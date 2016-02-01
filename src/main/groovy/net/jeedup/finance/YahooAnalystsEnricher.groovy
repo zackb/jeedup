@@ -19,7 +19,6 @@ import org.jsoup.select.Elements
 class YahooAnalystsEnricher implements StockEnricher {
 
     public static Collection<Analyst> fetchAnalysis(String symbol) {
-        println 'Analysts for : ' + symbol
         String url = 'http://finance.yahoo.com/q/ao?s=' + symbol + '+Analyst+Opinion'
         String html = HTTP.get(url)
         Document doc = Jsoup.parse(html)
@@ -92,10 +91,19 @@ class YahooAnalystsEnricher implements StockEnricher {
         return values
     }
 
-
     @Override
     public void enrich(Stock stock) {
+        println 'Analysts ' + stock.id
         Collection<Analyst> analysis = fetchAnalysis(stock.id)
+        Analyst current = analysis.find { it.meanRating != null }
+        if (current) {
+            stock.meanAnalystRating = current.meanRating
+            stock.analystStrongBuy = current.strongBuy
+            stock.analystBuy = current.buy
+            stock.analystHold = current.hold
+            stock.analystUnderperform = current.underperform
+            stock.analystSell = current.sell
+        }
         analysis*.save()
     }
 

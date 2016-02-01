@@ -74,6 +74,7 @@ class PhraseSet {
         PhraseSet result = new PhraseSet()
         result.title = 'Money'
         result.urls = [
+                "http://www.dailyfinance.com/rss.xml",
                 "http://www.fool.com/feeds/index.aspx?id=foolwatch&format=rss2",
                 "http://feeds.reuters.com/news/wealth",
                 //"http://feeds.reuters.com/reuters/businessNews",

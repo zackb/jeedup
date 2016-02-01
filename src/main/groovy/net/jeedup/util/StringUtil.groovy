@@ -11,6 +11,7 @@ import java.util.regex.Pattern
 class StringUtil {
 
     public static String formatBigNumber(Double money) {
+        if (!money) return ''
         String end = 'K'
         if (Math.abs(money) > 1000000000) {
             end = 'B'
