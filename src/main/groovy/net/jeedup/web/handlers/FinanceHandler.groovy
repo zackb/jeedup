@@ -125,10 +125,13 @@ class FinanceHandler {
                 cls:cls,
                 plus:plus,
                 analys:agood ? ass : null,
+                desc: StringUtil.removeHtml(stock.description),
                 ebitda: StringUtil.formatBigNumber(stock.ebitda),
                 shares: StringUtil.formatBigNumber(stock.sharesOutstanding),
                 mcap: StringUtil.formatBigNumber(stock.marketCapitalization),
-                eval: StringUtil.formatBigNumber(stock.enterpriseValue)
+                eval: StringUtil.formatBigNumber(stock.enterpriseValue),
+                libs: StringUtil.formatBigNumber(stock.currentLiabilities),
+                assets: StringUtil.formatBigNumber(stock.currentAssets)
         ], 'admin/search')
     }
 

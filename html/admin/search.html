@@ -80,7 +80,7 @@
           <!-- /simplywall -->
 
           <div class="col-md-2">
-            <div class="panel panel-sm">{{ stock.id }}</div>
+            <div class="panel panel-sm z-description">{{ desc }}</div>
           </div>
 
           <div class="col-md-7">
@@ -139,10 +139,10 @@
                                 <td>Dept / Equity</td><td>{{ stock.debtEquity }}</td>
                             </tr>
                             <tr data-toggle="tooltip" data-placement="top" title="A balance sheet account that represents the value of all assets that can reasonably expected to be converted into cash within one year. Current assets include cash and cash equivalents, accounts receivable, inventory, marketable securities, prepaid expenses and other liquid assets that can be readily converted to cash.">
-                                <td>Current Assets</td><td>{{ stock.currentAssets }}</td>
+                                <td>Current Assets</td><td>{{ assets }}</td>
                             </tr>
                             <tr data-toggle="tooltip" data-placement="top" title="A company's debts or obligations that are due within one year. Current liabilities appear on the company's balance sheet and include short term debt, accounts payable, accrued liabilities and other debts.">
-                                <td>Current Liabilities</td><td>{{ stock.currentLiabilities }}</td>
+                                <td>Current Liabilities</td><td>{{ libs }}</td>
                             </tr>
                             <tr data-toggle="tooltip" data-placement="top" title="A liquidity ratio that measures a company's ability to pay short-term and long-term obligations. To gauge this ability, the current ratio considers the total assets of a company (both liquid and illiquid) relative to that company’s total liabilities. Current Ratio = Current Assets / Current Liabilities">
                                 <td>Current Ratio</td><td>{{ stock.currentRatio }}</td>

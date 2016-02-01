@@ -30,7 +30,7 @@ class StringUtil {
     }
 
     public static String removeHtml(String text) {
-        return text?.replaceAll('<.*?>', ' ')?.trim()
+        return text?.replaceAll('<.*?>', ' ')?.trim()?.replaceAll('&amp;', 'and')
     }
 
     public static String removeUrls(String text) {
