@@ -32,4 +32,5 @@ $(function() {
     $('.z-form-search').submit(search);
     $('.z-btn-search').click(search);
     typeaheadSearch();
+    $('[data-toggle="tooltip"]').tooltip({delay:300, trigger:'click hover focus'});
 });

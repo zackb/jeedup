@@ -90,19 +90,19 @@
                 <div class="col-md-3">
                     <div class="panel panel-sm z-analyst">
                         <table class="table">
-                            <tr>
+                            <tr data-toggle="tooltip" data-placement="top" title="The total dollar market value of all of a company's outstanding shares. Market capitalization is calculated by multiplying a company's shares outstanding by the current market price of one share. The investment community uses this figure to determine a company's size, as opposed to sales or total asset figures.">
                                 <td>Mkt Cap</td><td>{{ mcap }}</td>
                             </tr>
-                            <tr>
+                            <tr data-toggle="tooltip" data-placement="top" title="A measure of a company's total value. Calculated as market capitalization plus debt, minority interest and preferred shares, minus total cash and cash equivalents. ">
                                 <td>Ent Value</td><td>{{ eval }}</td>
                             </tr>
-                            <tr>
+                            <tr data-toggle="tooltip" data-placement="top" title="A company's stock currently held by all its shareholders">
                                 <td>Shares</td><td>{{ stock.sharesOutstanding }}</td>
                             </tr>
-                            <tr>
+                            <tr data-toggle="tooltip" data-placement="top" title="A ratio used to compare a stock's market value to its book value. It is calculated by dividing the current closing price of the stock by the latest quarter's book value per share.">
                                 <td>Price / Book</td><td>{{ stock.priceBook }}</td>
                             </tr>
-                            <tr>
+                            <tr data-toggle="tooltip" data-placement="top" title="A measure of the volatility, or systematic risk, of a security or a portfolio in comparison to the market as a whole. Beta is used in the capital asset pricing model (CAPM), a model that calculates the expected return of an asset based on its beta and expected market returns.">
                                 <td>Beta</td><td>Z1.20</td>
                             </tr>
                         </table>
@@ -113,19 +113,19 @@
                 <div class="col-md-3">
                     <div class=" panel panel-sm z-analyst">
                         <table class="table">
-                            <tr>
+                            <tr data-toggle="tooltip" data-placement="top" title="A projected price level as stated by an investment analyst or advisor.">
                                 <td>1 Yr Target</td><td>{{ stock.oneyrTargetPrice }}</td>
                             </tr>
-                            <tr>
+                            <tr data-toggle="tooltip" data-placement="top" title="A ratio for valuing a company that measures its current share price relative to its per-share earnings. Market Value per Share / Earnings per Share">
                                 <td>P/E</td><td>{{ stock.peRatio }}</td>
                             </tr>
-                            <tr>
+                            <tr data-toggle="tooltip" data-placement="top" title="The portion of a company's profit allocated to each outstanding share of common stock. Earnings per share serves as an indicator of a company's profitability.">
                                 <td>EPS</td><td>{{ stock.eps }}</td>
                             </tr>
-                            <tr>
+                            <tr data-toggle="tooltip" data-placement="top" title="A stock's price-to-earnings ratio divided by the growth rate of its earnings for a specified time period. Used to determine a stock's value while taking the company's earnings growth into account, and is considered to provide a more complete picture than the P/E ratio.">
                                 <td>PEG</td><td>{{ stock.pegRatio }}</td>
                             </tr>
-                            <tr>
+                            <tr data-toggle="tooltip" data-placement="top" title="An indicator of a company's financial performance. Revenue - Expenses (excluding tax, interest, depreciation and amortization.">
                                 <td>EBITDA</td><td>{{ stock.ebitda }}</td>
                             </tr>
                         </table>
@@ -135,19 +135,19 @@
                 <div class="col-md-3">
                     <div class=" panel panel-sm z-analyst">
                         <table class="table">
-                            <tr>
+                            <tr data-toggle="tooltip" data-placement="top" title="Debt ratio used to measure a company's financial leverage, calculated by dividing a company’s total liabilities by its stockholders' equity. The D/E ratio indicates how much debt a company is using to finance its assets relative to the amount of value represented in shareholders’ equity. Total Liabilities / Shareholders' Equity">
                                 <td>Dept / Equity</td><td>{{ stock.debtEquity }}</td>
                             </tr>
-                            <tr>
+                            <tr data-toggle="tooltip" data-placement="top" title="A balance sheet account that represents the value of all assets that can reasonably expected to be converted into cash within one year. Current assets include cash and cash equivalents, accounts receivable, inventory, marketable securities, prepaid expenses and other liquid assets that can be readily converted to cash.">
                                 <td>Current Assets</td><td>{{ stock.currentAssets }}</td>
                             </tr>
-                            <tr>
+                            <tr data-toggle="tooltip" data-placement="top" title="A company's debts or obligations that are due within one year. Current liabilities appear on the company's balance sheet and include short term debt, accounts payable, accrued liabilities and other debts.">
                                 <td>Current Liabilities</td><td>{{ stock.currentLiabilities }}</td>
                             </tr>
-                            <tr>
+                            <tr data-toggle="tooltip" data-placement="top" title="A liquidity ratio that measures a company's ability to pay short-term and long-term obligations. To gauge this ability, the current ratio considers the total assets of a company (both liquid and illiquid) relative to that company’s total liabilities. Current Ratio = Current Assets / Current Liabilities">
                                 <td>Current Ratio</td><td>{{ stock.currentRatio }}</td>
                             </tr>
-                            <tr>
+                            <tr data-toggle="tooltip" data-placement="top" title="An indicator of a company’s short-term liquidity. The quick ratio measures a company’s ability to meet its short-term obligations with its most liquid assets. For this reason, the ratio excludes inventories from current assets, and is calculated as follows: Quick ratio = (current assets – inventories) / current liabilities, or = (cash and equivalents + marketable securities + accounts receivable) / current liabilities.">
                                 <td>Quick Ratio</td><td>{{ stock.quickRatio }}</td>
                             </tr>
                         </table>
@@ -157,19 +157,19 @@
                 <div class="col-md-3">
                     <div class=" panel panel-sm z-analyst">
                         <table class="table">
-                            <tr>
+                            <tr data-toggle="tooltip" data-placement="top" title="TODO DUPE">
                                 <td>Shares</td><td>{{ stock.sharesOutstanding }}</td>
                             </tr>
-                            <tr>
+                            <tr data-toggle="tooltip" data-placement="top" title="Measure how much out of every dollar of sales a company actually keeps in earnings. A 20% profit margin, then, means the company has a net income of $0.20 for each dollar of total revenue earned. Net Income / Net Sales (revenue)">
                                 <td>Profit Margin</td><td>{{ stock.profitMargin }}%</td>
                             </tr>
-                            <tr>
+                            <tr data-toggle="tooltip" data-placement="top" title="A margin ratio used to measure a company's pricing strategy and operating efficiency.">
                                 <td>Operating Margin</td><td>{{ stock.operatingMargin }}%</td>
                             </tr>
-                            <tr>
+                            <tr data-toggle="tooltip" data-placement="top" title="An indicator of how profitable a company is relative to its total assets. ROA gives an idea as to how efficient management is at using its assets to generate earnings. Calculated by dividing a company's annual earnings by its total assets, ROA is displayed as a percentage. Sometimes this is referred to as 'return on investment'.">
                                 <td>Return on Assets</td><td>{{ stock.returnOnAssets }}%</td>
                             </tr>
-                            <tr>
+                            <tr data-toggle="tooltip" data-placement="top" title="The amount of net income returned as a percentage of shareholders equity. Return on equity measures a corporation's profitability by revealing how much profit a company generates with the money shareholders have invested. Net Income/Shareholder's Equity">
                                 <td>Return on Equity</td><td>{{ stock.returnOnEquity }}%</td>
                             </tr>
                         </table>
