@@ -31,7 +31,7 @@
 }
 
 .z-news-links a {
-    font-size: 8px !important;
+    font-size: 9px !important;
 }
 .z-news-list {
     padding: 0px !important;
@@ -71,6 +71,34 @@ a.z-news-list:focus {
 
 .z-analyst td {
     padding: 3px !important;
+}
+
+.z-scan-list-container {
+    height: 23.5em; !important;
+    overflow: scroll;
+    overflow-x:hidden;
+    overflow-y:scroll;
+    margin-bottom: 1.275em !important;
+    padding: 0px !important;
+}
+.z-scan-list-container::-webkit-scrollbar {
+    width:30px;
+}
+.z-scan-list-container::-webkit-scrollbar * {
+    background:transparent;
+}
+.z-scan-list-container::-webkit-scrollbar-thumb {
+    background:rgba(255,0,0,0.1) !important;
+}
+
+.z-scan-list table {
+    font-weight: 500 !important;
+    border-spacing: 0px;
+}
+
+.z-scan-list td {
+    padding: 3px !important;
+    font-weight: 200 !important;
 }
 
 
