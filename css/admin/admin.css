@@ -82,7 +82,7 @@ a.z-news-list:focus {
     padding: 0px !important;
 }
 .z-scan-list-container::-webkit-scrollbar {
-    width:30px;
+    width:1em;
 }
 .z-scan-list-container::-webkit-scrollbar * {
     background:transparent;
@@ -99,6 +99,9 @@ a.z-news-list:focus {
 .z-scan-list td {
     padding: 3px !important;
     font-weight: 200 !important;
+}
+.z-scan-list th {
+    text-align: center !important;
 }
 
 

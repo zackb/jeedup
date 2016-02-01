@@ -2,6 +2,7 @@ package net.jeedup.finance
 
 import groovy.transform.CompileStatic
 import net.jeedup.finance.model.Stock
+import net.jeedup.persistence.sql.SqlDB
 import net.jeedup.util.ThreadedJob
 
 /**
@@ -114,6 +115,29 @@ class StockService {
     order by (yearHigh - yearLow)""")
 
     }
+
+    public List<Stock> findGrowthStocks() {
+        return Stock.db().executeQuery("""
+    epsEstimateNextYear > eps
+	and  DATEDIFF(now(),lastUpdated) < 4
+	and stockExchange in ('NYQ', 'NMS', 'NGM', 'NCM')
+    order by returnOnEquity""")
+    }
+
+    public List<Stock> findDogsOfTheDow() {
+        return Stock.db().executeQuery("""
+	DATEDIFF(now(),lastUpdated) < 4
+	and id in (${SqlDB.questionMarksWithCommas(DOW.size())})
+    order by trailingAnnualDividendYieldInPercent desc limit 10""", DOW)
+    }
+
+    private static final List<String> DOW = [
+        'MMM', 'AXP', 'AAPL', 'BA', 'CAT',
+        'CVX', 'CSCO', 'KO', 'DIS', 'DD',
+        'XOM', 'GE', 'GS', 'HD', 'IBM', 'INTC',
+        'JNJ', 'JPM', 'MCD', 'MRK', 'MSFT', 'NKE',
+        'PFE', 'PG', 'TRV', 'UTX', 'UNH', 'VZ', 'V', 'WMT'
+    ]
 
     public static void main(String[] args) {
         /*

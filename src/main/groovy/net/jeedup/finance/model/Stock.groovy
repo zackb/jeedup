@@ -38,6 +38,7 @@ public class Stock {
     public String currency //USD,
     public Double daysHigh //629.83,
     public Double daysLow //623.78,
+    public Double dividendYield //
     public Date dividendPayDate //May 15,
     public Double trailingAnnualDividendYield //12.44,
     public Double trailingAnnualDividendYieldInPercent //1.99,

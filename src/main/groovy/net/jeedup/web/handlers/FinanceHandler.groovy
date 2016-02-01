@@ -131,6 +131,16 @@ class FinanceHandler {
 
     @Endpoint('f/scan')
     def scan(Map data) {
-        HTML([stocks:StockService.instance.findValueStocks()], 'admin/scan')
+        HTML([
+            data: [
+                [ name : 'Value',
+                  stocks: StockService.instance.findValueStocks()
+                ], [ name : 'Growth',
+                  stocks: StockService.instance.findGrowthStocks()
+                ], [ name: 'Dogs of the Dow',
+                    stocks: StockService.instance.findDogsOfTheDow()
+                ]
+            ]
+        ], 'admin/scan')
     }
 }

@@ -305,7 +305,7 @@ class SqlDB<T> extends DB<T> {
         field.set(obj, value)
     }
 
-    private static String questionMarksWithCommas(int num) {
+    public static String questionMarksWithCommas(int num) {
         if (num == 0) {
             return ''
         }
