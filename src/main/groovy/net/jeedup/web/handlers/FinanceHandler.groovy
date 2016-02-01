@@ -126,6 +126,7 @@ class FinanceHandler {
                 plus:plus,
                 analys:agood ? ass : null,
                 desc: StringUtil.removeHtml(stock.description),
+                beta: StringUtil.formatTwoDec(stock.beta),
                 ebitda: StringUtil.formatBigNumber(stock.ebitda),
                 shares: StringUtil.formatBigNumber(stock.sharesOutstanding),
                 mcap: StringUtil.formatBigNumber(stock.marketCapitalization),
@@ -145,8 +146,10 @@ class FinanceHandler {
                   stocks: StockService.instance.findGrowthStocks()
                 ], [ name: 'Top Analysts Recommended',
                     stocks: StockService.instance.findTopAnalyst()
+                ], [ name: 'Pre-correction 52wk High',
+                    stocks: StockService.instance.findPreCorrectionHighs()
                 ], [ name: 'Dogs of the Dow',
-                    stocks: StockService.instance.findDogsOfTheDow()
+                     stocks: StockService.instance.findDogsOfTheDow()
                 ]
             ]
         ], 'admin/scan')

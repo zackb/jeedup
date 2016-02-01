@@ -20,6 +20,9 @@ class CnbcStockEntricher implements StockEnricher {
     @Override
     public void enrich(List<Stock> stocks) {
         if (!stocks) return
+        if (stocks.size() == 1) {
+            stocks.add(stocks[0])
+        }
         Map<String, Stock> stockMap = [:]
         stocks.each { stockMap[it.id] = it }
         String syms = (stocks*.id).join('|')

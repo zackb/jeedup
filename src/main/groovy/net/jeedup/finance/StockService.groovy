@@ -149,6 +149,16 @@ class StockService {
 	order by analystStrongBuy desc, analystBuy desc, meanAnalystRating desc, analystSell asc, analystUnderperform asc limit 100
 """)
     }
+    public List<Stock> findPreCorrectionHighs() {
+        return Stock.db().executeQuery("""
+	DATEDIFF(now(),lastUpdated) < 4
+	and active = 1
+	and yearHighDate is not null
+	and month(yearHighDate) in (9, 10)
+	and stockExchange in ('NYQ', 'NMS', 'NGM', 'NCM')
+	order by (yearHigh - ask) desc
+""")
+    }
 
     private static final List<String> DOW = [
         'MMM', 'AXP', 'AAPL', 'BA', 'CAT',
