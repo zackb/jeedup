@@ -1,0 +1,24 @@
+<html>
+  <head>
+    <title>Jeedup Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <link href="/css/admin/admin.css" rel="stylesheet">
+    <link href="/css/admin/bootstrap.jeedup.css" rel="stylesheet">
+  </head>
+  <body>
+  <div class="container-fluid z-news-list">
+
+<div class="list-group">
+{{#items}}
+  <a href="{{ link }}" target="_blank" class="list-group-item">
+    <h6 class="list-group-item-heading">{{ title }}</h6>
+    <p class="list-group-item-text">{{ description }}</p>
+  </a>
+{{/items}}
+</div>
+
+
+  </div>
+  </body>
+</html>

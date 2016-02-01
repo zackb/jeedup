@@ -58,6 +58,14 @@
                 <input class="z-52wk" type='range' disabled min='{{ stock.yearLow }}' max='{{ stock.yearHigh }}' value='{{ stock.ask }}' step='1'/>
             </div>
 
+            <div class="panel panel-sm text-center z-news-links">
+                <a href="https://www.google.com/finance?q={{ stock.id }}" target="_blank">Google</a> |
+                <a href="http://finance.yahoo.com/q?s={{ stock.id }}" target="_blank">Yahoo</a> |
+                <a href="http://www.marketwatch.com/investing/stock/{{ stock.id }}" target="_blank">MarketWatch</a> |
+                <a href="http://data.cnbc.com/quotes/{{ stock.id }}" target="_blank">CNBC</a> |
+                <a href="http://money.cnn.com/quote/quote.html?symb={{ stock.id }}" target="_blank">CNN</a>
+            </div>
+
           </div> <!-- /col-md-2 -->
 
           <div class="col-md-7">
@@ -76,15 +84,111 @@
           </div>
 
           <div class="col-md-7">
-            <table>
-                <tr><td>EPS</td><td>10</td><td>M</td><td>Z</td><td>Z</td><td>Z</td></tr>
-            </table>
-          </div>
+
+            <div class="container-fluid z-key-stats">
+
+                <div class="col-md-3">
+                    <div class="panel panel-sm z-analyst">
+                        <table class="table">
+                            <tr>
+                                <td>Mkt Cap</td><td>{{ mcap }}</td>
+                            </tr>
+                            <tr>
+                                <td>Ent Value</td><td>{{ eval }}</td>
+                            </tr>
+                            <tr>
+                                <td>Shares</td><td>{{ stock.sharesOutstanding }}</td>
+                            </tr>
+                            <tr>
+                                <td>Price / Book</td><td>{{ stock.priceBook }}</td>
+                            </tr>
+                            <tr>
+                                <td>Beta</td><td>Z1.20</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+
+                <div class="col-md-3">
+                    <div class=" panel panel-sm z-analyst">
+                        <table class="table">
+                            <tr>
+                                <td>1 Yr Target</td><td>{{ stock.oneyrTargetPrice }}</td>
+                            </tr>
+                            <tr>
+                                <td>P/E</td><td>{{ stock.peRatio }}</td>
+                            </tr>
+                            <tr>
+                                <td>EPS</td><td>{{ stock.eps }}</td>
+                            </tr>
+                            <tr>
+                                <td>PEG</td><td>{{ stock.pegRatio }}</td>
+                            </tr>
+                            <tr>
+                                <td>EBITDA</td><td>{{ stock.ebitda }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class=" panel panel-sm z-analyst">
+                        <table class="table">
+                            <tr>
+                                <td>Dept / Equity</td><td>{{ stock.debtEquity }}</td>
+                            </tr>
+                            <tr>
+                                <td>Current Assets</td><td>{{ stock.currentAssets }}</td>
+                            </tr>
+                            <tr>
+                                <td>Current Liabilities</td><td>{{ stock.currentLiabilities }}</td>
+                            </tr>
+                            <tr>
+                                <td>Current Ratio</td><td>{{ stock.currentRatio }}</td>
+                            </tr>
+                            <tr>
+                                <td>Quick Ratio</td><td>{{ stock.quickRatio }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class=" panel panel-sm z-analyst">
+                        <table class="table">
+                            <tr>
+                                <td>Shares</td><td>{{ stock.sharesOutstanding }}</td>
+                            </tr>
+                            <tr>
+                                <td>Profit Margin</td><td>{{ stock.profitMargin }}%</td>
+                            </tr>
+                            <tr>
+                                <td>Operating Margin</td><td>{{ stock.operatingMargin }}%</td>
+                            </tr>
+                            <tr>
+                                <td>Return on Assets</td><td>{{ stock.returnOnAssets }}%</td>
+                            </tr>
+                            <tr>
+                                <td>Return on Equity</td><td>{{ stock.returnOnEquity }}%</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+              <div class="col-md-12 z-news-list">
+                <iframe width="100%" height="40%" src="/stock/news/embed/{{ stock.id }}" frameborder="0"></iframe>
+              </div>
+
+
+
+            </div> <!-- /.container-fluid -->
+
+          </div> <!-- key stats -->
 
 
           <div class="col-md-3">
             <div id="z-stocktwits"></div>
-        </div>
+          </div>
 
     </div> <!-- /.container-fluid -->
 

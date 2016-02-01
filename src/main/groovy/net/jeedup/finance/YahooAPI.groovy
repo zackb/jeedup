@@ -1,5 +1,8 @@
 package net.jeedup.finance
 
+import net.jeedup.feed.FeedItem
+import net.jeedup.feed.RssFeed
+import net.jeedup.feed.parser.RssFeedParser
 import net.jeedup.finance.model.Industry
 import net.jeedup.finance.model.Sector
 import net.jeedup.finance.model.Stock
@@ -165,7 +168,8 @@ class YahooAPI {
         }
     }
 
-    public static void main(String[] args) {
-        println StockService.getInstance().retrieveAndUpdateStockData(true, false)
+    public static List<FeedItem> retrieveNewsItems(String symbol) {
+        String url = 'http://feeds.finance.yahoo.com/rss/2.0/headline?s=' + symbol + '&region=US&lang=en-US'
+        return new RssFeedParser().parse(new RssFeed(url:url))
     }
 }

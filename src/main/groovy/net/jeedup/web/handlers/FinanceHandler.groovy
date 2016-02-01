@@ -3,6 +3,7 @@ package net.jeedup.web.handlers
 import groovy.transform.CompileStatic
 import net.jeedup.coding.JSON
 import net.jeedup.finance.StockService
+import net.jeedup.finance.YahooAPI
 import net.jeedup.finance.YahooCSV
 import net.jeedup.finance.model.Price
 import net.jeedup.finance.model.Stock
@@ -53,5 +54,14 @@ class FinanceHandler {
         result += ");"
 
         return TEXT(result)
+    }
+
+    @Endpoint('stock/news/embed')
+    def newsEmbed(Map data) {
+        String id = data.id?.toString()?.trim()
+        if (!id) {
+            throw new Exception('Missing required id')
+        }
+        HTML([items:YahooAPI.retrieveNewsItems(id)], 'admin/stock_news_embed')
     }
 }
