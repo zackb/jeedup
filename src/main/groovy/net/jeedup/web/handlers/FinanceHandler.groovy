@@ -8,6 +8,7 @@ import net.jeedup.finance.YahooCSV
 import net.jeedup.finance.model.Analyst
 import net.jeedup.finance.model.Price
 import net.jeedup.finance.model.Stock
+import net.jeedup.util.StringUtil
 import net.jeedup.web.Endpoint
 import static net.jeedup.net.http.Response.*
 
@@ -124,8 +125,10 @@ class FinanceHandler {
                 cls:cls,
                 plus:plus,
                 analys:agood ? ass : null,
-                mcap: String.format("%.2fM", stock.marketCapitalization / 1000000.0),
-                eval: String.format("%.2fM", stock.enterpriseValue / 1000000.0)
+                ebitda: StringUtil.formatBigNumber(stock.ebitda),
+                shares: StringUtil.formatBigNumber(stock.sharesOutstanding),
+                mcap: StringUtil.formatBigNumber(stock.marketCapitalization),
+                eval: StringUtil.formatBigNumber(stock.enterpriseValue)
         ], 'admin/search')
     }
 

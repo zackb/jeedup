@@ -10,6 +10,25 @@ import java.util.regex.Pattern
 @CompileStatic
 class StringUtil {
 
+    public static String formatBigNumber(Double money) {
+        String end = 'K'
+        if (Math.abs(money) > 1000000000) {
+            end = 'B'
+            money /= 1000000000
+        } else if (Math.abs(money) > 1000000) {
+            end = 'M'
+            money /= 1000000
+        } else {
+            end = 'K'
+            money /= 1000
+        }
+        return String.format("%.2f%s", money, end)
+    }
+
+    public static String formatTwoDec(Double number) {
+        return String.format("%.2f", number)
+    }
+
     public static String removeHtml(String text) {
         return text?.replaceAll('<.*?>', ' ')?.trim()
     }

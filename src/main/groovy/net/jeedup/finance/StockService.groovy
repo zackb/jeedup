@@ -28,12 +28,14 @@ class StockService {
 
     private StockService() {
         super()
-        addEnrichers([new MorningstarStockEnricher(),
-                      new YahooStockEnricher(),
-                      new YahooAnalystsEnricher(),
-                      new YahooKeyStatisticsStockEnricher(),
-                      new YahooBalanceSheetStockEnricher()]
-                as List<StockEnricher>)
+        addEnrichers([
+            new MorningstarStockEnricher(),
+            new YahooStockEnricher(),
+            new YahooAnalystsEnricher(),
+            new YahooKeyStatisticsStockEnricher(),
+            new YahooBalanceSheetStockEnricher(),
+            new MorningstarStockHTMLEnricher()
+        ] as List<StockEnricher>)
     }
 
     public static StockService getInstance() {
@@ -88,7 +90,6 @@ class StockService {
                 enricher.enrich(stocks.findAll {
                     it.lastUpdated.time < (System.currentTimeMillis() - enricher.updateFrequency.value)
                 } as List<Stock>)
-
             }
             for (Stock stock : stocks) {
                 try {

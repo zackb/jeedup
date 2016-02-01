@@ -97,7 +97,7 @@
                                 <td>Ent Value</td><td>{{ eval }}</td>
                             </tr>
                             <tr data-toggle="tooltip" data-placement="top" title="A company's stock currently held by all its shareholders">
-                                <td>Shares</td><td>{{ stock.sharesOutstanding }}</td>
+                                <td>Shares</td><td>{{ shares }}</td>
                             </tr>
                             <tr data-toggle="tooltip" data-placement="top" title="A ratio used to compare a stock's market value to its book value. It is calculated by dividing the current closing price of the stock by the latest quarter's book value per share.">
                                 <td>Price / Book</td><td>{{ stock.priceBook }}</td>
@@ -126,7 +126,7 @@
                                 <td>PEG</td><td>{{ stock.pegRatio }}</td>
                             </tr>
                             <tr data-toggle="tooltip" data-placement="top" title="An indicator of a company's financial performance. Revenue - Expenses (excluding tax, interest, depreciation and amortization.">
-                                <td>EBITDA</td><td>{{ stock.ebitda }}</td>
+                                <td>EBITDA</td><td>{{ ebitda }}</td>
                             </tr>
                         </table>
                     </div>
@@ -158,7 +158,7 @@
                     <div class=" panel panel-sm z-analyst">
                         <table class="table">
                             <tr data-toggle="tooltip" data-placement="top" title="TODO DUPE">
-                                <td>Shares</td><td>{{ stock.sharesOutstanding }}</td>
+                                <td>Shares</td><td>{{ shares }}</td>
                             </tr>
                             <tr data-toggle="tooltip" data-placement="top" title="Measure how much out of every dollar of sales a company actually keeps in earnings. A 20% profit margin, then, means the company has a net income of $0.20 for each dollar of total revenue earned. Net Income / Net Sales (revenue)">
                                 <td>Profit Margin</td><td>{{ stock.profitMargin }}%</td>

@@ -14,6 +14,7 @@ import net.jeedup.web.Model
 public class Stock {
     public String id //symbol
     public String name
+    public String description
     @Constraints(max = 1)
     public int active
     public Date lastUpdated
