@@ -154,4 +154,17 @@ class FinanceHandler {
             ]
         ], 'admin/scan')
     }
+
+    @Endpoint('f/analyze')
+    def analyze(Map data) {
+        String msg = 'OK'
+        long start = System.currentTimeMillis()
+        try {
+            StockService.instance.enrich()
+        } catch (Exception e) {
+            e.printStackTrace()
+            msg = e.message
+        }
+        return JSON([msg:msg, time: (System.currentTimeMillis() - start) / 1000])
+    }
 }
