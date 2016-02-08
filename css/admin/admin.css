@@ -8,6 +8,12 @@
 }
 */
 
+td .z-industry {
+    margin-left: 10px !important;
+    font-weight: 100 !important;
+    font-size: 8px !important;
+}
+
 .z-content {
     padding-top: 4.75em;
 }

@@ -6,6 +6,7 @@ import net.jeedup.finance.StockService
 import net.jeedup.finance.YahooAPI
 import net.jeedup.finance.YahooCSV
 import net.jeedup.finance.model.Analyst
+import net.jeedup.finance.model.Industry
 import net.jeedup.finance.model.Price
 import net.jeedup.finance.model.Stock
 import net.jeedup.util.StringUtil
@@ -119,7 +120,8 @@ class FinanceHandler {
             ass.under << a.underperform
             ass.sell << a.sell
         }
-        HTML([
+        Industry industry = Industry.get(stock.industryId)
+        def resp = [
                 stock:stock,
                 lwr:stock.id.toLowerCase(),
                 cls:cls,
@@ -133,7 +135,11 @@ class FinanceHandler {
                 eval: StringUtil.formatBigNumber(stock.enterpriseValue),
                 libs: StringUtil.formatBigNumber(stock.currentLiabilities),
                 assets: StringUtil.formatBigNumber(stock.currentAssets)
-        ], 'admin/search')
+        ]
+        if (industry) {
+            resp.industrype = StringUtil.formatTwoDec(industry.peRatio)
+        }
+        HTML(resp, 'admin/search')
     }
 
     @Endpoint('f/scan')

@@ -117,7 +117,7 @@
                                 <td>1 Yr Target</td><td>{{ stock.oneyrTargetPrice }}</td>
                             </tr>
                             <tr data-toggle="tooltip" data-placement="top" title="A ratio for valuing a company that measures its current share price relative to its per-share earnings. Market Value per Share / Earnings per Share">
-                                <td>P/E</td><td>{{ stock.peRatio }}</td>
+                                <td>P/E</td><td>{{ stock.peRatio }} {{#industrype}}  <i class="z-industry">({{ industrype }}) {{/industrype}}</i></td>
                             </tr>
                             <tr data-toggle="tooltip" data-placement="top" title="The portion of a company's profit allocated to each outstanding share of common stock. Earnings per share serves as an indicator of a company's profitability.">
                                 <td>EPS</td><td>{{ stock.eps }}</td>
