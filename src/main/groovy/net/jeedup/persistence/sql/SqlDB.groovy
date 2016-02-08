@@ -72,6 +72,15 @@ class SqlDB<T> extends DB<T> {
         return result
     }
 
+    public <T> Map<Object, T> getAllAsMap(List ids = null) {
+        Map<Object, T> map = [:]
+        List<T> objects = getAll(ids)
+        for (T o : objects) {
+            map.put(id(o), o)
+        }
+        return map
+    }
+
     public <T> List<T> executeQuery(String query, List args = null) throws Exception {
 
         List<T> results = []
@@ -181,10 +190,9 @@ class SqlDB<T> extends DB<T> {
         executeUpdate(createSql)
     }
 
-    protected Sql Sql() {
+    public Sql Sql() {
         return new Sql(dataSource)
     }
-
 
     private static Map<Class, String> selectSqlCache = new ConcurrentHashMap<Class, String>()
 

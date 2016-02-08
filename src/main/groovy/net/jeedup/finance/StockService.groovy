@@ -1,9 +1,11 @@
 package net.jeedup.finance
 
+import groovy.sql.GroovyResultSet
 import groovy.transform.CompileStatic
 import net.jeedup.feed.FeedItem
 import net.jeedup.feed.RssFeed
 import net.jeedup.feed.parser.RssFeedParser
+import net.jeedup.finance.model.Industry
 import net.jeedup.finance.model.Stock
 import net.jeedup.persistence.sql.SqlDB
 import net.jeedup.util.ThreadedJob
@@ -82,6 +84,18 @@ class StockService {
 
     public void updateSecuritiesData() {
         YahooAPI.retrieveAllSecurities()
+    }
+
+    public void updateIndustryData() {
+        Map<Object, Industry> industries = Industry.db().getAllAsMap()
+        Stock.db().Sql().eachRow('select industryId, avg(peRatio) pe from Stock group by industryId', { GroovyResultSet row ->
+            Long id = row.getLong('industryId')
+            Double pe = row.getDouble('pe')
+            if (id) {
+                industries[id].peRatio = pe
+                industries[id].save()
+            }
+        })
     }
 
     public void retrieveAndUpdateStockData() {
@@ -183,7 +197,8 @@ class StockService {
         getInstance().addEnrichers([new MorningstarStockEnricher(), new YahooStockEnricher(), new YahooAnalystsEnricher(), new YahooKeyStatisticsStockEnricher()] as List<StockEnricher>)
         getInstance().addEnricher(new YahooBalanceSheetStockEnricher())
         */
-        println getInstance().enrichers
-        getInstance().enrich()
+        //println getInstance().enrichers
+        //getInstance().enrich()
+        getInstance().updateIndustryData()
     }
 }

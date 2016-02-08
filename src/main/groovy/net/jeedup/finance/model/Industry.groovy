@@ -18,6 +18,7 @@ class Industry {
     public String title // name
     public Long sectorId
     public Long yahooId
+    public Double peRatio
     public Date lastUpdated
     public Date dateCreated
 
