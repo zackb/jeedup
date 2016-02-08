@@ -182,7 +182,6 @@ class JeedupHandler implements HttpHandler {
     }
 
     private boolean isResourceDir(String path) {
-
         return resources.contains(path.split('/')[0])
     }
 }
