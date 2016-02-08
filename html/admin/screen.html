@@ -1,0 +1,27 @@
+
+{{> header}}
+<div class="container-fluid z-content">
+    <div class="col-md-2"></div>
+    <div class="col-md-8 z-scan-list-container">
+        <input id="jql" type="text" size="35" class="form-control" autocomplete="off" data-provide="typeahead" placeholder="JQL...">
+    </div>
+    <div class="col-md-2"></div>
+    <div id="result" class="col-md-12"></div>
+
+</div>
+<script>
+
+$(function() {
+    $jql = $('#jql');
+    $jql.keyup(function(e){
+        if (e.keyCode == 13) {
+            q = encodeURIComponent($jql.val());
+            $.get('/f/screen?q=' + q, function(a) {
+                $('#result').html(a);
+            });
+        }
+    });
+});
+
+</script>
+{{> footer}}

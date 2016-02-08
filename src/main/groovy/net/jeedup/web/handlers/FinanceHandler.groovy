@@ -55,7 +55,7 @@ class FinanceHandler {
         result += JSON.encode(formatted)
         result += ");"
 
-        return TEXT(result)
+        TEXT(result)
     }
 
     @Endpoint('stock/news/embed')
@@ -165,6 +165,16 @@ class FinanceHandler {
             e.printStackTrace()
             msg = e.message
         }
-        return JSON([msg:msg, time: (System.currentTimeMillis() - start) / 1000])
+        JSON([msg:msg, time: (System.currentTimeMillis() - start) / 1000])
+    }
+
+    @Endpoint('f/screen')
+    def screen(Map data) {
+        String q = ((String)data.q)?.trim()
+        if (q) {
+            List<Stock> stocks = Stock.db().executeQuery(q)
+            return HTML([stocks:stocks], 'admin/screen_result')
+        }
+        HTML([:], 'admin/screen')
     }
 }

@@ -1,0 +1,11 @@
+<div class="panel panel-sm z-scan-list">
+    <table class="table">
+        <tr><th></th><th>{{ name }}</th><th></th></tr>
+        {{#stocks}}
+        <tr>
+            <td><a href="/f/lookup/{{ id }}">{{ id }}</a></td><td>{{ name }}</td>
+            <td>{{ ask }}</td>
+        </tr>
+        {{/stocks}}
+    </table>
+</div>
