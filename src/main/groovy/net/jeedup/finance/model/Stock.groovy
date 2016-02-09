@@ -19,6 +19,8 @@ public class Stock {
     public int active
     public Date lastUpdated
 
+    public Double score
+
     public Long industryId
     public Long sectorId
 
