@@ -156,6 +156,8 @@ class FinanceHandler {
                     stocks: StockService.instance.findPreCorrectionHighs()
                 ], [ name: 'Dogs of the Dow',
                      stocks: StockService.instance.findDogsOfTheDow()
+                ], [ name: "Zack's Algorithm",
+                     stocks: StockService.instance.findZacksScores()
                 ]
             ]
         ], 'admin/scan')

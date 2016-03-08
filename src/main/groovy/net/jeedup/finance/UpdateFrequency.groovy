@@ -7,6 +7,7 @@ import groovy.transform.CompileStatic
  */
 @CompileStatic
 enum UpdateFrequency {
+    MILLISECOND(1L),
     SECOND(1000L),
     MINUTE(1000L * 60),
     HOUR(1000L * 60 * 60),

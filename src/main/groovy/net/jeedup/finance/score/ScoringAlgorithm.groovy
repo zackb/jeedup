@@ -5,6 +5,7 @@ import net.jeedup.finance.StockEnricher
 import net.jeedup.finance.UpdateFrequency
 import net.jeedup.finance.model.Stock
 import net.jeedup.finance.score.impl.*
+import net.jeedup.util.ThreadedJob
 
 /**
  * Stock scoring algo
@@ -35,19 +36,6 @@ class ScoringAlgorithm implements StockEnricher {
         return score
     }
 
-    public static void main(String[] args) {
-        Stock.db().executeQuery('active = ?', [1]).each { Stock stock ->
-            try {
-                double score = score(stock)
-                stock.score = score
-                println 'SCORE: ' + stock.id + ' : ' + score
-                stock.save()
-            } catch (Exception e) {
-                e.printStackTrace()
-            }
-        }
-    }
-
     @Override
     public void enrich(Stock stock) {
         score stock
@@ -60,6 +48,18 @@ class ScoringAlgorithm implements StockEnricher {
 
     @Override
     public UpdateFrequency getUpdateFrequency() {
-        return UpdateFrequency.SECOND
+        return UpdateFrequency.MILLISECOND
+    }
+
+    public static void main(String[] args) {
+        ThreadedJob<Stock> job = new ThreadedJob<>(20, { Stock stock ->
+            stock.score = score(stock)
+            println 'SCORE: ' + stock.id + ' : ' + stock.score
+            stock.save()
+        })
+        Stock.db().executeQuery('active = ?', [1]).each { Stock stock ->
+            job.add(stock)
+        }
+        job.waitFor()
     }
 }

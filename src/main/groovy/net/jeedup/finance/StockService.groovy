@@ -7,6 +7,7 @@ import net.jeedup.feed.RssFeed
 import net.jeedup.feed.parser.RssFeedParser
 import net.jeedup.finance.model.Industry
 import net.jeedup.finance.model.Stock
+import net.jeedup.finance.score.ScoringAlgorithm
 import net.jeedup.persistence.sql.SqlDB
 import net.jeedup.util.ThreadedJob
 
@@ -37,7 +38,8 @@ class StockService {
             new YahooKeyStatisticsStockEnricher(),
             new YahooBalanceSheetStockEnricher(),
             new MorningstarStockHTMLEnricher(),
-            new CnbcStockEntricher()
+            new CnbcStockEntricher(),
+            new ScoringAlgorithm()
         ] as List<StockEnricher>)
     }
 
@@ -130,7 +132,7 @@ class StockService {
 	and currentAssets > (currentLiabilities * 1.5)
 	and  DATEDIFF(now(),lastUpdated) < 4
 	and ask < yearLow + (yearHigh - yearLow)
-	and stockExchange in ('NYQ', 'NMS', 'NGM', 'NCM')
+	and stockExchange in ('NYQ', 'NMS', 'NGM', 'NCM', 'PCX')
 	and priceBook > ask
 	and oneyrTargetPrice > ask
 	and enterpriseValue > marketCapitalization
@@ -143,7 +145,7 @@ class StockService {
     epsEstimateNextYear > eps
     and oneyrTargetPrice > ask
 	and  DATEDIFF(now(),lastUpdated) < 4
-	and stockExchange in ('NYQ', 'NMS', 'NGM', 'NCM')
+	and stockExchange in ('NYQ', 'NMS', 'NGM', 'NCM', 'PCX')
     order by (oneyrTargetPrice - ask) desc, returnOnEquity desc limit 100""")
     }
 
@@ -160,7 +162,7 @@ class StockService {
 	and active = 1
 	and meanAnalystRating > 0
 	and meanAnalystRating is not null
-	and stockExchange in ('NYQ', 'NMS', 'NGM', 'NCM')
+	and stockExchange in ('NYQ', 'NMS', 'NGM', 'NCM', 'PCX')
 	order by analystStrongBuy desc, analystBuy desc, meanAnalystRating desc, analystSell asc, analystUnderperform asc limit 100
 """)
     }
@@ -170,10 +172,20 @@ class StockService {
 	and active = 1
 	and yearHighDate is not null
 	and month(yearHighDate) in (9, 10)
-	and stockExchange in ('NYQ', 'NMS', 'NGM', 'NCM')
+	and stockExchange in ('NYQ', 'NMS', 'NGM', 'NCM', 'PCX')
 	order by (yearHigh - ask) desc
 """)
     }
+
+    public List<Stock> findZacksScores() {
+        return Stock.db().executeQuery("""
+	DATEDIFF(now(),lastUpdated) < 4
+	and active = 1
+	and stockExchange in ('NYQ', 'NMS', 'NGM', 'NCM', 'PCX')
+	order by score desc limit 150
+""")
+    }
+
 
     private static final List<String> DOW = [
         'MMM', 'AXP', 'AAPL', 'BA', 'CAT',
