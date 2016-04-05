@@ -122,6 +122,11 @@ public class Stock {
     public Date yearLowDate
 
 
+    // Growth
+    public Double qtrRevenueGrowth
+    public Double qtrEarningsGrowth
+
+
     public static SqlDB<Stock> db() {
         return DB.sql(Stock)
     }

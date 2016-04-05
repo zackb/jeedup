@@ -3,11 +3,11 @@ package net.jeedup.web.handlers
 import groovy.transform.CompileStatic
 import net.jeedup.coding.JSON
 import net.jeedup.finance.StockService
-import net.jeedup.finance.YahooAPI
 import net.jeedup.finance.YahooCSV
 import net.jeedup.finance.model.Analyst
 import net.jeedup.finance.model.Industry
 import net.jeedup.finance.model.Price
+import net.jeedup.finance.model.Sector
 import net.jeedup.finance.model.Stock
 import net.jeedup.util.StringUtil
 import net.jeedup.web.Endpoint
@@ -121,6 +121,7 @@ class FinanceHandler {
             ass.sell << a.sell
         }
         Industry industry = Industry.get(stock.industryId)
+        Sector sector = Sector.get(stock.sectorId)
         def resp = [
                 stock:stock,
                 lwr:stock.id.toLowerCase(),
@@ -136,9 +137,8 @@ class FinanceHandler {
                 libs: StringUtil.formatBigNumber(stock.currentLiabilities),
                 assets: StringUtil.formatBigNumber(stock.currentAssets)
         ]
-        if (industry) {
-            resp.industrype = StringUtil.formatTwoDec(industry.peRatio)
-        }
+        if (industry)   resp.industrype = StringUtil.formatTwoDec(industry.peRatio)
+        if (sector)     resp.sectorpe   = StringUtil.formatTwoDec(sector.peRatio)
         HTML(resp, 'admin/search')
     }
 
@@ -168,7 +168,7 @@ class FinanceHandler {
         String msg = 'OK'
         long start = System.currentTimeMillis()
         try {
-            StockService.instance.enrich()
+            StockService.instance.enrich(data.force == true)
         } catch (Exception e) {
             e.printStackTrace()
             msg = e.message

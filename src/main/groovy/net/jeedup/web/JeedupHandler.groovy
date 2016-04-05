@@ -50,7 +50,7 @@ class JeedupHandler implements HttpHandler {
             rootPath = rootPath.replace('/build/resources/main', '')
         }
         */
-        String rootPath = '.'
+        String rootPath = '/Users/zack/code/jeedup/'
 
         resourceHandler = new ResourceHandler()
                 .setResourceManager(new FileResourceManager(new File(rootPath), 10485760))

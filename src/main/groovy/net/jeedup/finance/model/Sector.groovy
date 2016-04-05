@@ -13,6 +13,7 @@ import net.jeedup.web.Model
 class Sector {
     public Long id
     public String title
+    public Double peRatio
     public Date lastUpdated
     public Date dateCreated
 

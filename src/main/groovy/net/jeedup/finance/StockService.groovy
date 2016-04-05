@@ -6,6 +6,7 @@ import net.jeedup.feed.FeedItem
 import net.jeedup.feed.RssFeed
 import net.jeedup.feed.parser.RssFeedParser
 import net.jeedup.finance.model.Industry
+import net.jeedup.finance.model.Sector
 import net.jeedup.finance.model.Stock
 import net.jeedup.finance.score.ScoringAlgorithm
 import net.jeedup.persistence.sql.SqlDB
@@ -19,6 +20,9 @@ class StockService {
 
     private static StockService instance = new StockService()
 
+    private final Set<StockEnricher> enrichers = new HashSet<>()
+
+    /*
     private final Set<StockEnricher> enrichers =
             new TreeSet<StockEnricher>(new Comparator<StockEnricher>() {
                 @Override
@@ -26,6 +30,7 @@ class StockService {
                     return s2.updateFrequency.compareTo(s1.updateFrequency) // reverse the compare. Oldest first
                 }
             })
+    */
 
     private boolean enriching = false
 
@@ -53,13 +58,20 @@ class StockService {
         stock.save()
     }
 
-    public void enrich() {
+    public void enrich(boolean forceRefresh = false) {
         if (enriching) {
             throw new Exception('Enrich job already in progress')
         }
         enriching = true
-        retrieveAndUpdateStockData()
-        enriching = false
+        try {
+            updateSectorAndIndustryData()
+            updateIndustryPe()
+            updateSectorPe()
+            updateSecuritiesData()
+            retrieveAndUpdateStockData(forceRefresh)
+        } finally {
+            enriching = false
+        }
     }
 
     private void addEnrichers(Collection<StockEnricher> newEnrichers) {
@@ -88,7 +100,7 @@ class StockService {
         YahooAPI.retrieveAllSecurities()
     }
 
-    public void updateIndustryData() {
+    public void updateIndustryPe() {
         Map<Object, Industry> industries = Industry.db().getAllAsMap()
         Stock.db().Sql().eachRow('select industryId, avg(peRatio) pe from Stock group by industryId', { GroovyResultSet row ->
             Long id = row.getLong('industryId')
@@ -100,12 +112,24 @@ class StockService {
         })
     }
 
-    public void retrieveAndUpdateStockData() {
+    public void updateSectorPe() {
+        Map<Object, Sector> industries = Sector.db().getAllAsMap()
+        Stock.db().Sql().eachRow('select sectorId, avg(peRatio) pe from Stock group by sectorId', { GroovyResultSet row ->
+            Long id = row.getLong('sectorId')
+            Double pe = row.getDouble('pe')
+            if (id) {
+                industries[id].peRatio = pe
+                industries[id].save()
+            }
+        })
+    }
+
+    public void retrieveAndUpdateStockData(boolean all = false) {
 
         ThreadedJob<List<Stock>> job = new ThreadedJob<List<Stock>>(20, { List<Stock> stocks ->
             for (StockEnricher enricher : enrichers) {
                 enricher.enrich(stocks.findAll {
-                    it.lastUpdated.time < (System.currentTimeMillis() - enricher.updateFrequency.value)
+                    all ?: it.lastUpdated.time < (System.currentTimeMillis() - enricher.updateFrequency.value)
                 } as List<Stock>)
             }
             for (Stock stock : stocks) {
@@ -211,6 +235,7 @@ class StockService {
         */
         //println getInstance().enrichers
         //getInstance().enrich()
-        getInstance().updateIndustryData()
+        getInstance().updateIndustryPe()
+        getInstance().updateSectorPe()
     }
 }

@@ -96,7 +96,7 @@ class YahooAPI {
             }
         }
 
-        String url = 'http://biz.yahoo.com/ic/ind_index.html'
+        String url = 'https://biz.yahoo.com/ic/ind_index.html'
         String data = HTTP.get(url)
         Document doc = Jsoup.parse(data)
         Elements tables = doc.select('table[cellpadding=2]')

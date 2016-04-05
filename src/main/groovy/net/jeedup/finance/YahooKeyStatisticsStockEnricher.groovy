@@ -39,7 +39,9 @@ class YahooKeyStatisticsStockEnricher implements StockEnricher {
 
         Element incomeStatement = tables.get(4)
         stock.revenuePerShare = parseTableRowValue(incomeStatement, 2)
+        stock.qtrRevenueGrowth = parseTableRowValue(incomeStatement, 3)
         stock.grossProfit = parseTableRowValue(incomeStatement, 4)
+        stock.qtrEarningsGrowth = parseTableRowValue(incomeStatement, 8)
         stock.eps = parseTableRowValue(incomeStatement, 7)
 
         Element balanceSheet = tables.get(5)
@@ -66,7 +68,7 @@ class YahooKeyStatisticsStockEnricher implements StockEnricher {
     }
 
     public static void main(String[] args) {
-        Stock stock = Stock.db().get('FARM')
+        Stock stock = Stock.db().get('AAPL')
         new YahooKeyStatisticsStockEnricher().enrich(stock)
         println stock.enterpriseValue
         println stock.enterpriseValueRevenue
@@ -80,5 +82,6 @@ class YahooKeyStatisticsStockEnricher implements StockEnricher {
         println stock.cash
         println stock.debt
         println stock.eps
+        stock.save()
     }
 }

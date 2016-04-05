@@ -4,13 +4,13 @@
     "datasources": {
         "mainDB": {
             "url": "jdbc:mysql://127.0.0.1:3306/jeedup?relaxAutoCommit=true&autoReconnect=true",
-            "username": "jeedup",
-            "password": "jeedup"
+            "username": "root",
+            "password": "dlvr"
         },
         "auxDB": {
             "url": "jdbc:mysql://127.0.0.1:3306/jeedup_aux?relaxAutoCommit=true&autoReconnect=true",
-            "username": "jeedup",
-            "password": "jeedup"
+            "username": "root",
+            "password": "dlvr"
         }
     },
     "queues": {
