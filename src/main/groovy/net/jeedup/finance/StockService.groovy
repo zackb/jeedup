@@ -44,6 +44,7 @@ class StockService {
             new YahooBalanceSheetStockEnricher(),
             new MorningstarStockHTMLEnricher(),
             new CnbcStockEntricher(),
+            new FairValueEnricher(),
             new ScoringAlgorithm()
         ] as List<StockEnricher>)
     }
@@ -210,6 +211,13 @@ class StockService {
 """)
     }
 
+    public List<Stock> findDiscoutStocks() {
+        return Stock.db().executeQuery('fairValuePercent is not null order by fairValuePercent desc limit 100')
+    }
+
+    public List<Stock> findOverpricedStocks() {
+        return Stock.db().executeQuery('fairValuePercent is not null order by fairValuePercent asc, eps desc, qtrRevenueGrowth desc limit 100')
+    }
 
     private static final List<String> DOW = [
         'MMM', 'AXP', 'AAPL', 'BA', 'CAT',

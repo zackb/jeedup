@@ -109,6 +109,8 @@ class FinanceHandler {
             plus = ''
         }
 
+        String fvstr = stock.fairValuePercent == null ? '' : stock.fairValuePercent >= 0 ? 'Discount' : 'Overpriced'
+
         List<Analyst> analysts = Analyst.forSymbol(stock.id)
         def ass = [strong:[],buy:[],hold:[],under:[],sell:[]]
         boolean agood = false
@@ -135,7 +137,8 @@ class FinanceHandler {
                 mcap: StringUtil.formatBigNumber(stock.marketCapitalization),
                 eval: StringUtil.formatBigNumber(stock.enterpriseValue),
                 libs: StringUtil.formatBigNumber(stock.currentLiabilities),
-                assets: StringUtil.formatBigNumber(stock.currentAssets)
+                assets: StringUtil.formatBigNumber(stock.currentAssets),
+                fvstr: fvstr
         ]
         if (industry)   resp.industrype = StringUtil.formatTwoDec(industry.peRatio)
         if (sector)     resp.sectorpe   = StringUtil.formatTwoDec(sector.peRatio)
@@ -154,6 +157,10 @@ class FinanceHandler {
                     stocks: StockService.instance.findTopAnalyst()
                 ], [ name: 'Pre-correction 52wk High',
                     stocks: StockService.instance.findPreCorrectionHighs()
+                ], [ name: 'Discount',
+                 stocks: StockService.instance.findDiscoutStocks()
+                ], [ name: 'Overpriced',
+                 stocks: StockService.instance.findOverpricedStocks()
                 ], [ name: 'Dogs of the Dow',
                      stocks: StockService.instance.findDogsOfTheDow()
                 ], [ name: "Zack's Algorithm",

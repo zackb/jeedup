@@ -53,10 +53,17 @@
             </div> <!-- /panel -->
             {{/analys}}
 
-
             <div class="panel panel-sm">
                 <input class="z-52wk" type='range' disabled min='{{ stock.yearLow }}' max='{{ stock.yearHigh }}' value='{{ stock.ask }}' step='1'/>
             </div>
+
+            {{#stock.fairValuePercent}}
+            <div class="panel panel-sm text-center z-analyst">
+                <table class="table">
+                <tr><td>{{ fvstr }}</td><td>{{ stock.fairValuePercent }}%</td></tr>
+                </table>
+            </div>
+            {{/stock.fairValuePercent}}
 
             <div class="panel panel-sm text-center z-news-links">
                 <a href="https://www.google.com/finance?q={{ stock.id }}" target="_blank">Google</a> |
@@ -165,6 +172,9 @@
                             </tr>
                             <tr data-toggle="tooltip" data-placement="top" title="An indicator of a company’s short-term liquidity. The quick ratio measures a company’s ability to meet its short-term obligations with its most liquid assets. For this reason, the ratio excludes inventories from current assets, and is calculated as follows: Quick ratio = (current assets – inventories) / current liabilities, or = (cash and equivalents + marketable securities + accounts receivable) / current liabilities.">
                                 <td>Quick Ratio</td><td>{{ stock.quickRatio }}</td>
+                            </tr>
+                            <tr data-toggle="tooltip" data-placement="top" title="The calculations are based on the principles described by Benjamin Graham.">
+                                <td>Fair Value</td><td>{{ stock.fairValue }}</td>
                             </tr>
                         </table>
                     </div>

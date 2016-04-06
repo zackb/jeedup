@@ -126,6 +126,11 @@ public class Stock {
     public Double qtrRevenueGrowth
     public Double qtrEarningsGrowth
 
+    // Fair Value
+    public Double fairValue
+    public Double fairValuePercent
+    public String fairValueStr
+
 
     public static SqlDB<Stock> db() {
         return DB.sql(Stock)
